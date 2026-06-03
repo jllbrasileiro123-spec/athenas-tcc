@@ -1,0 +1,9 @@
+# Deploy: https://railway.com — conecte o repositório e defina Root Directory = athenas (se o repo for a pasta pai)
+
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/"
+restartPolicyType = "ON_FAILURE"
