@@ -19,10 +19,24 @@ No PowerShell, na pasta do projeto:
 cd "c:\Users\jllbr\OneDrive\Desktop\trabalho tcc\athenas"
 ```
 
-Troque `SEU_USUARIO` pelo seu usuário do GitHub:
+Conta: **jllbrasileiro123-spec** — repositório pode ser **privado**.
+
+1. Crie o repo em [github.com/new](https://github.com/new) com o **mesmo nome** que usar abaixo (ex.: `athenas`).
+2. Se o `remote` ainda não existir:
 
 ```powershell
-git remote add origin https://github.com/SEU_USUARIO/athenas.git
+git remote add origin https://github.com/jllbrasileiro123-spec/athenas.git
+```
+
+Se já existir com URL errada, corrija:
+
+```powershell
+git remote set-url origin https://github.com/jllbrasileiro123-spec/athenas.git
+```
+
+3. Envie o código:
+
+```powershell
 git push -u origin main
 ```
 
