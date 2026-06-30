@@ -4,6 +4,7 @@ import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { InstructorRoute } from './components/InstructorRoute'
 import { Login } from './pages/Login'
+import { AuthCallback } from './pages/AuthCallback'
 
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })))
 const CourseDetail = lazy(() => import('./pages/CourseDetail').then((m) => ({ default: m.CourseDetail })))
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Login openSignup />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/esqueci-senha" element={<ForgotPassword />} />
         <Route path="/redefinir-senha" element={<ResetPassword />} />
         <Route element={<AuthenticatedLayout />}>

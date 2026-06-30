@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -37,6 +37,18 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [showSignup, setShowSignup] = useState(openSignup)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const oauthError = params.get('oauth_error')
+    if (oauthError) {
+      setError(decodeURIComponent(oauthError))
+      params.delete('oauth_error')
+      const next = params.toString()
+      const path = window.location.pathname + (next ? `?${next}` : '')
+      window.history.replaceState({}, '', path)
+    }
+  }, [])
 
   if (user) {
     return <Navigate to="/explorar" replace />

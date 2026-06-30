@@ -29,7 +29,7 @@ Se você colar no `.env` a **mesma URL e chave** do outro sistema:
    - Ative **Confirm email** (obrigatório para aceitar e-mails reais).
    - Configure **Site URL**: `http://localhost:5173`
    - Em **Redirect URLs**, adicione: `http://localhost:5173/**`
-4. (Opcional) Em **Authentication → Providers**, ative Google, Facebook e Apple e cole as credenciais OAuth.
+4. (Opcional) Login social: Google no Supabase; **Apple** → guia completo em **[APPLE_SETUP.md](./APPLE_SETUP.md)**.
 5. Em **Project Settings → API**, copie:
    - `Project URL`
    - `anon public` key

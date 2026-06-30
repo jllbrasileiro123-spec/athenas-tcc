@@ -38,6 +38,16 @@ export const translations = {
   'login.signupLink': { pt: 'Cadastre-se', en: 'Sign up' },
   'login.forgot': { pt: 'Esqueceu a senha?', en: 'Forgot password?' },
   'login.orContinue': { pt: 'ou continue com', en: 'or continue with' },
+  'login.oauthError': {
+    pt: 'Não foi possível entrar com essa conta. Tente de novo ou use e-mail e senha.',
+    en: 'Could not sign in with that account. Try again or use email and password.',
+  },
+
+  'authCallback.working': { pt: 'Concluindo login...', en: 'Finishing sign in...' },
+  'authCallback.noSession': {
+    pt: 'Login não concluído. Verifique Apple/Google no Supabase.',
+    en: 'Sign in did not complete. Check Apple/Google in Supabase.',
+  },
 
   'signup.title': { pt: 'Criar conta', en: 'Create account' },
   'signup.confirmEmail': { pt: 'Confirme seu e-mail', en: 'Confirm your email' },

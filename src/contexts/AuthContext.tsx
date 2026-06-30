@@ -132,9 +132,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signInWithOAuth = async (provider: 'google' | 'apple') => {
+    const redirectTo = `${window.location.origin}/auth/callback`
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/explorar` },
+      options: {
+        redirectTo,
+        skipBrowserRedirect: false,
+        ...(provider === 'apple' ? { scopes: 'name email' } : {}),
+      },
     })
     return { error: error?.message ?? null }
   }
