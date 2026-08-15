@@ -3,7 +3,6 @@ import { Link, Navigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { BrandMark } from '../components/BrandMark'
 import type { InstructorApplication } from '../types/database'
 
 export function BecomeInstructor() {
@@ -70,10 +69,6 @@ export function BecomeInstructor() {
   return (
     <div className="page-shell">
       <div className="max-w-xl mx-auto px-4 py-10">
-        <p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold mb-3">
-          <BrandMark framed className="h-5 w-5" alt="" />
-          ATHENAS
-        </p>
         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{t('instructorApply.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('instructorApply.desc')}</p>
 

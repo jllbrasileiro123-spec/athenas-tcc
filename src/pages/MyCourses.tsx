@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { deleteHostedVideo } from '../lib/videoStorage'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
-import { BrandMark } from '../components/BrandMark'
 import type { TranslationKey } from '../i18n/translations'
 import type { Course, Lesson } from '../types/database'
 
@@ -154,10 +153,6 @@ export function MyCourses() {
       <div className="max-w-4xl mx-auto px-4 py-10 lg:py-12">
         <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
           <div>
-            <p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold mb-2">
-              <BrandMark framed className="h-5 w-5" alt="" />
-              ATHENAS
-            </p>
             <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{pageTitle}</h1>
             <p className="mt-2 text-sm text-neutral-600 max-w-lg">{pageSubtitle}</p>
           </div>
