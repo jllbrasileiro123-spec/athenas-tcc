@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useLanguage } from '../contexts/LanguageContext'
-import { BrandMark } from '../components/BrandMark'
 import type { Course, InstructorApplication } from '../types/database'
 
 type AppRow = InstructorApplication & {
@@ -84,10 +83,6 @@ export function AdminModeration() {
   return (
     <div className="page-shell">
       <div className="max-w-3xl mx-auto px-4 py-10">
-        <p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold mb-3">
-          <BrandMark framed className="h-5 w-5" alt="" />
-          ATHENAS · ADMIN
-        </p>
         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{t('admin.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('admin.desc')}</p>
 

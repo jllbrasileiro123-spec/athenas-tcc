@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { BrandMark } from '../components/BrandMark'
 import { BrandSelect } from '../components/BrandSelect'
 import { MoneyInput } from '../components/MoneyInput'
 import { formatBRL, reaisFromCents } from '../lib/money'
@@ -301,10 +300,6 @@ export function CreateCourse() {
         </Link>
 
         <header className="mb-6">
-          <p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] text-brand-gold mb-2">
-            <BrandMark framed className="h-5 w-5" alt="" />
-            ATHENAS · {t('nav.myLessons')}
-          </p>
           <h1 className="text-3xl font-bold text-neutral-900">{t('create.title')}</h1>
         </header>
 

@@ -4,7 +4,6 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
-import { BrandMark } from '../components/BrandMark'
 import type { Course } from '../types/database'
 
 export function InstructorDashboard() {
@@ -54,10 +53,6 @@ export function InstructorDashboard() {
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
           <div>
-            <p className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold mb-2">
-              <BrandMark framed className="h-5 w-5" alt="" />
-              ATHENAS
-            </p>
             <h1 className="text-2xl font-bold text-neutral-900">{t('instructor.title')}</h1>
           </div>
           <Link to="/instrutor/novo-curso" className="btn-primary">
