@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #0a0a0a;
+  --color-brand-dark: #000000;
+  --color-brand-gold: #c9a227;
+  --color-brand-gold-soft: #f5e6c8;
+  --color-brand-cream: #faf6ee;
+  --color-accent: #737373;
+}
+
+body {
+  @apply bg-brand-cream text-neutral-900 antialiased;
+}
+
+html {
+  scroll-padding-top: 4rem; /* = header h-16 */
+}
+
+@keyframes phoenix-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(201, 162, 39, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(201, 162, 39, 0.95)) drop-shadow(0 0 28px rgba(245, 230, 200, 0.8));
+  }
+}
+
+@keyframes celebration-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.86) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.phoenix-glow {
+  animation: phoenix-glow 1.6s ease-in-out infinite;
+}
+
+.celebration-pop {
+  animation: celebration-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.celebration-bar {
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer components {
+  .page-shell {
+    @apply min-h-full bg-brand-cream;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-bold text-brand-gold shadow-sm shadow-black/10 transition-colors hover:bg-black hover:shadow-md disabled:opacity-60;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-neutral-900 bg-white px-5 py-2.5 text-sm font-bold text-neutral-900 shadow-sm shadow-black/5 transition-colors hover:bg-neutral-950 hover:text-brand-gold hover:shadow-md;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm font-semibold text-neutral-700 transition-colors hover:bg-brand-gold-soft hover:text-neutral-900;
+  }
+
+  .input-athenas {
+    @apply w-full rounded-full border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold;
+  }
+
+  .card-athenas {
+    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm shadow-black/[0.04] transition-all hover:border-brand-gold/60 hover:shadow-md hover:shadow-black/[0.06];
+  }
+
+  .empty-athenas {
+    @apply rounded-2xl border border-brand-gold/30 bg-white p-10 md:p-12 text-center shadow-sm shadow-black/[0.04];
+  }
+
+  .alert-error {
+    @apply rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800;
+  }
+
+  .alert-brand {
+    @apply rounded-2xl border border-brand-gold/40 bg-brand-gold-soft/70 px-4 py-3 text-sm text-neutral-900;
+  }
+
+  .spinner-athenas {
+    @apply h-8 w-8 rounded-full border-2 border-brand-gold/30 border-t-brand-gold animate-spin;
+  }
+
+  .link-athenas {
+    @apply font-semibold text-brand-gold hover:underline;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
