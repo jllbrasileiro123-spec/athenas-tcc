@@ -71,8 +71,8 @@ export function InstructorDashboard() {
             </Link>
           </EmptyState>
         ) : (
-          <div className="bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-brand-gold/40 transition-colors">
-            <table className="w-full text-sm">
+          <div className="bg-white border border-neutral-200 rounded-2xl overflow-x-auto hover:border-brand-gold/40 transition-colors">
+            <table className="w-full text-sm min-w-[520px]">
               <thead className="bg-brand-cream border-b border-brand-gold/20">
                 <tr>
                   <th className="text-left p-3 text-neutral-700">{t('instructor.colTitle')}</th>

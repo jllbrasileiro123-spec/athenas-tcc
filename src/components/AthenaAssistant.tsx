@@ -75,6 +75,9 @@ export function AthenaAssistant() {
   const [resetStatus, setResetStatus] = useState<string | null>(null)
   const [resetLoading, setResetLoading] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
+  const [expanded, setExpanded] = useState(() =>
+    typeof window === 'undefined' ? true : window.matchMedia('(min-width: 1024px)').matches
+  )
   const canSend = input.trim().length > 0 && !typing
 
   useEffect(() => {
@@ -158,28 +161,49 @@ export function AthenaAssistant() {
   const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant')
 
   return (
-    <aside className="sticky top-20 z-10">
-      <div className="rounded-2xl border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col max-h-[min(80vh,640px)]">
+    <aside className="lg:sticky lg:top-20 z-10">
+      <div className="rounded-2xl border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col max-h-[min(70dvh,640px)] lg:max-h-[min(80vh,640px)]">
         <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
-          <div className="flex items-center gap-3">
-            <AthenaMark framed variant="header" className="h-[72px] w-[72px]" alt="Athena" />
+          <button
+            type="button"
+            className="flex items-center gap-3 text-left lg:pointer-events-none"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+          >
+            <AthenaMark framed variant="header" className="h-14 w-14 lg:h-[72px] lg:w-[72px]" alt="Athena" />
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-brand-gold">Athena</p>
               <h3 className="font-bold text-base leading-tight">{t('assistant.title')}</h3>
+              <p className="lg:hidden text-[11px] text-neutral-400 mt-0.5">
+                {expanded ? t('assistant.close') : t('assistant.open')}
+              </p>
             </div>
-          </div>
-          {messages.length > 1 && (
+          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {messages.length > 1 && expanded && (
+              <button
+                type="button"
+                onClick={clearChat}
+                className="text-[10px] font-bold uppercase tracking-wide text-neutral-500 hover:text-brand-gold"
+              >
+                {t('assistant.clear')}
+              </button>
+            )}
             <button
               type="button"
-              onClick={clearChat}
-              className="text-[10px] font-bold uppercase tracking-wide text-neutral-500 hover:text-brand-gold shrink-0"
+              className="lg:hidden h-8 w-8 rounded-full text-brand-gold hover:bg-white/10"
+              onClick={() => setExpanded((v) => !v)}
+              aria-label={expanded ? t('assistant.close') : t('assistant.open')}
             >
-              {t('assistant.clear')}
+              {expanded ? '–' : '+'}
             </button>
-          )}
+          </div>
         </div>
-        <p className="text-xs text-neutral-400 mb-3 shrink-0">{t('assistant.subtitle')}</p>
+        <p className={`text-xs text-neutral-400 mb-3 shrink-0 ${expanded ? '' : 'hidden lg:block'}`}>
+          {t('assistant.subtitle')}
+        </p>
 
+        <div className={expanded ? 'contents' : 'hidden lg:contents'}>
         <div
           ref={listRef}
           className="flex-1 min-h-[140px] overflow-y-auto space-y-3 pr-1 mb-3 rounded-lg bg-black/40 p-2"
@@ -305,7 +329,7 @@ export function AthenaAssistant() {
             onChange={(e) => setInput(e.target.value)}
             placeholder={t('assistant.placeholder')}
             disabled={typing}
-            className="flex-1 min-w-0 px-3 py-2 rounded-full bg-neutral-900 border border-neutral-600 text-sm text-white placeholder:text-neutral-500 outline-none focus:border-brand-gold disabled:opacity-60"
+            className="flex-1 min-w-0 px-3 py-2.5 rounded-full bg-neutral-900 border border-neutral-600 text-base text-white placeholder:text-neutral-500 outline-none focus:border-brand-gold disabled:opacity-60"
           />
           <button
             type="submit"
@@ -319,6 +343,7 @@ export function AthenaAssistant() {
             {t('assistant.send')}
           </button>
         </form>
+        </div>
       </div>
     </aside>
   )
