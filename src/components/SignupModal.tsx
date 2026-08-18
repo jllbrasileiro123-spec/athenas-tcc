@@ -53,7 +53,7 @@ export function SignupModal({ onClose }: SignupModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-[2px]"
       onClick={onClose}
       role="presentation"
     >
@@ -61,7 +61,7 @@ export function SignupModal({ onClose }: SignupModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="signup-title"
-        className="w-full max-w-[400px] bg-white rounded-2xl shadow-2xl border border-brand-gold/20 overflow-hidden"
+        className="w-full max-w-[400px] max-h-[min(92dvh,720px)] overflow-y-auto bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-brand-gold/20 pb-[env(safe-area-inset-bottom)] sm:pb-0"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-brand-gold/20 bg-brand-cream">

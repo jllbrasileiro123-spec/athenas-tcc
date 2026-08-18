@@ -5,6 +5,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { InstructorRoute } from './components/InstructorRoute'
 import { AdminRoute } from './components/AdminRoute'
 import { BrandSplash } from './components/BrandSplash'
+import { InstallAppBanner } from './components/InstallAppBanner'
 import { Login } from './pages/Login'
 import { AuthCallback } from './pages/AuthCallback'
 
@@ -41,6 +42,7 @@ function AuthenticatedLayout() {
 export default function App() {
   return (
     <Suspense fallback={<PageFallback />}>
+      <InstallAppBanner />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />

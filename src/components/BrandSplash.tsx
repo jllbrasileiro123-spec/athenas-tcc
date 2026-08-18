@@ -5,7 +5,7 @@ export function BrandSplash({ message, fullScreen = false }: { message?: string;
   return (
     <div
       className={`flex flex-col items-center justify-center bg-brand-cream px-4 ${
-        fullScreen ? 'min-h-screen' : 'min-h-[40vh]'
+        fullScreen ? 'min-h-dvh' : 'min-h-[40vh]'
       }`}
     >
       <div className="animate-[athenas-fade-in_0.7s_ease-out_both] text-center">

@@ -167,6 +167,7 @@ function YouTubeTrackedPlayer({
       const playerVars: Record<string, number | string> = {
         rel: 0,
         modestbranding: 1,
+        playsinline: 1,
         origin: window.location.origin,
       }
       if (yt.playlistId) {
@@ -216,7 +217,16 @@ function YouTubeTrackedPlayer({
   if (!onNearComplete) {
     const embed = youtubeEmbedUrl(videoUrl)
     if (!embed) return null
-    return <iframe src={embed} title={title} className="w-full h-full" allowFullScreen />
+    return (
+      <iframe
+        src={embed}
+        title={title}
+        className="w-full h-full"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
+    )
   }
 
   return <div id={hostId} className="w-full h-full" title={title} />

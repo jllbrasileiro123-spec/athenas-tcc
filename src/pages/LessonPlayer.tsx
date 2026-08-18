@@ -137,7 +137,7 @@ export function LessonPlayer() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-5 md:py-8">
         <Link to={`/curso/${courseId}`} className="text-sm link-athenas">
           ← {course?.title ?? t('course.backToCourse')}
         </Link>

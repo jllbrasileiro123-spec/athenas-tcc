@@ -4,8 +4,13 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { GamificationProvider } from './contexts/GamificationContext'
 import { LanguageProvider } from './contexts/LanguageContext'
+import { captureInstallPrompt } from './components/InstallAppBanner'
+import { registerServiceWorker } from './lib/pwa'
 import App from './App'
 import './index.css'
+
+captureInstallPrompt()
+registerServiceWorker()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

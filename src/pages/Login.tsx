@@ -82,7 +82,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
   }
 
   return (
-    <div className="min-h-screen bg-brand-cream flex flex-col items-center justify-center p-4 gap-4">
+    <div className="min-h-dvh bg-brand-cream flex flex-col items-center justify-center p-4 gap-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
       {!isSupabaseConfigured && (
         <div className="w-full max-w-[920px] alert-brand">
           <p className="font-semibold">Supabase ainda não configurado</p>
@@ -93,23 +93,23 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
           </p>
         </div>
       )}
-      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[520px] border border-brand-gold/20">
-        <div className="bg-neutral-950 text-white p-10 md:p-12 flex flex-col justify-between md:w-[42%] border-r border-brand-gold/20">
+      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[520px] border border-brand-gold/20">
+        <div className="bg-neutral-950 text-white p-6 sm:p-10 md:p-12 flex flex-col justify-between md:w-[42%] border-r border-brand-gold/20">
           <div>
-            <BrandMark className="h-14 w-auto max-w-[11rem]" alt="ATHENAS" />
+            <BrandMark className="h-12 sm:h-14 w-auto max-w-[11rem]" alt="ATHENAS" />
             <p className="mt-3 text-sm font-semibold tracking-[0.25em] uppercase text-brand-gold">
               ATHENAS
             </p>
           </div>
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight">{t('login.welcome')}</h1>
-            <p className="text-neutral-400 mt-4 text-sm leading-relaxed">{t('login.welcomeDesc')}</p>
+          <div className="mt-6 md:mt-0">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">{t('login.welcome')}</h1>
+            <p className="text-neutral-400 mt-3 md:mt-4 text-sm leading-relaxed">{t('login.welcomeDesc')}</p>
           </div>
         </div>
 
-        <div className="bg-brand-cream/40 p-10 md:p-12 flex flex-col justify-center md:w-[58%]">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-neutral-900">{t('login.title')}</h2>
+        <div className="bg-brand-cream/40 p-6 sm:p-10 md:p-12 flex flex-col justify-center md:w-[58%]">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('login.title')}</h2>
             <p className="text-neutral-500 text-sm mt-1">{t('login.subtitle')}</p>
           </div>
 
@@ -125,7 +125,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 bg-transparent outline-none text-neutral-900 placeholder:text-neutral-400 text-sm"
+                className="flex-1 bg-transparent outline-none text-neutral-900 placeholder:text-neutral-400 text-base"
               />
             </div>
 
@@ -138,7 +138,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
                 placeholder={t('login.password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="flex-1 bg-transparent outline-none text-neutral-900 placeholder:text-neutral-400 text-sm"
+                className="flex-1 bg-transparent outline-none text-neutral-900 placeholder:text-neutral-400 text-base"
               />
               <button
                 type="button"

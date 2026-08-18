@@ -15,6 +15,11 @@ export const translations = {
   'nav.teach': { pt: 'Meus cursos', en: 'My courses' },
   'nav.login': { pt: 'Entrar', en: 'Sign in' },
   'nav.signup': { pt: 'Cadastrar', en: 'Sign up' },
+  'nav.mobile': { pt: 'Navegação principal', en: 'Main navigation' },
+  'nav.exploreShort': { pt: 'Explorar', en: 'Explore' },
+  'nav.learnShort': { pt: 'Aulas', en: 'Learn' },
+  'nav.teachShort': { pt: 'Ensinar', en: 'Teach' },
+  'nav.adminShort': { pt: 'Admin', en: 'Admin' },
   'footer.tagline': {
     pt: 'Educação inteligente com assistente Athena',
     en: 'Smart education with Athena assistant',
@@ -602,6 +607,21 @@ export const translations = {
   'create.lessonType': { pt: 'Tipo da aula', en: 'Lesson type' },
   'create.quizSection': { pt: 'Perguntas do checkpoint', en: 'Checkpoint questions' },
   'create.videoSection': { pt: 'Vídeo da lição', en: 'Lesson video' },
+
+  'pwa.installTitle': { pt: 'Usar o ATHENAS no celular', en: 'Use ATHENAS on your phone' },
+  'pwa.installBody': {
+    pt: 'Instale o app na tela inicial para abrir em tela cheia, como um aplicativo.',
+    en: 'Install the app on your home screen to open it full screen.',
+  },
+  'pwa.installCta': { pt: 'Instalar', en: 'Install' },
+  'pwa.iosHint': {
+    pt: 'No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.',
+    en: 'In Safari, tap Share, then Add to Home Screen.',
+  },
+  'pwa.dismiss': { pt: 'Agora não', en: 'Not now' },
+
+  'assistant.open': { pt: 'Toque para conversar', en: 'Tap to chat' },
+  'assistant.close': { pt: 'Recolher chat', en: 'Collapse chat' },
 } as const
 
 export type TranslationKey = keyof typeof translations
