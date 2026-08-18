@@ -69,3 +69,13 @@ npm run dev
 ```
 
 A aplicação estará disponível em [http://localhost:5173](http://localhost:5173).
+
+## Usar no celular
+
+O ATHENAS é um aplicativo web instalável (PWA). Depois de publicado (Railway ou outro HTTPS):
+
+1. Abra o site no Safari (iPhone) ou no Chrome (Android).
+2. **iPhone:** toque em **Compartilhar** e depois em **Adicionar à Tela de Início**.
+3. **Android:** use o aviso **Instalar** ou o menu do Chrome → **Adicionar à tela inicial**.
+
+O atalho abre em tela cheia, como um app. No computador, `npm run dev` também funciona no celular da mesma rede: o Vite já escuta em `0.0.0.0:5173` — acesse `http://<ip-do-computador>:5173`.

@@ -81,17 +81,17 @@ export function Home() {
   return (
     <div className="bg-brand-cream min-h-full">
       <section className="border-b border-neutral-200 bg-white">
-        <div className="max-w-[1400px] mx-auto px-4 py-10 lg:py-14">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+        <div className="max-w-[1400px] mx-auto px-4 py-6 md:py-10 lg:py-14">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
             <div className="max-w-2xl">
-              <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-gold mb-4">
+              <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-gold mb-3 md:mb-4">
                 <BrandMark framed className="h-5 w-5" alt="" />
                 {t('home.badge')}
               </p>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 leading-[1.1]">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 leading-[1.1]">
                 {t('home.title')}
               </h1>
-              <p className="mt-4 text-neutral-600 text-lg max-w-xl">
+              <p className="mt-3 md:mt-4 text-neutral-600 text-base md:text-lg max-w-xl">
                 {t('home.desc', { athena: 'Athena' })}
               </p>
             </div>
@@ -109,7 +109,7 @@ export function Home() {
                   placeholder={t('home.searchPlaceholder')}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="flex-1 px-5 py-3.5 text-neutral-900 outline-none text-sm"
+                  className="flex-1 px-5 py-3.5 text-neutral-900 outline-none text-base"
                 />
                 <button
                   type="submit"

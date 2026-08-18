@@ -9,12 +9,32 @@
   --color-accent: #737373;
 }
 
-body {
-  @apply bg-brand-cream text-neutral-900 antialiased;
+html {
+  scroll-padding-top: calc(3.5rem + env(safe-area-inset-top));
 }
 
-html {
-  scroll-padding-top: 4rem; /* = header h-16 */
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: calc(4rem + env(safe-area-inset-top));
+  }
+}
+
+body {
+  @apply bg-brand-cream text-neutral-900 antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+@media (display-mode: standalone) {
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
 }
 
 @keyframes phoenix-glow {
@@ -68,7 +88,7 @@ html {
   }
 
   .input-athenas {
-    @apply w-full rounded-full border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold;
+    @apply w-full rounded-full border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold;
   }
 
   .card-athenas {

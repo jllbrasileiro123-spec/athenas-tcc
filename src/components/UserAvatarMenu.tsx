@@ -107,7 +107,7 @@ export function UserAvatarMenu() {
       <button
         type="button"
         onClick={openMenu}
-        className="h-10 w-10 rounded-full overflow-hidden border-2 border-brand-gold bg-neutral-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
+        className="h-10 w-10 rounded-full overflow-hidden border-2 border-brand-gold bg-neutral-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 touch-manipulation"
         aria-expanded={open}
         aria-haspopup="true"
         aria-label={t('menu.account')}
@@ -131,10 +131,23 @@ export function UserAvatarMenu() {
 
       {open && (
         <div
-          className={`absolute right-0 top-full mt-2 rounded-2xl border border-brand-gold/30 bg-white shadow-xl z-[100] overflow-hidden ${
-            panel === 'help' ? 'w-[320px]' : 'w-[288px]'
+          className="fixed inset-0 z-[99] bg-neutral-950/50 md:hidden"
+          onClick={() => {
+            setOpen(false)
+            setPanel('menu')
+          }}
+        />
+      )}
+
+      {open && (
+        <div
+          className={`fixed inset-x-0 bottom-0 z-[100] max-h-[min(85dvh,640px)] overflow-y-auto rounded-t-3xl border border-brand-gold/30 bg-white shadow-xl pb-[env(safe-area-inset-bottom)] md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 md:max-h-[min(80vh,560px)] md:rounded-2xl md:pb-0 ${
+            panel === 'help' ? 'md:w-[320px]' : 'md:w-[288px]'
           }`}
         >
+          <div className="md:hidden flex justify-center pt-2 pb-1">
+            <span className="h-1 w-10 rounded-full bg-neutral-300" />
+          </div>
           <div className="px-4 py-3 bg-neutral-950 text-white border-b border-brand-gold/20">
             <p className="font-bold text-sm truncate text-brand-gold flex items-center gap-2 flex-wrap">
               <span className="truncate">{displayName}</span>

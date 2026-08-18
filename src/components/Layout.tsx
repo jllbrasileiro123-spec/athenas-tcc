@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { BrandMark } from './BrandMark'
 import { StreakWidget } from './StreakWidget'
 import { UserAvatarMenu } from './UserAvatarMenu'
+import { MobileTabBar } from './MobileTabBar'
 import { buildWhatsAppUrl } from '../lib/supportWhatsApp'
 
 export function Layout() {
@@ -28,10 +29,9 @@ export function Layout() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-cream">
-      {/* Header fixo: main reserva o espaço com pt-16 (64px) */}
-      <header className="fixed inset-x-0 top-0 z-50 h-16 bg-white/95 backdrop-blur border-b border-brand-gold/20 shadow-sm">
-        <div className="max-w-7xl mx-auto h-full px-3 sm:px-4 flex items-center gap-3">
+    <div className="min-h-dvh flex flex-col bg-brand-cream">
+      <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur border-b border-brand-gold/20 shadow-sm pt-[env(safe-area-inset-top)]">
+        <div className="max-w-7xl mx-auto h-14 md:h-16 px-3 sm:px-4 flex items-center gap-2 sm:gap-3">
           <Link
             to="/explorar"
             className="inline-flex items-center gap-2 text-neutral-950 font-bold text-base sm:text-lg shrink-0 tracking-widest uppercase"
@@ -40,7 +40,7 @@ export function Layout() {
             <span className="hidden sm:inline">ATHENAS</span>
           </Link>
 
-          <nav className="flex-1 min-w-0 flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
+          <nav className="hidden md:flex flex-1 min-w-0 items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
             <NavLink to="/explorar" className={({ isActive }) => navClass(isActive)} end={false}>
               {t('nav.explore')}
             </NavLink>
@@ -63,7 +63,7 @@ export function Layout() {
             )}
           </nav>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="ml-auto flex items-center gap-2 shrink-0">
             {user ? (
               <>
                 <StreakWidget />
@@ -83,11 +83,11 @@ export function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-[calc(4rem+env(safe-area-inset-top))] pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <Outlet />
       </main>
 
-      <footer className="bg-neutral-950 text-neutral-400 mt-auto border-t border-brand-gold/20">
+      <footer className="hidden md:block bg-neutral-950 text-neutral-400 mt-auto border-t border-brand-gold/20">
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
             <div className="max-w-sm">
@@ -122,6 +122,8 @@ export function Layout() {
           </p>
         </div>
       </footer>
+
+      <MobileTabBar />
     </div>
   )
 }

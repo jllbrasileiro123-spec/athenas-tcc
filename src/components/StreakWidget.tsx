@@ -50,7 +50,7 @@ export function StreakWidget() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold-soft/70 px-2.5 py-1 hover:bg-brand-gold-soft"
+          className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold-soft/70 px-2 py-1 sm:px-2.5 hover:bg-brand-gold-soft touch-manipulation"
           aria-expanded={open}
           aria-label={t('streak.aria')}
         >
@@ -63,7 +63,7 @@ export function StreakWidget() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-white px-2.5 py-1 hover:bg-brand-gold-soft/70"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-white px-2 py-1 sm:px-2.5 hover:bg-brand-gold-soft/70 touch-manipulation"
           aria-expanded={open}
           aria-label={t('streak.coinsAria')}
         >
@@ -74,7 +74,12 @@ export function StreakWidget() {
         </button>
 
         {open && (
-          <div className="absolute right-0 top-full mt-2 w-[320px] rounded-2xl border border-brand-gold/30 bg-white shadow-xl z-[90] p-4">
+          <>
+            <div className="fixed inset-0 z-[89] bg-neutral-950/50 md:hidden" onClick={() => setOpen(false)} />
+            <div className="fixed inset-x-0 bottom-0 z-[90] max-h-[min(85dvh,640px)] overflow-y-auto rounded-t-3xl border border-brand-gold/30 bg-white shadow-xl p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 md:w-[min(320px,calc(100vw-1.5rem))] md:max-h-none md:rounded-2xl md:pb-4">
+              <div className="md:hidden flex justify-center pb-2">
+                <span className="h-1 w-10 rounded-full bg-neutral-300" />
+              </div>
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-bold text-neutral-900">
@@ -112,7 +117,8 @@ export function StreakWidget() {
                 </p>
               )}
             </div>
-          </div>
+            </div>
+          </>
         )}
       </div>
 
