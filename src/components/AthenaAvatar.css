@@ -1,0 +1,65 @@
+.athena-avatar-header {
+  display: inline-flex;
+  flex: none;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 2px;
+  border: 0;
+  border-radius: 16px;
+  background: conic-gradient(
+    from 210deg,
+    #f1d77a 0deg,
+    #e8c95a 40deg,
+    #d4af37 80deg,
+    #8a6e1c 140deg,
+    #d4af37 190deg,
+    #f3e0a0 240deg,
+    #b89428 300deg,
+    #d4af37 340deg,
+    #f1d77a 360deg
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(243, 224, 160, 0.45),
+    0 0 10px rgba(212, 175, 55, 0.28);
+}
+
+.athena-avatar-mensagem {
+  display: inline-flex;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  border: 1.5px solid #d4af37;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: none;
+}
+
+.athena-avatar-header img,
+.athena-avatar-mensagem img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  background: #000;
+}
+
+.athena-avatar-header img {
+  border-radius: 14px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.athena-avatar-mensagem img {
+  border-radius: 50%;
+  transform: scale(1.12);
+}
