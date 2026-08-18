@@ -92,8 +92,8 @@ export const translations = {
   'home.loadingCourses': { pt: 'Carregando formações...', en: 'Loading programs...' },
   'home.noPublished': { pt: 'Nenhuma formação publicada ainda', en: 'No published programs yet' },
   'home.noPublishedHint': {
-    pt: 'Quando houver formações publicadas pela curadoria ATHENAS, elas aparecem aqui. Instrutores podem criar a primeira em Meus cursos.',
-    en: 'Published programs from ATHENAS curation will show up here. Instructors can create the first one in My courses.',
+    pt: 'Quando um instrutor publicar uma formação, ela aparece aqui. Você pode criar a primeira em Meus cursos.',
+    en: 'When an instructor publishes a program, it shows up here. You can create the first one in My courses.',
   },
   'home.noResults': { pt: 'Não há resultados para "{query}"', en: 'No results for "{query}"' },
   'home.noResultsFilter': { pt: 'Não há resultados em "{filter}"', en: 'No results in "{filter}"' },
@@ -367,8 +367,8 @@ export const translations = {
 
   'create.title': { pt: 'Nova formação', en: 'New program' },
   'create.subtitle': {
-    pt: 'Monte a formação e envie para revisão da curadoria antes de ir ao ar.',
-    en: 'Build the program and submit it for curation review before it goes live.',
+    pt: 'Monte a formação e publique para aparecer em Explorar.',
+    en: 'Build the program and publish it to appear in Explore.',
   },
   'create.error': { pt: 'Erro ao criar curso', en: 'Error creating course' },
   'create.back': { pt: 'Voltar para meus cursos', en: 'Back to my courses' },
@@ -387,10 +387,10 @@ export const translations = {
     en: 'Max R$ 50,000.00. Leave 0 for free.',
   },
   'create.level': { pt: 'Nível', en: 'Level' },
-  'create.publish': { pt: 'Enviar para revisão', en: 'Submit for review' },
+  'create.publish': { pt: 'Publicar', en: 'Publish' },
   'create.publishHint': {
-    pt: 'Formações não vão direto ao público: a curadoria ATHENAS aprova antes de aparecer em Explorar.',
-    en: 'Programs are not public right away: ATHENAS curation must approve before they appear in Explore.',
+    pt: 'Ao publicar, a formação aparece na hora em Explorar para os alunos.',
+    en: 'When you publish, the program goes live in Explore right away.',
   },
   'create.lessons': { pt: 'Aulas', en: 'Lessons' },
   'create.lessonsHint': {
@@ -443,7 +443,7 @@ export const translations = {
   'create.previewBadge': { pt: 'Prévia grátis', en: 'Free preview' },
   'create.videoTag': { pt: 'com vídeo', en: 'with video' },
   'create.noVideoYet': { pt: 'sem vídeo', en: 'no video' },
-  'create.submit': { pt: 'Enviar para revisão', en: 'Submit for review' },
+  'create.submit': { pt: 'Publicar agora', en: 'Publish now' },
   'create.submitDraft': { pt: 'Salvar rascunho', en: 'Save draft' },
   'create.lessonTitleRequired': {
     pt: 'Digite o título da aula antes de adicionar.',
@@ -455,7 +455,7 @@ export const translations = {
   },
   'create.stepInfo': { pt: 'Informações', en: 'Details' },
   'create.stepLessons': { pt: 'Aulas', en: 'Lessons' },
-  'create.stepReview': { pt: 'Revisão', en: 'Review' },
+  'create.stepReview': { pt: 'Confirmar', en: 'Confirm' },
   'create.next': { pt: 'Próximo', en: 'Next' },
   'create.moveUp': { pt: 'Subir aula', en: 'Move lesson up' },
   'create.moveDown': { pt: 'Descer aula', en: 'Move lesson down' },

@@ -108,7 +108,7 @@ const copy: Record<
       navigate: { label: 'Abrir Meu aprendizado', to: '/meus-cursos' },
     },
     instructor: {
-      text: 'Para ensinar, peça em Conta → Tornar-se instrutor. Depois de aprovado, crie a formação e envie para revisão da curadoria.',
+      text: 'Para ensinar, peça em Conta → Tornar-se instrutor. Depois de aprovado, crie a formação e publique direto no catálogo.',
       followups: ['Quero ser instrutor', 'Como criar um curso?', 'Falar com o suporte'],
       navigate: { label: 'Tornar-se instrutor', to: '/tornar-se-instrutor' },
     },
@@ -178,7 +178,7 @@ const copy: Record<
       navigate: { label: 'Open My learning', to: '/meus-cursos' },
     },
     instructor: {
-      text: 'To teach, apply via Account → Become an instructor. After approval, create a program and submit it for curation review.',
+      text: 'To teach, apply via Account → Become an instructor. After approval, create a program and publish it to the catalog.',
       followups: ['I want to be an instructor', 'How do I create a course?', 'Talk to support'],
       navigate: { label: 'Become an instructor', to: '/tornar-se-instrutor' },
     },
