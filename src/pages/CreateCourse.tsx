@@ -193,14 +193,14 @@ export function CreateCourse() {
       description: description.trim() || null,
       price: reaisFromCents(priceCents),
       level,
-      published: forReview,
+      published: false,
     }
 
     let course: { id: string } | null = null
     let courseErr = (
       await supabase
         .from('courses')
-        .insert({ ...base, review_status: forReview ? 'approved' : 'draft' })
+        .insert({ ...base, review_status: forReview ? 'pending_review' : 'draft' })
         .select('id')
         .single()
     )

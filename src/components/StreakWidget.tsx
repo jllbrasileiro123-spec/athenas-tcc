@@ -46,28 +46,20 @@ export function StreakWidget() {
 
   return (
     <>
-      <div ref={rootRef} className="relative flex items-center gap-1.5">
+      <div ref={rootRef} className="relative">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold-soft/70 px-2 py-1 sm:px-2.5 hover:bg-brand-gold-soft touch-manipulation"
+          className="inline-flex items-center gap-1.5 touch-manipulation"
           aria-expanded={open}
-          aria-label={t('streak.aria')}
+          aria-label={`${t('streak.aria')}. ${t('streak.coinsAria')}`}
         >
-          <PhoenixMark className="h-6 w-6" glow={status.current_streak > 0} />
-          <span className="text-sm font-bold text-neutral-900 tabular-nums leading-none">
+          <img src="/icons/streak-flame.png" alt="" className="h-5 w-5 object-contain" draggable={false} />
+          <span className="text-sm font-bold text-neutral-900 tabular-nums">
             {status.current_streak}
-            <span className="ml-0.5 text-[10px] font-bold text-neutral-500">d</span>
           </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-white px-2 py-1 sm:px-2.5 hover:bg-brand-gold-soft/70 touch-manipulation"
-          aria-expanded={open}
-          aria-label={t('streak.coinsAria')}
-        >
-          <CoinIcon />
+          <span className="mx-0.5 h-5 w-px bg-neutral-400" aria-hidden />
+          <img src="/icons/coin-a.png" alt="" className="h-5 w-5 object-contain" draggable={false} />
           <span className="text-sm font-bold text-neutral-900 tabular-nums">
             {status.coin_balance}
           </span>
@@ -196,15 +188,6 @@ function StreakCalendar({ dates, today }: { dates: string[]; today: string }) {
         })}
       </div>
     </div>
-  )
-}
-
-function CoinIcon() {
-  return (
-    <svg className="h-4 w-4 text-brand-gold" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
-      <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
   )
 }
 

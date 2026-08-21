@@ -207,9 +207,19 @@ grant execute on function public.submit_course_for_review(uuid) to authenticated
 grant execute on function public.review_course(uuid, text, text) to authenticated;
 
 -- Admin vê cursos em revisão
-create policy "Admin vê todos os cursos"
-  on public.courses for select to authenticated
-  using (public.is_admin());
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'courses' and policyname = 'Admin vê todos os cursos'
+  ) then
+    create policy "Admin vê todos os cursos"
+      on public.courses for select to authenticated
+      using (public.is_admin());
+  end if;
+end $$;
+
+notify pgrst, 'reload schema';
 
 -- Depois de rodar este script, promova pelo menos um usuário a admin:
 -- update public.profiles set role = 'admin' where id = '<uuid-do-seu-usuario>';
