@@ -9,9 +9,16 @@ import {
   type ReactNode,
 } from 'react'
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
+import {
+  createDemoProfile,
+  createDemoSession,
+  createDemoUser,
+  isDemoSessionActive,
+  setDemoSessionActive,
+} from '../lib/demoAuth'
 import { resizeAvatarImage } from '../lib/imageResize'
 import { clearProfileCache, writeProfileCache } from '../lib/profileCache'
-import { supabase } from '../lib/supabase'
+import { isSupabaseConfigured, supabase } from '../lib/supabase'
 import type { Profile } from '../types/database'
 
 const PROFILE_SELECT = 'id, full_name, avatar_url, role, created_at'
@@ -22,6 +29,9 @@ interface AuthContextValue {
   profile: Profile | null
   /** true até saber se há sessão (não espera o perfil) */
   initializing: boolean
+  /** Acesso local sem Supabase (só para explorar a interface) */
+  demoMode: boolean
+  enterDemoMode: () => void
   signUp: (email: string, password: string, fullName: string, role?: string) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signInWithOAuth: (provider: 'google') => Promise<{ error: string | null }>
@@ -45,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [initializing, setInitializing] = useState(true)
+  const [demoMode, setDemoMode] = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const profileUserRef = useRef<string | null>(null)
 
@@ -60,7 +71,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // antigo escondia "Meus cursos" / "Moderação" na barra.
   }, [])
 
+  const applyDemoSession = useCallback(() => {
+    const demoUser = createDemoUser()
+    const demoProfile = createDemoProfile()
+    setDemoSessionActive(true)
+    setDemoMode(true)
+    applySession(createDemoSession(demoUser))
+    profileUserRef.current = demoUser.id
+    setProfile(demoProfile)
+    writeProfileCache(demoUser.id, demoProfile)
+    setInitializing(false)
+  }, [applySession])
+
+  const enterDemoMode = useCallback(() => {
+    applyDemoSession()
+  }, [applyDemoSession])
+
   const fetchProfile = useCallback(async (userId: string) => {
+    if (!isSupabaseConfigured || isDemoSessionActive()) {
+      const demoProfile = createDemoProfile()
+      profileUserRef.current = userId
+      setProfile(demoProfile)
+      writeProfileCache(userId, demoProfile)
+      return demoProfile
+    }
+
     const { data, error } = await supabase
       .from('profiles')
       .select(PROFILE_SELECT)
@@ -92,6 +127,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!cancelled) setInitializing(false)
     }, 4000)
 
+    if (!isSupabaseConfigured && isDemoSessionActive()) {
+      applyDemoSession()
+      window.clearTimeout(safety)
+      return () => {
+        cancelled = true
+        window.clearTimeout(safety)
+      }
+    }
+
     // getSession fora do callback evita deadlock do lock de auth do Supabase
     void supabase.auth.getSession().then(({ data: { session: s } }) => {
       if (cancelled) return
@@ -108,6 +152,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, s) => {
+      if (isDemoSessionActive()) return
+
       applySession(s)
 
       // Nunca chamar .from() síncrono dentro deste callback — deadlock do client
@@ -128,12 +174,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.clearTimeout(safety)
       subscription.unsubscribe()
     }
-  }, [applySession, fetchProfile])
+  }, [applyDemoSession, applySession, fetchProfile])
 
   // Recarrega o role quando a aba volta ao foco (ex.: após virar admin no SQL)
   useEffect(() => {
     function onVisible() {
-      if (document.visibilityState === 'visible' && user?.id) {
+      if (document.visibilityState === 'visible' && user?.id && isSupabaseConfigured && !isDemoSessionActive()) {
         clearProfileCache()
         void fetchProfile(user.id)
       }
@@ -152,6 +198,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fullName: string,
     role = 'student'
   ) => {
+    if (!isSupabaseConfigured) {
+      return { error: 'Configure o Supabase para criar contas reais.' }
+    }
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -164,6 +213,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      applyDemoSession()
+      return { error: null }
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error: error.message }
 
@@ -200,14 +254,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
+    setDemoSessionActive(false)
+    setDemoMode(false)
     applySession(null)
     setInitializing(false)
     clearProfileCache()
-    await supabase.auth.signOut({ scope: 'local' })
+    if (isSupabaseConfigured) {
+      await supabase.auth.signOut({ scope: 'local' })
+    }
   }
 
   const uploadAvatar = async (file: File) => {
     if (!user) return { error: 'Faça login novamente.' }
+    if (!isSupabaseConfigured || isDemoSessionActive()) {
+      return { error: 'Upload de foto disponível após configurar o Supabase.' }
+    }
 
     let resized: File
     try {
@@ -292,6 +353,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return next
     })
 
+    if (!isSupabaseConfigured || isDemoSessionActive()) {
+      return { error: null }
+    }
+
     const { error } = await supabase.from('profiles').update(payload).eq('id', user.id)
     if (error) {
       void fetchProfile(user.id)
@@ -311,6 +376,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       initializing,
+      demoMode,
+      enterDemoMode,
       signUp,
       signIn,
       signInWithOAuth,
@@ -322,7 +389,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       uploadingAvatar,
       updateProfile,
     }),
-    [user, session, profile, initializing, refreshProfile, uploadingAvatar]
+    [user, session, profile, initializing, demoMode, enterDemoMode, refreshProfile, uploadingAvatar]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

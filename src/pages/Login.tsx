@@ -26,7 +26,7 @@ function LockIcon() {
 }
 
 export function Login({ openSignup = false }: { openSignup?: boolean }) {
-  const { signIn, user } = useAuth()
+  const { signIn, enterDemoMode, user } = useAuth()
   const { t } = useLanguage()
   const navigate = useNavigate()
   const location = useLocation()
@@ -85,12 +85,21 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
     <div className="min-h-dvh bg-brand-cream flex flex-col items-center justify-center p-4 gap-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
       {!isSupabaseConfigured && (
         <div className="w-full max-w-[920px] alert-brand">
-          <p className="font-semibold">Supabase ainda não configurado</p>
+          <p className="font-semibold">Modo demonstração disponível</p>
           <p className="mt-1 text-neutral-700">
-            Edite o arquivo <code className="font-mono text-xs">.env</code> com a URL e a chave{' '}
-            <code className="font-mono text-xs">anon</code> do seu projeto Supabase e reinicie{' '}
-            <code className="font-mono text-xs">npm run dev</code>.
+            O Supabase ainda não está configurado. Você pode entrar para explorar a interface;
+            cursos e dados reais só aparecem depois de conectar o projeto.
           </p>
+          <button
+            type="button"
+            className="btn-primary mt-3"
+            onClick={() => {
+              enterDemoMode()
+              navigate(from, { replace: true })
+            }}
+          >
+            Entrar sem Supabase
+          </button>
         </div>
       )}
       <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[520px] border border-brand-gold/20">
