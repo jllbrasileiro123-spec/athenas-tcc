@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useLanguage } from '../contexts/LanguageContext'
+import { EmptyState, FolderIcon } from '../components/EmptyState'
+import type { TranslationKey } from '../i18n/translations'
 import type { Course, InstructorApplication } from '../types/database'
 
 type AppRow = InstructorApplication & {
@@ -12,6 +13,17 @@ type CourseRow = Course & {
   profiles?: { full_name: string | null } | null
 }
 
+type TFn = (key: TranslationKey, vars?: Record<string, string>) => string
+
+function formatAgo(iso: string, t: TFn) {
+  const min = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 60000))
+  if (min < 1) return t('admin.justNow')
+  if (min < 60) return t('admin.minutesAgo', { n: String(min) })
+  const hours = Math.floor(min / 60)
+  if (hours < 24) return t('admin.hoursAgo', { n: String(hours) })
+  return t('admin.daysAgo', { n: String(Math.floor(hours / 24)) })
+}
+
 export function AdminModeration() {
   const { t } = useLanguage()
   const [tab, setTab] = useState<'instructors' | 'courses'>('instructors')
@@ -19,7 +31,6 @@ export function AdminModeration() {
   const [courses, setCourses] = useState<CourseRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [notes, setNotes] = useState<Record<string, string>>({})
   const [busyId, setBusyId] = useState<string | null>(null)
 
   const load = useCallback(async () => {
@@ -37,8 +48,16 @@ export function AdminModeration() {
         .eq('review_status', 'pending_review')
         .order('updated_at', { ascending: true }),
     ])
-    if (appsRes.error) setError(appsRes.error.message)
-    else setApps((appsRes.data as AppRow[]) ?? [])
+    const missingTable =
+      appsRes.error?.message?.includes('instructor_applications') ||
+      appsRes.error?.message?.includes('schema cache')
+    if (missingTable) {
+      setError(t('admin.missingTable'))
+    } else if (appsRes.error) {
+      setError(appsRes.error.message)
+    } else {
+      setApps((appsRes.data as AppRow[]) ?? [])
+    }
     if (coursesRes.error) setError((prev) => prev ?? coursesRes.error!.message)
     else setCourses((coursesRes.data as CourseRow[]) ?? [])
     setLoading(false)
@@ -54,7 +73,7 @@ export function AdminModeration() {
     const { error: err } = await supabase.rpc('review_instructor_application', {
       application_id: id,
       new_status: status,
-      note: notes[id]?.trim() || null,
+      note: null,
     })
     setBusyId(null)
     if (err) {
@@ -70,7 +89,7 @@ export function AdminModeration() {
     const { error: err } = await supabase.rpc('review_course', {
       course_id: id,
       new_status: status,
-      note: notes[id]?.trim() || null,
+      note: null,
     })
     setBusyId(null)
     if (err) {
@@ -86,16 +105,7 @@ export function AdminModeration() {
         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{t('admin.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('admin.desc')}</p>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Link to="/instrutor/novo-curso" className="btn-primary !py-2.5 !px-4">
-            {t('admin.createCourse')}
-          </Link>
-          <Link to="/instrutor" className="btn-secondary !py-2.5 !px-4">
-            {t('admin.myCourses')}
-          </Link>
-        </div>
-
-        <div className="mt-6 flex gap-2">
+        <div className="mt-6 flex flex-wrap gap-2 p-1 bg-white border border-brand-gold/20 rounded-full w-full sm:w-fit shadow-sm">
           <TabBtn active={tab === 'instructors'} onClick={() => setTab('instructors')}>
             {t('admin.tabInstructors')} ({apps.length})
           </TabBtn>
@@ -113,46 +123,30 @@ export function AdminModeration() {
         ) : tab === 'instructors' ? (
           <div className="mt-6 space-y-4">
             {apps.length === 0 ? (
-              <EmptyState text={t('admin.noInstructorApps')} />
+              <EmptyState icon={<FolderIcon />} title={t('admin.noInstructorApps')} />
             ) : (
               apps.map((app) => (
-                <article key={app.id} className="card-athenas p-5 space-y-3">
+                <article key={app.id} className="card-athenas p-5">
                   <div className="flex flex-wrap items-start justify-between gap-2">
-                    <div>
-                      <p className="font-bold text-neutral-900">
+                    <div className="min-w-0">
+                      <p className="font-bold text-lg text-neutral-900">
                         {app.profiles?.full_name ?? t('admin.unnamed')}
                       </p>
-                      <p className="text-xs text-neutral-500 mt-0.5">
-                        {new Date(app.created_at).toLocaleString()}
+                      <p className="mt-1 text-sm text-neutral-700">
+                        <span className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">
+                          {t('admin.expertise')} ·{' '}
+                        </span>
+                        {app.expertise}
                       </p>
                     </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">
-                      {t('instructorApply.badgePending')}
+                    <span className="shrink-0 text-xs font-semibold text-brand-gold">
+                      {formatAgo(app.created_at, t)}
                     </span>
                   </div>
-                  <Field label={t('instructorApply.expertise')} value={app.expertise} />
-                  <Field label={t('instructorApply.bio')} value={app.bio} />
-                  {app.portfolio_url && (
-                    <p className="text-sm">
-                      <span className="font-bold text-neutral-700">{t('instructorApply.portfolio')}: </span>
-                      <a
-                        href={app.portfolio_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="link-athenas break-all"
-                      >
-                        {app.portfolio_url}
-                      </a>
-                    </p>
-                  )}
-                  <textarea
-                    rows={2}
-                    value={notes[app.id] ?? ''}
-                    onChange={(e) => setNotes((n) => ({ ...n, [app.id]: e.target.value }))}
-                    placeholder={t('admin.notePh')}
-                    className="input-athenas !rounded-xl text-sm"
-                  />
-                  <div className="flex flex-wrap gap-2">
+                  {app.bio ? (
+                    <p className="mt-3 text-sm text-neutral-600 line-clamp-2">{app.bio}</p>
+                  ) : null}
+                  <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       type="button"
                       disabled={busyId === app.id}
@@ -177,39 +171,33 @@ export function AdminModeration() {
         ) : (
           <div className="mt-6 space-y-4">
             {courses.length === 0 ? (
-              <EmptyState text={t('admin.noCourseReviews')} />
+              <EmptyState icon={<FolderIcon />} title={t('admin.noCourseReviews')} />
             ) : (
               courses.map((c) => (
-                <article key={c.id} className="card-athenas p-5 space-y-3">
+                <article key={c.id} className="card-athenas p-5">
                   <div className="flex flex-wrap items-start justify-between gap-2">
-                    <div>
-                      <p className="font-bold text-neutral-900">{c.title}</p>
-                      <p className="text-sm text-neutral-600 mt-0.5">
-                        {t('course.by')} {c.profiles?.full_name ?? t('common.instructor')}
+                    <div className="min-w-0">
+                      <p className="font-bold text-lg text-neutral-900">{c.title}</p>
+                      <p className="mt-1 text-sm text-neutral-700">
+                        {c.profiles?.full_name ?? t('admin.unnamed')}
+                        {c.level ? ` · ${c.level}` : ''}
                       </p>
                     </div>
-                    <a href={`/curso/${c.id}`} className="link-athenas text-sm">
-                      {t('instructor.view')}
-                    </a>
+                    <span className="shrink-0 text-xs font-semibold text-brand-gold">
+                      {formatAgo(c.updated_at, t)}
+                    </span>
                   </div>
-                  {c.description && (
-                    <p className="text-sm text-neutral-600 line-clamp-3">{c.description}</p>
-                  )}
-                  <textarea
-                    rows={2}
-                    value={notes[c.id] ?? ''}
-                    onChange={(e) => setNotes((n) => ({ ...n, [c.id]: e.target.value }))}
-                    placeholder={t('admin.notePh')}
-                    className="input-athenas !rounded-xl text-sm"
-                  />
-                  <div className="flex flex-wrap gap-2">
+                  {c.description ? (
+                    <p className="mt-3 text-sm text-neutral-600 line-clamp-2">{c.description}</p>
+                  ) : null}
+                  <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       type="button"
                       disabled={busyId === c.id}
                       onClick={() => void reviewCourse(c.id, 'approved')}
                       className="btn-primary !py-2 !px-4"
                     >
-                      {t('admin.approveCourse')}
+                      {t('admin.approve')}
                     </button>
                     <button
                       type="button"
@@ -243,30 +231,13 @@ function TabBtn({
     <button
       type="button"
       onClick={onClick}
-      className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+      className={`flex-1 sm:flex-none px-5 py-2 rounded-full text-sm font-bold transition-colors ${
         active
           ? 'bg-neutral-950 text-brand-gold'
-          : 'bg-white border border-brand-gold/30 text-neutral-700 hover:bg-brand-gold-soft'
+          : 'bg-transparent text-neutral-700 hover:bg-brand-gold-soft/40'
       }`}
     >
       {children}
     </button>
-  )
-}
-
-function Field({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">{label}</p>
-      <p className="text-sm text-neutral-800 mt-0.5 whitespace-pre-wrap">{value}</p>
-    </div>
-  )
-}
-
-function EmptyState({ text }: { text: string }) {
-  return (
-    <div className="empty-athenas bg-brand-cream/40 text-sm text-neutral-600">
-      {text}
-    </div>
   )
 }
