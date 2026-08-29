@@ -629,6 +629,41 @@ export const translations = {
 
   'assistant.open': { pt: 'Toque para conversar', en: 'Tap to chat' },
   'assistant.close': { pt: 'Recolher chat', en: 'Collapse chat' },
+
+  'legal.termsTitle': { pt: 'Termos de uso', en: 'Terms of use' },
+  'legal.terms1': {
+    pt: 'O ATHENAS é uma plataforma acadêmica de formações em tecnologia e inteligência artificial. Ao criar uma conta, você concorda em usar o serviço de forma lícita, respeitando instrutores, alunos e o conteúdo publicado.',
+    en: 'ATHENAS is an academic platform for technology and AI learning. By creating an account, you agree to use the service lawfully and to respect instructors, learners, and published content.',
+  },
+  'legal.terms2': {
+    pt: 'Cursos, aulas, quizzes e materiais pertencem aos respectivos autores ou à plataforma. É vedado copiar, redistribuir ou comercializar conteúdos sem autorização.',
+    en: 'Courses, lessons, quizzes, and materials belong to their authors or to the platform. Copying, redistributing, or selling content without permission is not allowed.',
+  },
+  'legal.terms3': {
+    pt: 'Instrutores enviam formações para curadoria. A publicação no catálogo ocorre após aprovação. A plataforma pode recusar ou remover conteúdos que violem estas regras.',
+    en: 'Instructors submit programs for curation. Catalog publication happens after approval. The platform may reject or remove content that violates these rules.',
+  },
+  'legal.terms4': {
+    pt: 'Recursos de gamificação (XP, sequência e moedas) existem para acompanhar o estudo e não constituem obrigação financeira. Em caso de dúvida, use o suporte no rodapé.',
+    en: 'Gamification (XP, streak, and coins) supports study tracking and is not a financial obligation. For questions, use support in the footer.',
+  },
+  'legal.privacyTitle': { pt: 'Privacidade', en: 'Privacy' },
+  'legal.privacy1': {
+    pt: 'Tratamos dados de conta (e-mail, nome e, se informado, telefone) para autenticação, matrícula, progresso de aulas e moderação de instrutores.',
+    en: 'We process account data (email, name, and phone if provided) for authentication, enrollment, lesson progress, and instructor moderation.',
+  },
+  'legal.privacy2': {
+    pt: 'A autenticação e o armazenamento são feitos com o Supabase. Vídeos podem ser enviados à plataforma ou incorporados do YouTube, conforme o instrutor cadastrar a aula.',
+    en: 'Authentication and storage use Supabase. Videos may be uploaded to the platform or embedded from YouTube, depending on how the instructor created the lesson.',
+  },
+  'legal.privacy3': {
+    pt: 'Não vendemos seus dados. Administradores acessam filas de curadoria apenas para aprovar ou recusar solicitações e formações.',
+    en: 'We do not sell your data. Administrators access curation queues only to approve or reject applications and programs.',
+  },
+  'legal.privacy4': {
+    pt: 'Você pode solicitar exclusão de conta e dados pelo canal de suporte. Este texto descreve o uso no projeto acadêmico ATHENAS e não substitui assessoria jurídica.',
+    en: 'You may request account and data deletion through support. This text describes use in the ATHENAS academic project and is not legal advice.',
+  },
 } as const
 
 export type TranslationKey = keyof typeof translations

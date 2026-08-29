@@ -26,6 +26,7 @@ const BecomeInstructor = lazy(() =>
 const AdminModeration = lazy(() =>
   import('./pages/AdminModeration').then((m) => ({ default: m.AdminModeration }))
 )
+const Legal = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Legal })))
 
 function PageFallback() {
   return <BrandSplash />
@@ -55,6 +56,8 @@ export default function App() {
           <Route path="curso/:id" element={<CourseDetail />} />
           <Route path="meus-cursos" element={<MyCourses />} />
           <Route path="alterar-senha" element={<ChangePassword />} />
+          <Route path="termos" element={<Legal kind="terms" />} />
+          <Route path="privacidade" element={<Legal kind="privacy" />} />
           <Route path="tornar-se-instrutor" element={<BecomeInstructor />} />
           <Route
             path="admin/moderacao"
