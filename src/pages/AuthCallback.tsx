@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -7,7 +7,7 @@ import { BrandSplash } from '../components/BrandSplash'
 export function AuthCallback() {
   const navigate = useNavigate()
   const { t } = useLanguage()
-  const [status, setStatus] = useState(t('authCallback.working'))
+  const status = t('authCallback.working')
 
   useEffect(() => {
     let cancelled = false

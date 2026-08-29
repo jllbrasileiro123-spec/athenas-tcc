@@ -113,8 +113,12 @@ export function Layout() {
               <Link to="/explorar" className="hover:text-brand-gold transition-colors">
                 {t('nav.explore')}
               </Link>
-              <span className="text-neutral-500">{t('footer.terms')}</span>
-              <span className="text-neutral-500">{t('footer.privacy')}</span>
+              <Link to="/termos" className="hover:text-brand-gold transition-colors">
+                {t('footer.terms')}
+              </Link>
+              <Link to="/privacidade" className="hover:text-brand-gold transition-colors">
+                {t('footer.privacy')}
+              </Link>
             </nav>
           </div>
           <p className="mt-8 pt-6 border-t border-white/10 text-xs text-neutral-500">

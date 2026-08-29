@@ -56,8 +56,11 @@ export function MyCourses() {
 
     if (enrollData) {
       const list = enrollData
-        .map((e) => (e as { courses: Course }).courses)
-        .filter((c) => c && !taughtIds.has(c.id))
+        .map((e) => {
+          const raw = (e as { courses: Course | Course[] | null }).courses
+          return Array.isArray(raw) ? raw[0] : raw
+        })
+        .filter((c): c is Course & { lessons?: { id: string }[] } => c != null && !taughtIds.has(c.id))
         .map((c) => ({
           ...c,
           lesson_count: Array.isArray(c.lessons) ? c.lessons.length : 0,
