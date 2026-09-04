@@ -133,12 +133,12 @@ export const translations = {
 
   'assistant.title': { pt: 'Tire suas dúvidas', en: 'Ask your questions' },
   'assistant.subtitle': {
-    pt: 'Pergunte sobre matrícula, aulas, senha e uso da plataforma.',
-    en: 'Ask about enrollment, lessons, password, and how to use the platform.',
+    pt: 'Pergunte sobre o conteúdo das suas formações e sobre o uso da plataforma.',
+    en: 'Ask about your programs content and about using the platform.',
   },
   'assistant.welcome': {
-    pt: 'Olá! Sou a Athena, sua guia por aqui. No que posso ajudar?',
-    en: "Hi! I'm Athena, your guide here. How can I help?",
+    pt: 'Olá! Sou a Athena. Posso tirar dúvidas sobre o conteúdo das formações em que você está matriculado — e, se eu não souber, encaminho a pergunta ao instrutor do curso.',
+    en: "Hi! I'm Athena. I can answer questions about the content of the programs you are enrolled in — and if I don't know, I forward the question to the course instructor.",
   },
   'assistant.placeholder': { pt: 'Digite sua dúvida...', en: 'Type your question...' },
   'assistant.send': { pt: 'Enviar', en: 'Send' },
@@ -330,7 +330,6 @@ export const translations = {
   'course.signInToEnroll': { pt: 'Entre', en: 'Sign in' },
   'course.toEnroll': { pt: 'para se matricular', en: 'to enroll' },
   'course.content': { pt: 'Conteúdo do curso', en: 'Course content' },
-  'course.preview': { pt: 'Prévia', en: 'Preview' },
   'course.watch': { pt: 'Assistir', en: 'Watch' },
   'course.enrollToWatch': { pt: 'Matricule-se', en: 'Enroll to watch' },
   'course.noLessons': { pt: 'Nenhuma aula publicada ainda.', en: 'No lessons published yet.' },
@@ -340,7 +339,9 @@ export const translations = {
     pt: 'Esta é a sua formação. Gerencie as aulas e vídeos abaixo.',
     en: 'This is your program. Manage lessons and videos below.',
   },
-  'course.previewCourse': { pt: 'Pré-visualizar aula', en: 'Preview lesson' },
+  'course.previewCourse': { pt: 'Ver como aluno', en: 'View as learner' },
+  'course.startFree': { pt: 'Começar agora — é grátis', en: 'Start now — it is free' },
+  'course.startFreeShort': { pt: 'Acesso grátis', en: 'Free access' },
 
   'lesson.loading': { pt: 'Carregando aula...', en: 'Loading lesson...' },
   'lesson.accessDenied': {
@@ -630,6 +631,259 @@ export const translations = {
   'assistant.open': { pt: 'Toque para conversar', en: 'Tap to chat' },
   'assistant.close': { pt: 'Recolher chat', en: 'Collapse chat' },
 
+  'course.enrolledNow': {
+    pt: 'Matrícula confirmada! Escolha como quer começar.',
+    en: 'Enrollment confirmed! Choose how you want to start.',
+  },
+
+  'common.cancel': { pt: 'Cancelar', en: 'Cancel' },
+
+  'doubts.title': { pt: 'Dúvidas desta aula', en: 'Questions about this lesson' },
+  'doubts.studentHint': {
+    pt: 'Escreva sua dúvida: quem responde é o instrutor dono desta formação.',
+    en: 'Write your question: the instructor who owns this program answers it.',
+  },
+  'doubts.ownerHint': {
+    pt: 'Você é o instrutor desta formação. Responda as dúvidas abaixo e o aluno vê a resposta aqui.',
+    en: 'You own this program. Answer the questions below and the learner sees the reply here.',
+  },
+  'doubts.placeholder': {
+    pt: 'Ex.: não entendi como a aula conta como concluída…',
+    en: "E.g.: I didn't understand how a lesson counts as complete…",
+  },
+  'doubts.send': { pt: 'Enviar dúvida ao instrutor', en: 'Send question to instructor' },
+  'doubts.sent': { pt: 'Enviada! O instrutor será notificado.', en: 'Sent! The instructor will see it.' },
+  'doubts.signIn': {
+    pt: 'Faça login para enviar uma dúvida.',
+    en: 'Sign in to send a question.',
+  },
+  'doubts.empty': {
+    pt: 'Nenhuma dúvida nesta aula ainda. Seja o primeiro a perguntar.',
+    en: 'No questions on this lesson yet. Be the first to ask.',
+  },
+  'doubts.counter': {
+    pt: '{answered} respondida(s) · {pending} na fila',
+    en: '{answered} answered · {pending} in queue',
+  },
+  'doubts.answered': { pt: 'Respondida', en: 'Answered' },
+  'doubts.waiting': { pt: 'Aguardando', en: 'Waiting' },
+  'doubts.you': { pt: 'Você', en: 'You' },
+  'doubts.student': { pt: 'Aluno', en: 'Learner' },
+  'doubts.instructorAnswer': { pt: 'Resposta do instrutor', en: 'Instructor answer' },
+  'doubts.yourAnswer': { pt: 'Sua resposta', en: 'Your answer' },
+  'doubts.answerCta': { pt: 'Responder', en: 'Answer' },
+  'doubts.answerPlaceholder': {
+    pt: 'Escreva a resposta para o aluno…',
+    en: 'Write the answer for the learner…',
+  },
+  'doubts.publishAnswer': { pt: 'Publicar resposta', en: 'Publish answer' },
+  'doubts.openLesson': { pt: 'Abrir a aula →', en: 'Open the lesson →' },
+  'doubts.queueKicker': { pt: 'Suporte ao aluno', en: 'Learner support' },
+  'doubts.queueTitle': { pt: 'Dúvidas dos alunos', en: 'Learner questions' },
+  'doubts.queueDesc': {
+    pt: 'Todas as dúvidas das suas formações, com as não respondidas primeiro.',
+    en: 'Every question from your programs, unanswered ones first.',
+  },
+  'doubts.queueEmpty': {
+    pt: 'Nenhuma dúvida chegou ainda nas suas formações.',
+    en: 'No questions have arrived in your programs yet.',
+  },
+  'doubts.missingTable': {
+    pt: 'Falta criar a tabela de dúvidas no Supabase. No SQL Editor, rode o arquivo supabase/atividades-5-a-8.sql inteiro e clique em Run.',
+    en: 'The questions table is missing in Supabase. In the SQL Editor, run supabase/atividades-5-a-8.sql and click Run.',
+  },
+  'doubts.askInstructor': { pt: 'Perguntar ao instrutor', en: 'Ask the instructor' },
+
+  'certificate.kicker': { pt: 'Certificado de conclusão', en: 'Certificate of completion' },
+  'certificate.completedThe': {
+    pt: 'concluiu com êxito a formação',
+    en: 'has successfully completed the program',
+  },
+  'certificate.lessonsTotal': {
+    pt: 'Trilha completa: {total} aulas concluídas.',
+    en: 'Full trail: {total} lessons completed.',
+  },
+  'certificate.issuedOn': { pt: 'Emitido em {date}', en: 'Issued on {date}' },
+  'certificate.codeLabel': { pt: 'Código de verificação', en: 'Verification code' },
+  'certificate.verifyHint': {
+    pt: 'A autenticidade pode ser conferida em /verificar com o código acima.',
+    en: 'Authenticity can be checked at /verificar using the code above.',
+  },
+  'certificate.print': { pt: 'Imprimir / salvar PDF', en: 'Print / save PDF' },
+  'certificate.verifyCta': { pt: 'Conferir este código', en: 'Check this code' },
+  'certificate.readyTitle': {
+    pt: 'Trilha concluída! Seu certificado está liberado.',
+    en: 'Trail complete! Your certificate is available.',
+  },
+  'certificate.readyBody': {
+    pt: 'Emitimos um código de verificação único para comprovar a conclusão.',
+    en: 'We issue a unique verification code proving completion.',
+  },
+  'certificate.getCta': { pt: 'Emitir certificado', en: 'Issue certificate' },
+  'certificate.lockedTitle': { pt: 'Certificado ainda bloqueado', en: 'Certificate still locked' },
+  'certificate.lockedBody': {
+    pt: 'Você concluiu {done} de {total} aulas. Complete a trilha para emitir o certificado.',
+    en: 'You completed {done} of {total} lessons. Finish the trail to issue the certificate.',
+  },
+  'certificate.missingTable': {
+    pt: 'Falta criar a tabela de certificados no Supabase. No SQL Editor, rode o arquivo supabase/atividades-5-a-8.sql inteiro e clique em Run.',
+    en: 'The certificates table is missing in Supabase. In the SQL Editor, run supabase/atividades-5-a-8.sql and click Run.',
+  },
+
+  'verify.kicker': { pt: 'Verificação', en: 'Verification' },
+  'verify.title': { pt: 'Conferir certificado', en: 'Check a certificate' },
+  'verify.desc': {
+    pt: 'Digite o código impresso no certificado. A consulta não exige login.',
+    en: 'Enter the code printed on the certificate. No login required.',
+  },
+  'verify.check': { pt: 'Verificar', en: 'Verify' },
+  'verify.valid': { pt: 'Certificado válido', en: 'Valid certificate' },
+  'verify.notFound': {
+    pt: 'Nenhum certificado encontrado com esse código.',
+    en: 'No certificate found with that code.',
+  },
+  'verify.holder': { pt: 'Concluído por', en: 'Completed by' },
+  'verify.course': { pt: 'Formação', en: 'Program' },
+  'verify.issued': { pt: 'Emitido em', en: 'Issued on' },
+  'footer.verify': { pt: 'Verificar certificado', en: 'Verify certificate' },
+
+  'survey.kicker': { pt: 'Teste com usuários', en: 'User testing' },
+  'survey.title': { pt: 'Questionário de usabilidade (SUS)', en: 'Usability questionnaire (SUS)' },
+  'survey.desc': {
+    pt: 'Dez afirmações sobre o uso do ATHENAS. Marque de 1 (discordo totalmente) a 5 (concordo totalmente). A nota final vai de 0 a 100.',
+    en: 'Ten statements about using ATHENAS. Rate 1 (strongly disagree) to 5 (strongly agree). The final score ranges from 0 to 100.',
+  },
+  'survey.participant': { pt: 'Identificação do participante', en: 'Participant identification' },
+  'survey.participantHint': {
+    pt: 'Nome ou código (ex.: P01)',
+    en: 'Name or code (e.g. P01)',
+  },
+  'survey.disagree': { pt: 'Discordo totalmente', en: 'Strongly disagree' },
+  'survey.agree': { pt: 'Concordo totalmente', en: 'Strongly agree' },
+  'survey.q1': {
+    pt: 'Eu usaria o ATHENAS com frequência.',
+    en: 'I would use ATHENAS frequently.',
+  },
+  'survey.q2': {
+    pt: 'Achei a plataforma mais complexa do que precisava ser.',
+    en: 'I found the platform more complex than it needed to be.',
+  },
+  'survey.q3': { pt: 'Achei a plataforma fácil de usar.', en: 'I found the platform easy to use.' },
+  'survey.q4': {
+    pt: 'Precisaria de ajuda técnica para conseguir usar a plataforma.',
+    en: 'I would need technical support to be able to use the platform.',
+  },
+  'survey.q5': {
+    pt: 'As funções da plataforma estão bem integradas.',
+    en: 'The platform functions are well integrated.',
+  },
+  'survey.q6': {
+    pt: 'Encontrei inconsistências na plataforma.',
+    en: 'I found inconsistencies in the platform.',
+  },
+  'survey.q7': {
+    pt: 'A maioria das pessoas aprenderia a usar a plataforma rapidamente.',
+    en: 'Most people would learn to use the platform quickly.',
+  },
+  'survey.q8': {
+    pt: 'Achei a plataforma confusa de usar.',
+    en: 'I found the platform confusing to use.',
+  },
+  'survey.q9': {
+    pt: 'Me senti confiante usando a plataforma.',
+    en: 'I felt confident using the platform.',
+  },
+  'survey.q10': {
+    pt: 'Precisei aprender muita coisa antes de conseguir usar a plataforma.',
+    en: 'I had to learn a lot before I could use the platform.',
+  },
+  'survey.comment': {
+    pt: 'O que confundiu, o que você gostou?',
+    en: 'What confused you, what did you like?',
+  },
+  'survey.commentHint': {
+    pt: 'Resposta aberta (opcional)',
+    en: 'Open answer (optional)',
+  },
+  'survey.submit': { pt: 'Enviar respostas', en: 'Submit answers' },
+  'survey.incomplete': {
+    pt: 'Responda as dez afirmações antes de enviar.',
+    en: 'Answer all ten statements before submitting.',
+  },
+  'survey.thanks': { pt: 'Obrigado por participar!', en: 'Thanks for participating!' },
+  'survey.scoreOf100': { pt: 'nota SUS (0 a 100)', en: 'SUS score (0 to 100)' },
+  'survey.aboveAverage': {
+    pt: 'Acima da média de usabilidade da literatura (≥ 68).',
+    en: 'Above the usability average in the literature (≥ 68).',
+  },
+  'survey.belowAverage': {
+    pt: 'Abaixo da média de referência (68). Vale priorizar os problemas apontados.',
+    en: 'Below the reference average (68). Worth prioritizing the reported problems.',
+  },
+  'survey.savedLocalOnly': {
+    pt: 'Nota calculada, mas não gravada: rode supabase/atividades-5-a-8.sql para criar a tabela sus_responses.',
+    en: 'Score computed but not stored: run supabase/atividades-5-a-8.sql to create the sus_responses table.',
+  },
+  'footer.survey': { pt: 'Pesquisa de usabilidade', en: 'Usability survey' },
+
+  'placement.kicker': { pt: 'Etapa 1 · Teste de conhecimento', en: 'Step 1 · Knowledge test' },
+  'placement.shortCta': { pt: 'Teste de conhecimento', en: 'Knowledge test' },
+  'placement.title': { pt: 'O que você já sabe?', en: 'What do you already know?' },
+  'placement.desc': {
+    pt: 'Responda o teste rápido para pular o que você já domina. Acertando 70% ou mais das perguntas de uma aula, ela entra como concluída na sua trilha.',
+    en: 'Take the quick test to skip what you already know. Scoring 70% or more on a lesson marks it complete on your trail.',
+  },
+  'placement.cta': { pt: 'Verificar meu conhecimento', en: 'Check my knowledge' },
+  'placement.retakeCta': { pt: 'Refazer o teste de conhecimento', en: 'Retake the knowledge test' },
+  'placement.asideHint': {
+    pt: 'O teste é a primeira etapa e define quais aulas você pula. Se preferir, comece pela aula 1.',
+    en: 'The test is the first step and defines which lessons you skip. If you prefer, start at lesson 1.',
+  },
+  'placement.startFromZero': { pt: 'Pular o teste e ver a aula 1', en: 'Skip the test and open lesson 1' },
+  'placement.skipTest': { pt: 'Pular o teste e ir para a aula 1 →', en: 'Skip the test and go to lesson 1 →' },
+  'placement.stepTitle': {
+    pt: 'Etapa 1 — Verifique seu conhecimento',
+    en: 'Step 1 — Check your knowledge',
+  },
+  'placement.stepBody': {
+    pt: 'Antes de começar as aulas, responda o teste rápido. Em cada aula que você acertar 70% ou mais, ela já entra como concluída — você pula direto para o que ainda não sabe.',
+    en: 'Before starting the lessons, take the quick test. Each lesson where you score 70% or more is marked complete — you jump straight to what you still need.',
+  },
+  'placement.stepCta': { pt: 'Começar o teste', en: 'Start the test' },
+  'placement.submit': { pt: 'Enviar teste', en: 'Submit test' },
+  'placement.unanswered': {
+    pt: 'Responda todas as perguntas antes de enviar.',
+    en: 'Answer every question before submitting.',
+  },
+  'placement.aboutLesson': { pt: 'Sobre: {lesson}', en: 'About: {lesson}' },
+  'placement.retake': {
+    pt: 'Você já fez este teste. Enviar de novo substitui o resultado anterior.',
+    en: 'You already took this test. Submitting again replaces the previous result.',
+  },
+  'placement.noQuestions': {
+    pt: 'Esta formação ainda não tem perguntas de nivelamento. Comece do zero pela trilha.',
+    en: 'This program has no placement questions yet. Start from scratch on the trail.',
+  },
+  'placement.missingTable': {
+    pt: 'Falta criar as tabelas no Supabase. No SQL Editor, rode o arquivo supabase/atividades-5-a-8.sql inteiro e clique em Run.',
+    en: 'The tables are missing in Supabase. In the SQL Editor, run supabase/atividades-5-a-8.sql and click Run.',
+  },
+  'placement.resultTitle': {
+    pt: 'Você já domina {unlocked} de {total} tópicos!',
+    en: 'You already master {unlocked} of {total} topics!',
+  },
+  'placement.resultScore': {
+    pt: 'Acertos: {correct} de {total} perguntas.',
+    en: 'Correct answers: {correct} of {total} questions.',
+  },
+  'placement.startAt': { pt: 'Vamos começar por: {lesson}', en: "Let's start at: {lesson}" },
+  'placement.allDone': {
+    pt: 'Você liberou todas as aulas desta formação.',
+    en: 'You unlocked every lesson in this program.',
+  },
+  'placement.goToLesson': { pt: 'Ir para a aula indicada', en: 'Go to the suggested lesson' },
+  'placement.openTrail': { pt: 'Ver minha trilha', en: 'View my trail' },
+
   'legal.termsTitle': { pt: 'Termos de uso', en: 'Terms of use' },
   'legal.terms1': {
     pt: 'O ATHENAS é uma plataforma acadêmica de formações em tecnologia e inteligência artificial. Ao criar uma conta, você concorda em usar o serviço de forma lícita, respeitando instrutores, alunos e o conteúdo publicado.',
@@ -663,6 +917,226 @@ export const translations = {
   'legal.privacy4': {
     pt: 'Você pode solicitar exclusão de conta e dados pelo canal de suporte. Este texto descreve o uso no projeto acadêmico ATHENAS e não substitui assessoria jurídica.',
     en: 'You may request account and data deletion through support. This text describes use in the ATHENAS academic project and is not legal advice.',
+  },
+
+  'footer.whatsNew': { pt: 'Novidades', en: "What's new" },
+  'menu.whatsNew': { pt: 'Novidades (demo)', en: "What's new (demo)" },
+  'footer.demoVideo': { pt: 'Ambiente demo', en: 'Demo lab' },
+
+  'demoVideo.kicker': { pt: 'Vídeo hospedado', en: 'Hosted video' },
+  'demoVideo.title': { pt: 'Teste o player sem YouTube', en: 'Test the player without YouTube' },
+  'demoVideo.desc': {
+    pt: 'Este MP4 fica no próprio ATHENAS (pasta public/demo). O player é HTML5 nativo.',
+    en: 'This MP4 is served by ATHENAS itself (public/demo). The player is native HTML5.',
+  },
+  'demoVideo.fileHint': {
+    pt: 'Arquivo: /demo/athenas-demo.mp4',
+    en: 'File: /demo/athenas-demo.mp4',
+  },
+  'demoVideo.openCatalog': { pt: 'Ir ao catálogo', en: 'Go to catalog' },
+
+  'demoLab.kicker': { pt: 'Ambiente interativo', en: 'Interactive lab' },
+  'demoLab.title': { pt: 'Mexa nas aulas, no quiz e nas dúvidas', en: 'Try lessons, quizzes, and Q&A' },
+  'demoLab.desc': {
+    pt: 'Publique várias aulas no seu perfil (vídeo hospedado + quizzes), tire dúvidas com a Athena e abra as Novidades.',
+    en: 'Publish several lessons on your profile (hosted video + quizzes), ask Athena, and open Whats new.',
+  },
+  'demoLab.publishTitle': { pt: '1. Publicar no meu perfil', en: '1. Publish on my profile' },
+  'demoLab.publishBody': {
+    pt: 'Cria 2 formações com várias aulas MP4 e 2 quizzes. Todas as aulas ficam liberadas para assistir, e você já sai matriculado.',
+    en: 'Creates 2 programs with several MP4 lessons and 2 quizzes. Every lesson is unlocked to watch, and you are enrolled.',
+  },
+  'demoLab.needInstructor': {
+    pt: 'Para postar aulas no seu perfil você precisa ser instrutor (ou admin).',
+    en: 'To post lessons on your profile you need to be an instructor (or admin).',
+  },
+  'demoLab.publishCta': { pt: 'Publicar aulas + quizzes agora', en: 'Publish lessons + quizzes now' },
+  'demoLab.publishing': { pt: 'Publicando…', en: 'Publishing…' },
+  'demoLab.seedOk': {
+    pt: 'Pronto! Formações demo no seu perfil. Use os botões para interagir.',
+    en: 'Done! Demo programs are on your profile. Use the buttons to interact.',
+  },
+  'demoLab.seedFail': { pt: 'Não foi possível publicar a demo.', en: 'Could not publish the demo.' },
+  'demoLab.openTeaching': { pt: 'Ver no Meus cursos', en: 'View in My courses' },
+  'demoLab.openCatalog': { pt: 'Ver no Explorar', en: 'View in Explore' },
+  'demoLab.watchLesson': { pt: 'Assistir', en: 'Watch' },
+  'demoLab.openQuiz': { pt: 'Responder quiz', en: 'Take quiz' },
+  'demoLab.openCourse': { pt: 'Abrir formação', en: 'Open program' },
+  'demoLab.interactTitle': { pt: '2. Onde interagir', en: '2. Where to interact' },
+  'demoLab.chatTitle': { pt: 'Chat de dúvidas (Athena)', en: 'Q&A chat (Athena)' },
+  'demoLab.chatBody': {
+    pt: 'Pergunte sobre matrícula, novidades, quiz ou progresso. Em outras telas use o botão flutuante Athena.',
+    en: 'Ask about enrollment, whats new, quizzes, or progress. On other screens use the floating Athena button.',
+  },
+  'demoLab.chatHint': { pt: '→ à direita nesta página', en: '→ on the right on this page' },
+  'demoLab.newsTitle': { pt: 'O que foi adicionado', en: 'What was added' },
+  'demoLab.newsBody': {
+    pt: 'Lista das entregas recentes com atalhos para cada tela.',
+    en: 'List of recent deliveries with shortcuts to each screen.',
+  },
+  'demoLab.videoTitle': { pt: 'Player sem YouTube', en: 'Player without YouTube' },
+  'demoLab.videoBody': {
+    pt: 'Vídeo MP4 hospedado no app — teste abaixo.',
+    en: 'MP4 hosted in the app — try it below.',
+  },
+  'demoLab.streakTitle': { pt: 'XP, sequência e moedas', en: 'XP, streak, and coins' },
+  'demoLab.streakBody': {
+    pt: 'Conclua aulas/quizzes e veja os ícones no topo da tela.',
+    en: 'Complete lessons/quizzes and check the icons at the top.',
+  },
+  'demoLab.placementTitle': { pt: 'Teste de nivelamento', en: 'Placement test' },
+  'demoLab.placementBody': {
+    pt: 'Responda o pré-teste e veja aulas entrarem como concluídas na trilha (70% por aula).',
+    en: 'Take the pre-test and watch lessons become complete on the trail (70% per lesson).',
+  },
+
+  'whatsNew.kicker': { pt: 'Demonstração TCC', en: 'Coursework demo' },
+  'whatsNew.title': { pt: 'O que foi adicionado', en: 'What was added' },
+  'whatsNew.desc': {
+    pt: 'Use esta página na apresentação: cada item resume uma entrega recente e abre a tela correspondente no app.',
+    en: 'Use this page in your presentation: each item summarizes a recent delivery and opens the matching screen in the app.',
+  },
+  'whatsNew.adminHint': {
+    pt: 'Disponível apenas para conta admin. Promova seu usuário em profiles.role = admin no Supabase.',
+    en: 'Admin accounts only. Set profiles.role = admin for your user in Supabase.',
+  },
+  'whatsNew.openExplore': { pt: 'Abrir Explorar', en: 'Open Explore' },
+  'whatsNew.openModeration': { pt: 'Abrir Moderação', en: 'Open Moderation' },
+  'whatsNew.openTerms': { pt: 'Abrir Termos', en: 'Open Terms' },
+  'whatsNew.openPrivacy': { pt: 'Abrir Privacidade', en: 'Open Privacy' },
+  'whatsNew.openCreateCourse': { pt: 'Criar formação', en: 'Create course' },
+  'whatsNew.openMyCourses': { pt: 'Meus cursos', en: 'My courses' },
+
+  'whatsNew.placementTitle': {
+    pt: 'Teste de nivelamento (Atividade 5)',
+    en: 'Placement test (Activity 5)',
+  },
+  'whatsNew.placementBody': {
+    pt: 'Ao se matricular, o aluno escolhe começar do zero ou fazer o pré-teste. Acertando 70% das perguntas de uma aula, ela entra como concluída — marcada como conclusão via teste.',
+    en: 'On enrollment the learner picks starting from scratch or taking the pre-test. Scoring 70% on a lesson marks it complete, flagged as completed via test.',
+  },
+  'whatsNew.placementWhere': {
+    pt: 'Onde ver: página da formação → Fazer teste rápido de nivelamento.',
+    en: 'Where to look: program page → Take the quick placement test.',
+  },
+  'whatsNew.chatContextTitle': {
+    pt: 'Athena responde sobre o curso (Atividade 7)',
+    en: 'Athena answers about the course (Activity 7)',
+  },
+  'whatsNew.chatContextBody': {
+    pt: 'Dentro de uma formação, o chat usa o conteúdo do curso: lista as aulas, diz onde você parou e explica o nivelamento. Fora da formação, mantém o FAQ geral.',
+    en: 'Inside a program the chat uses course content: lists lessons, shows where you stopped, and explains the placement test. Outside, it keeps the general FAQ.',
+  },
+  'whatsNew.chatContextWhere': {
+    pt: 'Onde ver: abra uma formação e pergunte "O que tem nesse curso?" no chat da Athena.',
+    en: 'Where to look: open a program and ask "What is in this course?" in Athena chat.',
+  },
+
+  'whatsNew.doubtsTitle': {
+    pt: 'Dúvidas respondidas pelo instrutor (Atividade 7)',
+    en: 'Questions answered by the instructor (Activity 7)',
+  },
+  'whatsNew.doubtsBody': {
+    pt: 'Cada aula tem uma área de dúvidas: o aluno pergunta ali (ou pelo chat da Athena) e o instrutor dono da formação responde. A resposta aparece junto da pergunta.',
+    en: 'Every lesson has a questions area: the learner asks there (or via Athena chat) and the instructor who owns the program replies. The answer shows next to the question.',
+  },
+  'whatsNew.doubtsWhere': {
+    pt: 'Onde ver: abra uma aula → Dúvidas desta aula. Instrutor: Painel do instrutor → Dúvidas dos alunos.',
+    en: 'Where to look: open a lesson → Questions about this lesson. Instructor: dashboard → Learner questions.',
+  },
+  'whatsNew.certificateTitle': {
+    pt: 'Certificado com código de verificação (Atividade 6)',
+    en: 'Certificate with verification code (Activity 6)',
+  },
+  'whatsNew.certificateBody': {
+    pt: 'Ao concluir 100% da trilha, a formação libera o certificado com um código único. Qualquer pessoa confere a autenticidade em /verificar, sem precisar de login.',
+    en: 'On 100% trail completion the program issues a certificate with a unique code. Anyone can check it at /verificar without signing in.',
+  },
+  'whatsNew.certificateWhere': {
+    pt: 'Onde ver: conclua as aulas → página da formação → Emitir certificado.',
+    en: 'Where to look: finish the lessons → program page → Issue certificate.',
+  },
+  'whatsNew.surveyTitle': {
+    pt: 'Questionário SUS de usabilidade (Atividade 8)',
+    en: 'SUS usability questionnaire (Activity 8)',
+  },
+  'whatsNew.surveyBody': {
+    pt: 'Formulário de 10 itens que calcula a nota SUS de 0 a 100 e grava as respostas para tabular o teste com o público-alvo.',
+    en: 'A 10-item form that computes the SUS score from 0 to 100 and stores answers to tabulate the target-audience test.',
+  },
+  'whatsNew.surveyWhere': {
+    pt: 'Onde ver: rodapé → Pesquisa de usabilidade.',
+    en: 'Where to look: footer → Usability survey.',
+  },
+
+  'whatsNew.pwaTitle': { pt: 'App instalável (PWA)', en: 'Installable app (PWA)' },
+  'whatsNew.pwaBody': {
+    pt: 'O ATHENAS pode ser instalado na tela inicial do celular e abrir em tela cheia, como um aplicativo.',
+    en: 'ATHENAS can be installed on the phone home screen and open full screen like a native app.',
+  },
+  'whatsNew.pwaWhere': {
+    pt: 'Onde ver: banner Instalar (quando disponível) ou menu do navegador no celular.',
+    en: 'Where to look: Install banner (when available) or the browser menu on mobile.',
+  },
+
+  'whatsNew.moderationTitle': { pt: 'Fila de curadoria', en: 'Curation queue' },
+  'whatsNew.moderationBody': {
+    pt: 'Pedidos de instrutor e formações aguardam Aprovar/Recusar no painel de Moderação, sem publicar direto no catálogo.',
+    en: 'Instructor applications and courses wait for Approve/Reject in Moderation, without publishing straight to the catalog.',
+  },
+  'whatsNew.moderationWhere': {
+    pt: 'Onde ver: menu Moderação (conta admin).',
+    en: 'Where to look: Moderation menu (admin account).',
+  },
+
+  'whatsNew.gamificationTitle': { pt: 'XP, sequência e moedas', en: 'XP, streak, and coins' },
+  'whatsNew.gamificationBody': {
+    pt: 'Concluir aulas atualiza trilha, XP, sequência de estudos e saldo de moedas, com ícones no header.',
+    en: 'Completing lessons updates the trail, XP, study streak, and coin balance, with icons in the header.',
+  },
+  'whatsNew.gamificationWhere': {
+    pt: 'Onde ver: ícones de chama e moeda no topo; progresso ao assistir uma aula.',
+    en: 'Where to look: flame and coin icons at the top; progress while watching a lesson.',
+  },
+
+  'whatsNew.athenaTitle': { pt: 'Assistente Athena', en: 'Athena assistant' },
+  'whatsNew.athenaBody': {
+    pt: 'Identidade visual da Athena no chat de ajuda, com avatar e atalhos rápidos para o aluno.',
+    en: 'Athena visual identity in the help chat, with avatar and quick shortcuts for the learner.',
+  },
+  'whatsNew.athenaWhere': {
+    pt: 'Onde ver: botão do assistente na página Explorar.',
+    en: 'Where to look: assistant button on the Explore page.',
+  },
+
+  'whatsNew.googleTitle': { pt: 'Login com Google', en: 'Google sign-in' },
+  'whatsNew.googleBody': {
+    pt: 'Entrada social via Google com callback OAuth, além do cadastro por e-mail e senha.',
+    en: 'Social sign-in via Google with OAuth callback, besides email and password signup.',
+  },
+  'whatsNew.googleWhere': {
+    pt: 'Onde ver: tela inicial de Entrar (antes do login).',
+    en: 'Where to look: Sign-in screen (before login).',
+  },
+
+  'whatsNew.legalTitle': { pt: 'Termos e Privacidade', en: 'Terms and Privacy' },
+  'whatsNew.legalBody': {
+    pt: 'Páginas legais acessíveis pelo rodapé, com texto alinhado ao uso acadêmico da plataforma.',
+    en: 'Legal pages linked from the footer, with text aligned to the academic use of the platform.',
+  },
+  'whatsNew.legalWhere': {
+    pt: 'Onde ver: links Termos e Privacidade no rodapé (desktop).',
+    en: 'Where to look: Terms and Privacy links in the footer (desktop).',
+  },
+
+  'whatsNew.quizTitle': { pt: 'Quizzes na trilha', en: 'Quizzes on the trail' },
+  'whatsNew.quizBody': {
+    pt: 'Instrutores montam checkpoints de quiz/simulado; o aluno responde no player e ganha XP ao passar.',
+    en: 'Instructors build quiz/exam checkpoints; learners answer in the player and earn XP on pass.',
+  },
+  'whatsNew.quizWhere': {
+    pt: 'Onde ver: criar formação (instrutor) ou assistir aulas com quiz na trilha.',
+    en: 'Where to look: create a course (instructor) or watch lessons with a quiz on the trail.',
   },
 } as const
 

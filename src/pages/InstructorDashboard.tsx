@@ -55,9 +55,14 @@ export function InstructorDashboard() {
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">{t('instructor.title')}</h1>
           </div>
-          <Link to="/instrutor/novo-curso" className="btn-primary">
-            {t('instructor.newCourse')}
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link to="/instrutor/duvidas" className="btn-secondary">
+              {t('doubts.queueTitle')}
+            </Link>
+            <Link to="/instrutor/novo-curso" className="btn-primary">
+              {t('instructor.newCourse')}
+            </Link>
+          </div>
         </div>
 
         {loading ? (

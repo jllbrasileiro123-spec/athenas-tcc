@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { CourseCard } from '../components/CourseCard'
-import { AthenaAssistant } from '../components/AthenaAssistant'
 import { BrandMark } from '../components/BrandMark'
 import { CatalogIcon, EmptyState, SearchIcon } from '../components/EmptyState'
 import { useAuth } from '../contexts/AuthContext'
@@ -124,8 +123,6 @@ export function Home() {
       </section>
 
       <div className="max-w-[1400px] mx-auto px-4 py-8 lg:py-10">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
-          <div className="flex-1 min-w-0 order-2 lg:order-1">
             {loadError && (
               <p
                 className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3"
@@ -225,18 +222,12 @@ export function Home() {
                 ) : null}
               </EmptyState>
             ) : (
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {filtered.map((course) => (
                   <CourseCard key={course.id} course={course} variant="horizontal" />
                 ))}
               </div>
             )}
-          </div>
-
-          <div className="w-full lg:w-[320px] xl:w-[360px] shrink-0 order-1 lg:order-2">
-            <AthenaAssistant />
-          </div>
-        </div>
       </div>
     </div>
   )

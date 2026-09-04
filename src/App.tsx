@@ -27,6 +27,19 @@ const AdminModeration = lazy(() =>
   import('./pages/AdminModeration').then((m) => ({ default: m.AdminModeration }))
 )
 const Legal = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Legal })))
+const WhatsNew = lazy(() => import('./pages/WhatsNew').then((m) => ({ default: m.WhatsNew })))
+const DemoVideo = lazy(() => import('./pages/DemoVideo').then((m) => ({ default: m.DemoVideo })))
+const PlacementTest = lazy(() =>
+  import('./pages/PlacementTest').then((m) => ({ default: m.PlacementTest }))
+)
+const InstructorQuestions = lazy(() =>
+  import('./pages/InstructorQuestions').then((m) => ({ default: m.InstructorQuestions }))
+)
+const Certificate = lazy(() => import('./pages/Certificate').then((m) => ({ default: m.Certificate })))
+const VerifyCertificate = lazy(() =>
+  import('./pages/VerifyCertificate').then((m) => ({ default: m.VerifyCertificate }))
+)
+const Survey = lazy(() => import('./pages/Survey').then((m) => ({ default: m.Survey })))
 
 function PageFallback() {
   return <BrandSplash />
@@ -51,13 +64,21 @@ export default function App() {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/esqueci-senha" element={<ForgotPassword />} />
         <Route path="/redefinir-senha" element={<ResetPassword />} />
+        {/* Verificação pública do certificado: não exige login */}
+        <Route path="/verificar" element={<VerifyCertificate />} />
+        <Route path="/verificar/:code" element={<VerifyCertificate />} />
         <Route element={<AuthenticatedLayout />}>
           <Route path="explorar" element={<Home />} />
           <Route path="curso/:id" element={<CourseDetail />} />
+          <Route path="nivelamento/:courseId" element={<PlacementTest />} />
           <Route path="meus-cursos" element={<MyCourses />} />
           <Route path="alterar-senha" element={<ChangePassword />} />
           <Route path="termos" element={<Legal kind="terms" />} />
           <Route path="privacidade" element={<Legal kind="privacy" />} />
+          <Route path="novidades" element={<WhatsNew />} />
+          <Route path="demo-video" element={<DemoVideo />} />
+          <Route path="certificado/:courseId" element={<Certificate />} />
+          <Route path="pesquisa" element={<Survey />} />
           <Route path="tornar-se-instrutor" element={<BecomeInstructor />} />
           <Route
             path="admin/moderacao"
@@ -80,6 +101,14 @@ export default function App() {
             element={
               <InstructorRoute>
                 <CreateCourse />
+              </InstructorRoute>
+            }
+          />
+          <Route
+            path="instrutor/duvidas"
+            element={
+              <InstructorRoute>
+                <InstructorQuestions />
               </InstructorRoute>
             }
           />

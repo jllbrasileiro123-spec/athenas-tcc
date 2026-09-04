@@ -5,6 +5,7 @@ import { BrandMark } from './BrandMark'
 import { StreakWidget } from './StreakWidget'
 import { UserAvatarMenu } from './UserAvatarMenu'
 import { MobileTabBar } from './MobileTabBar'
+import { FloatingAthenaDock } from './FloatingAthenaDock'
 import { buildWhatsAppUrl } from '../lib/supportWhatsApp'
 
 export function Layout() {
@@ -113,6 +114,18 @@ export function Layout() {
               <Link to="/explorar" className="hover:text-brand-gold transition-colors">
                 {t('nav.explore')}
               </Link>
+              <Link to="/novidades" className="hover:text-brand-gold transition-colors">
+                {t('footer.whatsNew')}
+              </Link>
+              <Link to="/demo-video" className="hover:text-brand-gold transition-colors">
+                {t('footer.demoVideo')}
+              </Link>
+              <Link to="/verificar" className="hover:text-brand-gold transition-colors">
+                {t('footer.verify')}
+              </Link>
+              <Link to="/pesquisa" className="hover:text-brand-gold transition-colors">
+                {t('footer.survey')}
+              </Link>
               <Link to="/termos" className="hover:text-brand-gold transition-colors">
                 {t('footer.terms')}
               </Link>
@@ -128,6 +141,7 @@ export function Layout() {
       </footer>
 
       <MobileTabBar />
+      {user ? <FloatingAthenaDock /> : null}
     </div>
   )
 }

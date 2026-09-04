@@ -7,6 +7,7 @@ import { useGamification } from '../contexts/GamificationContext'
 import { LessonVideoPlayer } from '../components/LessonVideoPlayer'
 import { CelebrationModal } from '../components/CelebrationModal'
 import { QuizTaker } from '../components/QuizTaker'
+import { LessonDoubts } from '../components/LessonDoubts'
 import type { Course, Lesson } from '../types/database'
 import type { CompleteLessonResult, TrailLesson } from '../lib/gamification'
 
@@ -36,7 +37,7 @@ export function LessonPlayer() {
       setCelebration(null)
       completingRef.current = false
       const [{ data: c }, { data: ls }, { data: lesson }] = await Promise.all([
-        supabase.from('courses').select('title').eq('id', cId).single(),
+        supabase.from('courses').select('title, instructor_id').eq('id', cId).single(),
         supabase.from('lessons').select('*').eq('course_id', cId).order('sort_order'),
         supabase.from('lessons').select('*').eq('id', lId).single(),
       ])
@@ -190,6 +191,14 @@ export function LessonPlayer() {
                 </Link>
               )}
             </div>
+
+            {courseId && (
+              <LessonDoubts
+                courseId={courseId}
+                lessonId={current.id}
+                isOwner={!!user && course?.instructor_id === user.id}
+              />
+            )}
           </div>
 
           <aside className="card-athenas p-4 h-fit max-h-[70vh] overflow-y-auto">
@@ -207,9 +216,6 @@ export function LessonPlayer() {
                     >
                       {done ? '✓ ' : `${i + 1}. `}
                       {l.title}
-                      {l.is_preview && (
-                        <span className="ml-1 text-[10px] text-neutral-500">({t('course.preview')})</span>
-                      )}
                     </Link>
                   </li>
                 )

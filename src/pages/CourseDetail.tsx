@@ -6,6 +6,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { InstructorBadge } from '../components/InstructorBadge'
 import { TrilhaProgresso } from '../components/TrilhaProgresso'
 import { deleteHostedVideo } from '../lib/videoStorage'
+import { fetchPlacementTest } from '../lib/placementTest'
 import { useGamification } from '../contexts/GamificationContext'
 import type { Course, Lesson } from '../types/database'
 import type { CourseTrail } from '../lib/gamification'
@@ -32,6 +33,9 @@ export function CourseDetail() {
   const [manageError, setManageError] = useState<string | null>(null)
   const [deletingLessonId, setDeletingLessonId] = useState<string | null>(null)
   const [trail, setTrail] = useState<CourseTrail | null>(null)
+  const [hasPlacement, setHasPlacement] = useState(false)
+  const [placementTaken, setPlacementTaken] = useState(false)
+  const [justEnrolled, setJustEnrolled] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -62,6 +66,10 @@ export function CourseDetail() {
         setEnrolled(!!enr)
         const trailData = await fetchTrail(courseId)
         if (trailData) setTrail(trailData)
+
+        const { test } = await fetchPlacementTest(courseId)
+        setHasPlacement((test?.questions.length ?? 0) > 0)
+        setPlacementTaken(Boolean(test?.already_taken))
       }
       setLoading(false)
     }
@@ -86,6 +94,7 @@ export function CourseDetail() {
       return
     }
     setEnrolled(true)
+    setJustEnrolled(true)
   }
 
   function startLearning() {
@@ -149,8 +158,11 @@ export function CourseDetail() {
   const instructor = course.profiles?.full_name ?? t('common.instructor')
   const levelLabel = levelLabels[course.level] ?? course.level
   const isOwner = user?.id === course.instructor_id
+  const isFree = Number(course.price) === 0
   const canWatchLesson = (lesson: { is_preview: boolean }) =>
     isOwner || enrolled || lesson.is_preview
+  /** Teste de nivelamento pendente: é o primeiro passo da formação */
+  const needsPlacement = hasPlacement && !placementTaken
 
   return (
     <div className="page-shell">
@@ -220,13 +232,50 @@ export function CourseDetail() {
                   </p>
                 )}
                 {enrolled ? (
-                  <button
-                    type="button"
-                    onClick={startLearning}
-                    className="btn-primary w-full mt-4 !py-3"
-                  >
-                    {t('course.continue')}
-                  </button>
+                  <>
+                    {justEnrolled && (
+                      <p className="mt-3 alert-brand text-xs">{t('course.enrolledNow')}</p>
+                    )}
+                    {/* O teste vem primeiro: é ele que define o que o aluno pula */}
+                    {needsPlacement ? (
+                      <>
+                        <Link
+                          to={`/nivelamento/${id}`}
+                          className="btn-primary w-full mt-4 !py-3 inline-flex justify-center"
+                        >
+                          {t('placement.cta')}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={startLearning}
+                          className="btn-secondary w-full mt-2 !py-3"
+                        >
+                          {t('placement.startFromZero')}
+                        </button>
+                        <p className="text-xs text-neutral-500 mt-2 text-center leading-relaxed">
+                          {t('placement.asideHint')}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onClick={startLearning}
+                          className="btn-primary w-full mt-4 !py-3"
+                        >
+                          {t('course.continue')}
+                        </button>
+                        {hasPlacement && (
+                          <Link
+                            to={`/nivelamento/${id}`}
+                            className="btn-secondary w-full mt-2 !py-3 inline-flex justify-center"
+                          >
+                            {t('placement.retakeCta')}
+                          </Link>
+                        )}
+                      </>
+                    )}
+                  </>
                 ) : (
                   <button
                     type="button"
@@ -234,7 +283,11 @@ export function CourseDetail() {
                     disabled={enrolling}
                     className="btn-primary w-full mt-4 !py-3"
                   >
-                    {enrolling ? t('course.enrolling') : t('course.enroll')}
+                    {enrolling
+                      ? t('course.enrolling')
+                      : isFree
+                        ? t('course.startFree')
+                        : t('course.enroll')}
                   </button>
                 )}
                 {!user && (
@@ -254,8 +307,42 @@ export function CourseDetail() {
           </p>
         )}
 
+        {trail && trail.total_lessons > 0 && trail.completed_count >= trail.total_lessons && (
+          <div className="mt-8 rounded-2xl border border-brand-gold/40 bg-brand-gold-soft/25 p-5 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-bold text-neutral-900">{t('certificate.readyTitle')}</p>
+              <p className="text-sm text-neutral-600 mt-0.5">{t('certificate.readyBody')}</p>
+            </div>
+            <Link to={`/certificado/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
+              {t('certificate.getCta')}
+            </Link>
+          </div>
+        )}
+
         <section className="mt-12">
           <h2 className="text-xl font-bold mb-4 text-neutral-900">{t('course.content')}</h2>
+
+          {/* Etapa 1 da trilha: verificar conhecimento antes das aulas */}
+          {needsPlacement && (enrolled || isOwner) && (
+            <div className="mb-6 rounded-2xl border-2 border-brand-gold/50 bg-brand-gold-soft/25 p-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <span className="h-9 w-9 shrink-0 rounded-full bg-neutral-950 text-brand-gold font-bold flex items-center justify-center text-sm">
+                    1
+                  </span>
+                  <div>
+                    <p className="font-bold text-neutral-900">{t('placement.stepTitle')}</p>
+                    <p className="text-sm text-neutral-600 mt-0.5 max-w-xl leading-relaxed">
+                      {t('placement.stepBody')}
+                    </p>
+                  </div>
+                </div>
+                <Link to={`/nivelamento/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
+                  {t('placement.stepCta')}
+                </Link>
+              </div>
+            </div>
+          )}
           {(enrolled || isOwner) && trail && trail.lessons.length > 0 && (
             <TrilhaProgresso
               courseId={id!}
@@ -277,11 +364,6 @@ export function CourseDetail() {
                 <div>
                   <span className="text-neutral-400 text-sm mr-2">{i + 1}.</span>
                   {lesson.title}
-                  {lesson.is_preview && (
-                    <span className="ml-2 text-xs bg-brand-gold-soft text-neutral-800 px-2 py-0.5 rounded">
-                      {t('course.preview')}
-                    </span>
-                  )}
                   {isOwner && (
                     <p className="text-xs text-neutral-400 mt-0.5 ml-6">
                       {lesson.video_url ? t('myCourses.hasVideo') : t('myCourses.noVideo')}
@@ -320,7 +402,9 @@ export function CourseDetail() {
                     </Link>
                   ) : (
                     !isOwner && (
-                      <span className="text-xs text-neutral-400">{t('course.enrollToWatch')}</span>
+                      <span className="text-xs text-neutral-400">
+                        {isFree ? t('course.startFreeShort') : t('course.enrollToWatch')}
+                      </span>
                     )
                   )}
                 </div>
