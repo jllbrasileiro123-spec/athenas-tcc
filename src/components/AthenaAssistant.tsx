@@ -9,6 +9,7 @@ import {
   type AssistantAction,
   type AssistantResult,
 } from '../lib/assistantReplies'
+import { askLessonQuestion, isMissingQuestions } from '../lib/lessonQuestions'
 import { buildOtherSupportWhatsAppUrl } from '../lib/supportWhatsApp'
 import { AthenaMark } from './AthenaMark'
 
@@ -34,7 +35,16 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms))
 }
 
-export function AthenaAssistant() {
+export function AthenaAssistant({
+  forceExpanded = false,
+  dock = false,
+  onClose,
+}: {
+  forceExpanded?: boolean
+  /** Painel flutuante (FAB no Layout) */
+  dock?: boolean
+  onClose?: () => void
+} = {}) {
   const { user, profile, resetPassword } = useAuth()
   const { t, language } = useLanguage()
   const location = useLocation()
@@ -76,9 +86,14 @@ export function AthenaAssistant() {
   const [resetLoading, setResetLoading] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const [expanded, setExpanded] = useState(() =>
-    typeof window === 'undefined' ? true : window.matchMedia('(min-width: 1024px)').matches
+    forceExpanded || dock
+      ? true
+      : typeof window === 'undefined'
+        ? true
+        : window.matchMedia('(min-width: 1024px)').matches
   )
   const canSend = input.trim().length > 0 && !typing
+  const showBody = forceExpanded || dock || expanded
 
   useEffect(() => {
     setMessages([welcomeMessage(t('assistant.welcome'), getContextualSuggestions(location.pathname, language))])
@@ -111,6 +126,10 @@ export function AthenaAssistant() {
       lastTopic,
       pathname: location.pathname,
       userId: user?.id ?? null,
+      history: messages
+        .filter((m) => m.id !== 'welcome')
+        .slice(-6)
+        .map((m) => ({ role: m.role, content: m.text })),
     })
 
     setLastTopic(result.topic)
@@ -160,27 +179,37 @@ export function AthenaAssistant() {
   const showStarterChips = messages.length <= 1 && !typing
   const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant')
 
-  return (
-    <aside className="lg:sticky lg:top-20 z-10">
-      <div className="rounded-2xl border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col max-h-[min(70dvh,640px)] lg:max-h-[min(80vh,640px)]">
+  const panel = (
+      <div
+        className={`rounded-2xl border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col ${
+          dock
+            ? 'h-[min(70dvh,560px)] w-[min(100vw-1.5rem,360px)]'
+            : 'max-h-[min(70dvh,640px)] lg:max-h-[min(80vh,640px)]'
+        }`}
+      >
         <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
           <button
             type="button"
-            className="flex items-center gap-3 text-left lg:pointer-events-none"
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
+            className={`flex items-center gap-3 text-left ${forceExpanded || dock ? '' : 'lg:pointer-events-none'}`}
+            onClick={() => {
+              if (dock && onClose) onClose()
+              else if (!forceExpanded) setExpanded((v) => !v)
+            }}
+            aria-expanded={showBody}
           >
             <AthenaMark framed variant="header" className="h-14 w-14 lg:h-[72px] lg:w-[72px]" alt="Athena" />
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-brand-gold">Athena</p>
               <h3 className="font-bold text-base leading-tight">{t('assistant.title')}</h3>
-              <p className="lg:hidden text-[11px] text-neutral-400 mt-0.5">
-                {expanded ? t('assistant.close') : t('assistant.open')}
-              </p>
+              {!forceExpanded && !dock && (
+                <p className="lg:hidden text-[11px] text-neutral-400 mt-0.5">
+                  {expanded ? t('assistant.close') : t('assistant.open')}
+                </p>
+              )}
             </div>
           </button>
           <div className="flex items-center gap-2 shrink-0">
-            {messages.length > 1 && expanded && (
+            {messages.length > 1 && showBody && (
               <button
                 type="button"
                 onClick={clearChat}
@@ -189,21 +218,26 @@ export function AthenaAssistant() {
                 {t('assistant.clear')}
               </button>
             )}
-            <button
-              type="button"
-              className="lg:hidden h-8 w-8 rounded-full text-brand-gold hover:bg-white/10"
-              onClick={() => setExpanded((v) => !v)}
-              aria-label={expanded ? t('assistant.close') : t('assistant.open')}
-            >
-              {expanded ? '–' : '+'}
-            </button>
+            {(dock || !forceExpanded) && (
+              <button
+                type="button"
+                className={`h-8 w-8 rounded-full text-brand-gold hover:bg-white/10 ${dock ? '' : 'lg:hidden'}`}
+                onClick={() => {
+                  if (dock && onClose) onClose()
+                  else setExpanded((v) => !v)
+                }}
+                aria-label={showBody ? t('assistant.close') : t('assistant.open')}
+              >
+                {dock ? '×' : showBody ? '–' : '+'}
+              </button>
+            )}
           </div>
         </div>
-        <p className={`text-xs text-neutral-400 mb-3 shrink-0 ${expanded ? '' : 'hidden lg:block'}`}>
+        <p className={`text-xs text-neutral-400 mb-3 shrink-0 ${showBody ? '' : 'hidden lg:block'}`}>
           {t('assistant.subtitle')}
         </p>
 
-        <div className={expanded ? 'contents' : 'hidden lg:contents'}>
+        <div className={showBody ? 'contents' : 'hidden lg:contents'}>
         <div
           ref={listRef}
           className="flex-1 min-h-[140px] overflow-y-auto space-y-3 pr-1 mb-3 rounded-lg bg-black/40 p-2"
@@ -240,33 +274,36 @@ export function AthenaAssistant() {
                       onResetEmail={setResetEmail}
                       onPasswordReset={handlePasswordReset}
                       lang={language}
+                      userId={user?.id ?? null}
                     />
                   ))}
                 </div>
               )}
 
               {m.role === 'assistant' && m.id !== 'welcome' && (
-                <div className="flex items-center gap-2 ml-12">
-                  <button
-                    type="button"
-                    aria-label="Útil"
-                    onClick={() => vote(m.id, 'up', m.text)}
-                    className={`text-xs px-1.5 py-0.5 rounded ${
-                      m.feedback === 'up' ? 'text-brand-gold' : 'text-neutral-500 hover:text-brand-gold'
-                    }`}
-                  >
-                    👍
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Não útil"
-                    onClick={() => vote(m.id, 'down', m.text)}
-                    className={`text-xs px-1.5 py-0.5 rounded ${
-                      m.feedback === 'down' ? 'text-brand-gold' : 'text-neutral-500 hover:text-brand-gold'
-                    }`}
-                  >
-                    👎
-                  </button>
+                <div className="flex items-center gap-3 ml-12">
+                  {m.feedback ? (
+                    <span className="text-[10px] uppercase tracking-wider text-brand-gold/80">
+                      {language === 'pt' ? 'Obrigado pelo retorno' : 'Thanks for the feedback'}
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => vote(m.id, 'up', m.text)}
+                        className="text-[10px] uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
+                      >
+                        {language === 'pt' ? 'Ajudou' : 'Helpful'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => vote(m.id, 'down', m.text)}
+                        className="text-[10px] uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
+                      >
+                        {language === 'pt' ? 'Não ajudou' : 'Not helpful'}
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -345,8 +382,13 @@ export function AthenaAssistant() {
         </form>
         </div>
       </div>
-    </aside>
   )
+
+  if (dock) {
+    return panel
+  }
+
+  return <aside className="lg:sticky lg:top-20 z-10">{panel}</aside>
 }
 
 function ActionBlock({
@@ -358,6 +400,7 @@ function ActionBlock({
   onResetEmail,
   onPasswordReset,
   lang,
+  userId,
 }: {
   action: AssistantAction
   supportUrl: string | null
@@ -367,6 +410,7 @@ function ActionBlock({
   onResetEmail: (v: string) => void
   onPasswordReset: (e: FormEvent) => void
   lang: 'pt' | 'en'
+  userId: string | null
 }) {
   if (action.kind === 'navigate') {
     return (
@@ -406,6 +450,18 @@ function ActionBlock({
     )
   }
 
+  if (action.kind === 'ask_instructor') {
+    if (!userId) return null
+    return (
+      <AskInstructorForm
+        courseId={action.courseId}
+        lessonId={action.lessonId}
+        userId={userId}
+        lang={lang}
+      />
+    )
+  }
+
   if (action.kind === 'password_form') {
     return (
       <form onSubmit={onPasswordReset} className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
@@ -434,4 +490,90 @@ function ActionBlock({
   }
 
   return null
+}
+
+/** Encaminha a dúvida do chat para o instrutor dono do curso (Atividade 7) */
+function AskInstructorForm({
+  courseId,
+  lessonId,
+  userId,
+  lang,
+}: {
+  courseId: string
+  lessonId: string | null
+  userId: string
+  lang: 'pt' | 'en'
+}) {
+  const [body, setBody] = useState('')
+  const [sending, setSending] = useState(false)
+  const [status, setStatus] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    if (!body.trim()) return
+    setSending(true)
+    setStatus(null)
+    const { error } = await askLessonQuestion({ courseId, lessonId, userId, body })
+    setSending(false)
+
+    if (error) {
+      setStatus(
+        isMissingQuestions(error)
+          ? lang === 'pt'
+            ? 'Rode supabase/atividades-5-a-8.sql no Supabase para ativar as dúvidas.'
+            : 'Run supabase/atividades-5-a-8.sql in Supabase to enable questions.'
+          : error
+      )
+      return
+    }
+    setDone(true)
+    setBody('')
+    setStatus(
+      lang === 'pt'
+        ? 'Dúvida enviada ao instrutor. A resposta aparece na aula.'
+        : 'Question sent to the instructor. The reply shows up on the lesson.'
+    )
+  }
+
+  if (done) {
+    return (
+      <div className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
+        <p className="text-[11px] text-brand-gold">{status}</p>
+        <Link to={`/curso/${courseId}`} className="inline-flex btn-secondary !py-1.5 !text-[11px]">
+          {lang === 'pt' ? 'Abrir a formação' : 'Open the program'}
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={submit} className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
+      <p className="text-[11px] font-bold text-neutral-200">
+        {lang === 'pt' ? 'Perguntar ao instrutor do curso' : 'Ask the course instructor'}
+      </p>
+      <textarea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        rows={3}
+        maxLength={600}
+        placeholder={lang === 'pt' ? 'Escreva sua dúvida…' : 'Write your question…'}
+        className="w-full rounded-lg bg-neutral-950 border border-neutral-600 px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-brand-gold resize-y"
+      />
+      <button
+        type="submit"
+        disabled={sending || !body.trim()}
+        className="btn-primary !py-2 !text-xs w-full disabled:opacity-50"
+      >
+        {sending
+          ? lang === 'pt'
+            ? 'Enviando…'
+            : 'Sending…'
+          : lang === 'pt'
+            ? 'Enviar dúvida'
+            : 'Send question'}
+      </button>
+      {status && <p className="text-[11px] text-brand-gold">{status}</p>}
+    </form>
+  )
 }

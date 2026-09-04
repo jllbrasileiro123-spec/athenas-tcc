@@ -186,6 +186,12 @@ export function UserAvatarMenu() {
               <MenuLink icon={<IconLock />} to="/alterar-senha" onClick={() => setOpen(false)}>
                 {t('menu.password')}
               </MenuLink>
+              <MenuLink icon={<IconSpark />} to="/novidades" onClick={() => setOpen(false)}>
+                {t('menu.whatsNew')}
+              </MenuLink>
+              <MenuLink icon={<IconTeach />} to="/demo-video" onClick={() => setOpen(false)}>
+                {t('footer.demoVideo')}
+              </MenuLink>
 
               <Divider />
               <SectionLabel>{t('menu.sectionPrefs')}</SectionLabel>
@@ -463,6 +469,18 @@ function IconShield() {
   return (
     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7.5 3v5.25c0 4.556-3.086 8.606-7.5 9.75-4.414-1.144-7.5-5.194-7.5-9.75V6L12 3z" />
+    </svg>
+  )
+}
+
+function IconSpark() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 3v3m0 12v3M3 12h3m12 0h3M6.3 6.3l2.1 2.1m7.2 7.2l2.1 2.1m0-11.4l-2.1 2.1M8.4 15.6l-2.1 2.1M12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z"
+      />
     </svg>
   )
 }
