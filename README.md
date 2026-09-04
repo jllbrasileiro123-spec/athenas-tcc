@@ -33,6 +33,7 @@ No SQL Editor do Supabase, execute os arquivos na seguinte ordem:
 | 2 | `supabase/instructor-applications.sql` | Solicitações de instrutor e revisão de cursos |
 | 3 | `supabase/gamification.sql` | Trilha, XP, sequência, moedas e congelador de sequência |
 | 4 | `supabase/quiz-questions.sql` | Status de revisão de curso e banco de perguntas de quiz |
+| 5 | `supabase/atividades-5-a-8.sql` | Nivelamento, dúvidas por aula, certificado e pesquisa SUS |
 
 ### 3. Conceder acesso de administrador
 
@@ -70,12 +71,30 @@ npm run dev
 
 A aplicação estará disponível em [http://localhost:5173](http://localhost:5173).
 
-## Usar no celular
+## Demonstração no iPad (ou no celular)
 
-O ATHENAS é um aplicativo web instalável (PWA). Depois de publicado (Railway ou outro HTTPS):
+O site publicado no GitHub Pages:
 
-1. Abra o site no Safari (iPhone) ou no Chrome (Android).
-2. **iPhone:** toque em **Compartilhar** e depois em **Adicionar à Tela de Início**.
-3. **Android:** use o aviso **Instalar** ou o menu do Chrome → **Adicionar à tela inicial**.
+**https://jllbrasileiro123-spec.github.io/athenas-tcc/**
 
-O atalho abre em tela cheia, como um app. No computador, `npm run dev` também funciona no celular da mesma rede: o Vite já escuta em `0.0.0.0:5173` — acesse `http://<ip-do-computador>:5173`.
+1. No iPad, abra o Safari e cole o link acima.
+2. Faça login com a mesma conta que você usa no computador.
+3. Para tela cheia: toque em **Compartilhar** → **Adicionar à Tela de Início**.
+
+Toda alteração enviada para o `main` no GitHub atualiza esse link automaticamente (Actions → Deploy GitHub Pages).
+
+No Supabase (**Authentication → URL Configuration**), inclua também:
+
+- Site URL: `https://jllbrasileiro123-spec.github.io/athenas-tcc/`
+- Redirect URLs: `https://jllbrasileiro123-spec.github.io/athenas-tcc/**`
+
+## Usar no celular (desenvolvimento local)
+
+O ATHENAS é um aplicativo web instalável (PWA). Em desenvolvimento:
+
+1. Rode `npm run dev` no computador.
+2. No celular da mesma rede Wi‑Fi, abra `http://<ip-do-computador>:5173`.
+3. **iPhone/iPad:** Compartilhar → Adicionar à Tela de Início.
+4. **Android:** aviso Instalar ou menu do Chrome → Adicionar à tela inicial.
+
+O atalho abre em tela cheia, como um app.

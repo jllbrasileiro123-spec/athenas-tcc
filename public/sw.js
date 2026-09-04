@@ -1,11 +1,12 @@
 /* ATHENAS service worker — network-first for pages, cache-first for same-origin assets. */
-const CACHE = 'athenas-shell-v1'
+const CACHE = 'athenas-shell-v2'
+const SHELL = ['./', './index.html', './manifest.webmanifest']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((cache) => cache.addAll(['/', '/index.html', '/manifest.webmanifest']))
+      .then((cache) => cache.addAll(SHELL))
       .then(() => self.skipWaiting())
       .catch(() => self.skipWaiting())
   )
@@ -32,10 +33,10 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone()
-          void caches.open(CACHE).then((cache) => cache.put('/index.html', copy))
+          void caches.open(CACHE).then((cache) => cache.put('./index.html', copy))
           return response
         })
-        .catch(() => caches.match('/index.html').then((cached) => cached ?? Response.error()))
+        .catch(() => caches.match('./index.html').then((cached) => cached ?? Response.error()))
     )
     return
   }
