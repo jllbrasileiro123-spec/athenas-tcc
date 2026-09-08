@@ -20,6 +20,26 @@ export type TrailLesson = {
   duration_minutes: number
   completed: boolean
   completed_at: string | null
+  /** Liberada pelo teste de nivelamento (via_teste_nivelamento no plano) */
+  via_placement_test: boolean
+}
+
+/**
+ * Atividade 4: um nó só libera quando todos os anteriores estão concluídos.
+ * Instrutor vê tudo; aulas já concluídas (inclusive via nivelamento) ficam acessíveis.
+ */
+export function isLessonSequentiallyUnlocked(
+  lessons: TrailLesson[],
+  lessonId: string,
+  opts?: { isOwner?: boolean }
+): boolean {
+  if (opts?.isOwner) return true
+  const sorted = [...lessons].sort((a, b) => a.sort_order - b.sort_order)
+  const idx = sorted.findIndex((l) => l.id === lessonId)
+  if (idx < 0) return false
+  const lesson = sorted[idx]
+  if (lesson.is_preview || lesson.completed) return true
+  return sorted.slice(0, idx).every((l) => l.completed)
 }
 
 export type CourseTrail = {

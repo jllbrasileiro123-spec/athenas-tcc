@@ -126,6 +126,9 @@ export function Layout() {
               <Link to="/pesquisa" className="hover:text-brand-gold transition-colors">
                 {t('footer.survey')}
               </Link>
+              <Link to="/roteiro-teste" className="hover:text-brand-gold transition-colors">
+                {t('footer.protocol')}
+              </Link>
               <Link to="/termos" className="hover:text-brand-gold transition-colors">
                 {t('footer.terms')}
               </Link>

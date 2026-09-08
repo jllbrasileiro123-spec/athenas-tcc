@@ -10,6 +10,7 @@ import { fetchPlacementTest } from '../lib/placementTest'
 import { useGamification } from '../contexts/GamificationContext'
 import type { Course, Lesson } from '../types/database'
 import type { CourseTrail } from '../lib/gamification'
+import { isLessonSequentiallyUnlocked } from '../lib/gamification'
 
 export function CourseDetail() {
   const { id } = useParams<{ id: string }>()
@@ -159,8 +160,14 @@ export function CourseDetail() {
   const levelLabel = levelLabels[course.level] ?? course.level
   const isOwner = user?.id === course.instructor_id
   const isFree = Number(course.price) === 0
-  const canWatchLesson = (lesson: { is_preview: boolean }) =>
+  const hasEnrollmentAccess = (lesson: { is_preview: boolean }) =>
     isOwner || enrolled || lesson.is_preview
+  /** Atividade 4: só a próxima aula da trilha (ou já concluídas) fica liberada */
+  const canAccessTrailLesson = (lesson: { id: string; is_preview: boolean }) => {
+    if (!hasEnrollmentAccess(lesson)) return false
+    if (!trail?.lessons.length) return true
+    return isLessonSequentiallyUnlocked(trail.lessons, lesson.id, { isOwner })
+  }
   /** Teste de nivelamento pendente: é o primeiro passo da formação */
   const needsPlacement = hasPlacement && !placementTaken
 
@@ -349,7 +356,7 @@ export function CourseDetail() {
               lessons={trail.lessons}
               completedCount={trail.completed_count}
               totalLessons={trail.total_lessons}
-              canAccess={canWatchLesson}
+              canAccess={canAccessTrailLesson}
             />
           )}
           {(isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
@@ -393,13 +400,15 @@ export function CourseDetail() {
                       </button>
                     </>
                   )}
-                  {canWatchLesson(lesson) ? (
+                  {canAccessTrailLesson(lesson) ? (
                     <Link
                       to={`/assistir/${id}/${lesson.id}`}
                       className="text-sm link-athenas"
                     >
                       {t('course.watch')}
                     </Link>
+                  ) : enrolled && !isOwner ? (
+                    <span className="text-xs text-neutral-400">{t('trail.locked')}</span>
                   ) : (
                     !isOwner && (
                       <span className="text-xs text-neutral-400">

@@ -43,6 +43,7 @@ export function TrilhaProgresso({
             style={{ width: `${pct}%` }}
           />
         </div>
+        <p className="mt-2 text-xs text-neutral-500">{t('trail.unlockHint')}</p>
       </div>
 
       <ol className="relative mx-auto max-w-md py-4">
@@ -64,17 +65,19 @@ export function TrilhaProgresso({
                 className={`flex h-16 w-16 items-center justify-center rounded-full border-4 shadow-md transition-transform ${
                   lesson.completed
                     ? 'border-brand-gold bg-neutral-950 text-brand-gold'
-                    : isCurrent
+                    : isCurrent && accessible
                       ? 'border-brand-gold bg-brand-gold-soft scale-110'
                       : 'border-neutral-200 bg-white'
                 }`}
               >
                 {lesson.completed ? (
                   <PhoenixMark className="h-9 w-9" glow />
-                ) : isCurrent ? (
+                ) : isCurrent && accessible ? (
                   <PhoenixMark className="h-9 w-9" glow />
+                ) : accessible ? (
+                  <span className="text-sm font-bold text-neutral-700">{i + 1}</span>
                 ) : (
-                  <span className="text-sm font-bold text-neutral-400">{i + 1}</span>
+                  <span className="text-xs font-bold text-neutral-400">{t('trail.lockedShort')}</span>
                 )}
               </span>
               <p className="mt-2 text-center text-sm font-bold text-neutral-900 leading-tight line-clamp-2">
@@ -83,6 +86,14 @@ export function TrilhaProgresso({
               <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-gold">
                 {typeLabel(lesson.content_type, t)} · +{lesson.xp_reward} XP
               </p>
+              {lesson.via_placement_test && (
+                <p className="mt-1 text-[10px] font-semibold text-emerald-700">
+                  {t('trail.viaPlacement')}
+                </p>
+              )}
+              {!accessible && !lesson.completed && (
+                <p className="mt-1 text-[10px] font-semibold text-neutral-400">{t('trail.locked')}</p>
+              )}
             </div>
           )
 

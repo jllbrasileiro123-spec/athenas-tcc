@@ -52,6 +52,13 @@ const ITEMS: DemoItem[] = [
     cta: 'footer.survey',
   },
   {
+    title: 'whatsNew.protocolTitle',
+    body: 'whatsNew.protocolBody',
+    where: 'whatsNew.protocolWhere',
+    to: '/roteiro-teste',
+    cta: 'footer.protocol',
+  },
+  {
     title: 'whatsNew.pwaTitle',
     body: 'whatsNew.pwaBody',
     where: 'whatsNew.pwaWhere',
