@@ -650,12 +650,7 @@ begin
     (c2, m2, 'Um fluxo automático confiável precisa de:',
      '["Nenhum tratamento de erro","Tratamento de erro e registro do que rodou","Somente boa intenção","Execução manual diária"]'::jsonb, 1, 1);
 
-  -- ---------- Matricula todos os usuários existentes ----------
-  insert into public.enrollments (user_id, course_id)
-  select p.id, c.id
-  from public.profiles p
-  cross join (select c1 as id union all select c2) c
-  on conflict (user_id, course_id) do nothing;
+  -- Sem matrícula automática: o aluno usa "Começar grátis" e o popup abre na hora.
 
   -- ---------- Dúvidas de exemplo (uma respondida, uma na fila) ----------
   -- Autor: outro usuário, se existir; senão o próprio instrutor

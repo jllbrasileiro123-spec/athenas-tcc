@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -6,42 +5,35 @@ type PlacementPopupProps = {
   courseId: string
   /** Quantos módulos existem, para o texto explicar o que pode ser pulado */
   moduleCount: number
-  onDismiss: () => void
+  /** Usuário logado: pode fazer o teste. Sem login, só pede autenticação. */
+  isLoggedIn: boolean
+  busy?: boolean
+  onTakeTest: () => void
+  onStartFromBeginning: () => void
 }
 
 /**
- * Popup de desbloqueio por nivelamento: aparece ao entrar na formação
- * (Atividade 5). Quem acerta as perguntas de um módulo já começa nele.
+ * Gate obrigatório ao abrir a formação: define se o aluno começa do
+ * Módulo 1 ou pode avançar pelo teste de nivelamento.
  */
-export function PlacementPopup({ courseId, moduleCount, onDismiss }: PlacementPopupProps) {
+export function PlacementPopup({
+  courseId,
+  moduleCount,
+  isLoggedIn,
+  busy = false,
+  onTakeTest,
+  onStartFromBeginning,
+}: PlacementPopupProps) {
   const { t } = useLanguage()
-  const [closing, setClosing] = useState(false)
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onDismiss()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onDismiss])
-
-  function dismiss() {
-    setClosing(true)
-    onDismiss()
-  }
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-neutral-950/70 px-4 py-8"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-neutral-950/80 px-4 py-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="placement-popup-title"
     >
-      <div
-        className={`celebration-pop w-full max-w-md rounded-3xl border border-brand-gold/40 bg-brand-cream p-7 shadow-2xl ${
-          closing ? 'opacity-0' : ''
-        }`}
-      >
+      <div className="celebration-pop w-full max-w-md rounded-3xl border border-brand-gold/40 bg-brand-cream p-7 shadow-2xl">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">
           {t('placement.popupKicker')}
         </p>
@@ -57,19 +49,38 @@ export function PlacementPopup({ courseId, moduleCount, onDismiss }: PlacementPo
         <ul className="mt-4 space-y-1.5 text-sm text-neutral-600">
           <li>· {t('placement.popupRule1')}</li>
           <li>· {t('placement.popupRule2')}</li>
+          <li>· {t('placement.popupRule3')}</li>
         </ul>
 
         <div className="mt-6 space-y-2">
-          <Link
-            to={`/nivelamento/${courseId}`}
-            onClick={dismiss}
-            className="btn-primary w-full !py-3 inline-flex justify-center"
-          >
-            {t('placement.popupTakeTest')}
-          </Link>
-          <button type="button" onClick={dismiss} className="btn-secondary w-full !py-2.5">
-            {t('placement.popupStartFirst')}
-          </button>
+          {isLoggedIn ? (
+            <>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={onTakeTest}
+                className="btn-primary w-full !py-3 inline-flex justify-center disabled:opacity-60"
+              >
+                {busy ? t('common.loading') : t('placement.popupTakeTest')}
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={onStartFromBeginning}
+                className="btn-secondary w-full !py-2.5 disabled:opacity-60"
+              >
+                {t('placement.popupStartFirst')}
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/"
+              state={{ from: { pathname: `/curso/${courseId}` } }}
+              className="btn-primary w-full !py-3 inline-flex justify-center"
+            >
+              {t('placement.popupSignIn')}
+            </Link>
+          )}
         </div>
       </div>
     </div>
