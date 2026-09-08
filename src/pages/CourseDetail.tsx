@@ -41,11 +41,16 @@ export function CourseDetail() {
   const [placementTaken, setPlacementTaken] = useState(false)
   const [justEnrolled, setJustEnrolled] = useState(false)
   const [modules, setModules] = useState<CourseModule[]>([])
-  const [popupDismissed, setPopupDismissed] = useState(false)
+  /** Só some depois do teste OU se o aluno escolher começar do Módulo 1 */
+  const [choseStartFromZero, setChoseStartFromZero] = useState(false)
+  const [gateBusy, setGateBusy] = useState(false)
 
   useEffect(() => {
     if (!id) return
     const courseId: string = id
+    setChoseStartFromZero(
+      sessionStorage.getItem(`athenas.placementStartZero.${courseId}`) === '1'
+    )
     async function load() {
       const { data: courseData } = await supabase
         .from('courses')
@@ -62,6 +67,13 @@ export function CourseDetail() {
       if (courseData) setCourse(courseData as Course)
       if (lessonsData) setLessons(lessonsData as Lesson[])
 
+      const { modules: mods } = await fetchCourseModules(courseId)
+      setModules(mods)
+
+      const { test } = await fetchPlacementTest(courseId)
+      setHasPlacement((test?.questions.length ?? 0) > 0)
+      setPlacementTaken(Boolean(test?.already_taken))
+
       if (user) {
         const { data: enr } = await supabase
           .from('enrollments')
@@ -72,41 +84,67 @@ export function CourseDetail() {
         setEnrolled(!!enr)
         const trailData = await fetchTrail(courseId)
         if (trailData) setTrail(trailData)
-
-        const { test } = await fetchPlacementTest(courseId)
-        setHasPlacement((test?.questions.length ?? 0) > 0)
-        setPlacementTaken(Boolean(test?.already_taken))
-
-        const { modules: mods } = await fetchCourseModules(courseId)
-        setModules(mods)
-        setPopupDismissed(
-          sessionStorage.getItem(`athenas.placementPopup.${courseId}`) === 'off'
-        )
+      } else {
+        setEnrolled(false)
+        setTrail(null)
       }
       setLoading(false)
     }
     load()
   }, [id, user, fetchTrail])
 
+  /** Garante matrícula antes do teste / trilha (cursos gratuitos e pagos no fluxo demo). */
+  async function ensureEnrolled(): Promise<boolean> {
+    if (!user || !id) {
+      navigate('/', { state: { from: { pathname: `/curso/${id}` } } })
+      return false
+    }
+    if (enrolled) return true
+    setEnrollError(null)
+    const { error } = await supabase.from('enrollments').insert({
+      user_id: user.id,
+      course_id: id,
+    })
+    if (error && !error.message.includes('duplicate')) {
+      setEnrollError(error.message)
+      return false
+    }
+    setEnrolled(true)
+    setJustEnrolled(true)
+    const trailData = await fetchTrail(id)
+    if (trailData) setTrail(trailData)
+    return true
+  }
+
   async function handleEnroll() {
     if (!user) {
       navigate('/', { state: { from: { pathname: `/curso/${id}` } } })
       return
     }
-    if (!id) return
-    setEnrollError(null)
     setEnrolling(true)
-    const { error } = await supabase.from('enrollments').insert({
-      user_id: user.id,
-      course_id: id,
-    })
+    const ok = await ensureEnrolled()
     setEnrolling(false)
-    if (error) {
-      setEnrollError(error.message.includes('duplicate') ? t('course.alreadyEnrolled') : error.message)
-      return
+    if (!ok) return
+    // Depois de "comprar grátis", o nivelamento abre na hora
+    setChoseStartFromZero(false)
+    if (id) sessionStorage.removeItem(`athenas.placementStartZero.${id}`)
+  }
+
+  async function handleTakePlacement() {
+    setGateBusy(true)
+    const ok = await ensureEnrolled()
+    setGateBusy(false)
+    if (ok && id) navigate(`/nivelamento/${id}`)
+  }
+
+  async function handleStartFromBeginning() {
+    setGateBusy(true)
+    const ok = await ensureEnrolled()
+    setGateBusy(false)
+    if (ok) {
+      setChoseStartFromZero(true)
+      if (id) sessionStorage.setItem(`athenas.placementStartZero.${id}`, '1')
     }
-    setEnrolled(true)
-    setJustEnrolled(true)
   }
 
   function startLearning() {
@@ -182,13 +220,11 @@ export function CourseDetail() {
   /** Teste de nivelamento pendente: é o primeiro passo da formação */
   const needsPlacement = hasPlacement && !placementTaken
   const hasModules = modules.length > 0
-  /** Popup de desbloqueio: só para quem já está na formação e não fez o teste */
-  const showPlacementPopup = needsPlacement && enrolled && !isOwner && !popupDismissed
-
-  function dismissPlacementPopup() {
-    setPopupDismissed(true)
-    if (id) sessionStorage.setItem(`athenas.placementPopup.${id}`, 'off')
-  }
+  /**
+   * Popup depois de "Começar grátis" (ou se já estiver matriculado sem ter feito o teste).
+   * Vale também para o dono do curso, para poder testar o fluxo de aluno.
+   */
+  const showPlacementPopup = needsPlacement && enrolled && !choseStartFromZero
 
   return (
     <div className="page-shell">
@@ -232,6 +268,18 @@ export function CourseDetail() {
             {isOwner ? (
               <>
                 <p className="mt-3 text-sm text-neutral-600">{t('course.ownerHint')}</p>
+                {needsPlacement && !enrolled && (
+                  <button
+                    type="button"
+                    onClick={() => void handleEnroll()}
+                    disabled={enrolling || gateBusy}
+                    className="btn-primary w-full mt-4 !py-3"
+                  >
+                    {enrolling || gateBusy
+                      ? t('course.enrolling')
+                      : t('placement.ownerTestCta')}
+                  </button>
+                )}
                 {lessons[0] && (
                   <button
                     type="button"
@@ -262,21 +310,16 @@ export function CourseDetail() {
                     {justEnrolled && (
                       <p className="mt-3 alert-brand text-xs">{t('course.enrolledNow')}</p>
                     )}
-                    {/* O teste vem primeiro: é ele que define o que o aluno pula */}
-                    {needsPlacement ? (
+                    {/* Enquanto o nivelamento não for feito, o CTA principal é o teste */}
+                    {needsPlacement && !choseStartFromZero ? (
                       <>
-                        <Link
-                          to={`/nivelamento/${id}`}
-                          className="btn-primary w-full mt-4 !py-3 inline-flex justify-center"
-                        >
-                          {t('placement.cta')}
-                        </Link>
                         <button
                           type="button"
-                          onClick={startLearning}
-                          className="btn-secondary w-full mt-2 !py-3"
+                          onClick={() => void handleTakePlacement()}
+                          disabled={gateBusy}
+                          className="btn-primary w-full mt-4 !py-3 disabled:opacity-60"
                         >
-                          {t('placement.startFromZero')}
+                          {gateBusy ? t('common.loading') : t('placement.cta')}
                         </button>
                         <p className="text-xs text-neutral-500 mt-2 text-center leading-relaxed">
                           {t('placement.asideHint')}
@@ -305,11 +348,11 @@ export function CourseDetail() {
                 ) : (
                   <button
                     type="button"
-                    onClick={handleEnroll}
-                    disabled={enrolling}
+                    onClick={() => void handleEnroll()}
+                    disabled={enrolling || gateBusy}
                     className="btn-primary w-full mt-4 !py-3"
                   >
-                    {enrolling
+                    {enrolling || gateBusy
                       ? t('course.enrolling')
                       : isFree
                         ? t('course.startFree')
@@ -461,7 +504,10 @@ export function CourseDetail() {
         <PlacementPopup
           courseId={id}
           moduleCount={modules.length}
-          onDismiss={dismissPlacementPopup}
+          isLoggedIn={Boolean(user)}
+          busy={gateBusy}
+          onTakeTest={() => void handleTakePlacement()}
+          onStartFromBeginning={() => void handleStartFromBeginning()}
         />
       )}
     </div>

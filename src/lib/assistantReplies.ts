@@ -206,7 +206,7 @@ const copy: Record<
       navigate: { label: 'Ir ao Ambiente demo', to: '/demo-video' },
     },
     placement: {
-      text: 'O teste de nivelamento é opcional: acertando 70% ou mais das perguntas de uma aula, ela já entra como concluída na sua trilha. Abra a formação e escolha "Fazer teste rápido de nivelamento".',
+      text: 'Ao abrir a formação, um popup obrigatório pede o teste de nivelamento: ele mostra se você começa no Módulo 1 ou pode pular módulos. Acertando 70% ou mais das perguntas de um módulo, ele já entra como concluído.',
       followups: ['O que tem nesse curso?', 'Ver meu progresso', 'Como me matricular?'],
     },
     courseContent: {
@@ -304,7 +304,7 @@ const copy: Record<
       navigate: { label: 'Go to Demo lab', to: '/demo-video' },
     },
     placement: {
-      text: 'The placement test is optional: scoring 70% or more on a lesson marks it complete on your trail. Open the program and choose "Take the quick placement test".',
+      text: 'When you open a program, a required popup asks for the placement test: it shows if you start at Module 1 or can skip modules. Scoring 70% or more on a module marks it complete.',
       followups: ['What is in this course?', 'Check my progress', 'How do I enroll?'],
     },
     courseContent: {

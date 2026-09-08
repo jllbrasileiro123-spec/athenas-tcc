@@ -829,12 +829,103 @@ begin
     (curso, mod4, 'A nota mínima de aprovação no simulado é:',
      '["50%","60%","70%","90%"]'::jsonb, 2, 1);
 
-  -- ---------- Matricula todos os usuários existentes ----------
-  insert into public.enrollments (user_id, course_id)
-  select p.id, curso from public.profiles p
-  on conflict (user_id, course_id) do nothing;
-
+  -- Sem matrícula automática: o aluno usa "Começar grátis" e o popup abre na hora.
   raise notice 'Seed de módulos OK. Curso=% | Módulos: % % % %', curso, mod1, mod2, mod3, mod4;
+end $$;
+
+-- ============================================================
+-- 7) CURSO NOVO PARA TESTAR O POPUP (sem matrícula prévia)
+-- ============================================================
+-- Fluxo: Explorar → este curso → Começar grátis → popup de nivelamento.
+
+do $$
+declare
+  instructor uuid;
+  curso uuid;
+  mod1 uuid; mod2 uuid;
+  ex1 uuid; ex2 uuid;
+  demo_video text := '/demo/athenas-demo.mp4';
+  demo_audio text := '/demo/athenas-podcast.m4a';
+begin
+  select id into instructor from public.profiles where role = 'admin' order by created_at limit 1;
+  if instructor is null then
+    select id into instructor from public.profiles where role = 'instructor' order by created_at limit 1;
+  end if;
+  if instructor is null then
+    select id into instructor from public.profiles order by created_at limit 1;
+  end if;
+  if instructor is null then
+    raise exception 'Nenhum usuário em profiles. Crie sua conta no app e rode este SQL de novo.';
+  end if;
+
+  delete from public.courses where title = 'ATHENAS · Nivelamento grátis (teste do popup)';
+
+  insert into public.courses (instructor_id, title, description, price, level, published, review_status)
+  values (
+    instructor,
+    'ATHENAS · Nivelamento grátis (teste do popup)',
+    'Curso de teste: clique em Começar grátis e o popup de nivelamento abre na hora. Dois módulos — o 2 só libera se você acertar o teste ou concluir o Módulo 1.',
+    0, 'iniciante', true, 'approved'
+  )
+  returning id into curso;
+
+  insert into public.course_modules (course_id, title, description, level, sort_order, unlocked_by_default)
+  values (curso, 'Módulo 1 — Base', 'Começa liberado. Explicação, tutorial, podcast e exercício.', 'iniciante', 0, true)
+  returning id into mod1;
+
+  insert into public.course_modules (course_id, title, description, level, sort_order, unlocked_by_default)
+  values (curso, 'Módulo 2 — Intermediário', 'Libera pelo teste (≥70%) ou ao concluir o Módulo 1.', 'intermediario', 1, false)
+  returning id into mod2;
+
+  insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
+  values
+    (curso, mod1, 'M1 · Explicação', 'Conteúdo base do curso de teste.', demo_video, null, 1, 0, true, 'lesson', 'explicacao', 10),
+    (curso, mod1, 'M1 · Tutorial', 'Passo a passo no player.', demo_video, null, 1, 1, true, 'lesson', 'tutorial', 10),
+    (curso, mod1, 'M1 · Podcast', 'Áudio opcional.', null, demo_audio, 1, 2, true, 'lesson', 'podcast', 10);
+
+  insert into public.lessons (course_id, module_id, title, description, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
+  values (curso, mod1, 'M1 · Exercício', 'Acerte 70% para liberar o Módulo 2.', 5, 3, true, 'quiz', 'exercicio', 15)
+  returning id into ex1;
+
+  insert into public.quiz_questions (lesson_id, prompt, choices, correct_index, sort_order) values
+    (ex1, 'O popup de nivelamento aparece quando?',
+     '["Nunca","Ao clicar em Começar grátis","Só no certificado","Só no WhatsApp"]'::jsonb, 1, 0),
+    (ex1, 'Para pular para o Módulo 2 pelo teste, a nota mínima é:',
+     '["50%","60%","70%","100%"]'::jsonb, 2, 1);
+
+  insert into public.module_materials (module_id, title, url, kind, sort_order) values
+    (mod1, 'Link — Roteiro de teste', '/roteiro-teste', 'link', 0);
+
+  insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
+  values
+    (curso, mod2, 'M2 · Explicação', 'Conteúdo intermediário liberado pelo nivelamento.', demo_video, null, 1, 4, true, 'lesson', 'explicacao', 10),
+    (curso, mod2, 'M2 · Tutorial', 'Prática no nível intermediário.', demo_video, null, 1, 5, true, 'lesson', 'tutorial', 10),
+    (curso, mod2, 'M2 · Podcast', 'Áudio opcional do módulo 2.', null, demo_audio, 1, 6, true, 'lesson', 'podcast', 10);
+
+  insert into public.lessons (course_id, module_id, title, description, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
+  values (curso, mod2, 'M2 · Exercício', 'Avaliação do módulo intermediário.', 5, 7, true, 'quiz', 'exercicio', 15)
+  returning id into ex2;
+
+  insert into public.quiz_questions (lesson_id, prompt, choices, correct_index, sort_order) values
+    (ex2, 'Concluir o Módulo 1 desbloqueia:',
+     '["Nada","O Módulo 2","Só o certificado","O chat"]'::jsonb, 1, 0),
+    (ex2, 'O podcast é:',
+     '["Obrigatório","Opcional","Proibido","Pago à parte"]'::jsonb, 1, 1);
+
+  insert into public.module_materials (module_id, title, url, kind, sort_order) values
+    (mod2, 'Link — Novidades', '/novidades', 'link', 0);
+
+  insert into public.placement_questions (course_id, module_id, prompt, choices, correct_index, sort_order) values
+    (curso, mod1, 'O nivelamento serve para:',
+     '["Descobrir se você começa do zero ou pode pular módulos","Apagar o curso","Trocar de senha","Nada"]'::jsonb, 0, 0),
+    (curso, mod1, 'Acertar 70% ou mais das perguntas de um módulo:',
+     '["Não faz nada","Conclui o módulo e pode liberar o próximo","Zera o XP","Cancela a matrícula"]'::jsonb, 1, 1),
+    (curso, mod2, 'O Módulo 2 deste curso de teste é de nível:',
+     '["Iniciante","Intermediário","Só áudio","Sem conteúdo"]'::jsonb, 1, 0),
+    (curso, mod2, 'Sem o teste, o aluno começa:',
+     '["No Módulo 1","Direto no certificado","Fora da plataforma","No Módulo 2"]'::jsonb, 0, 1);
+
+  raise notice 'Curso de teste do popup OK. Curso=% | Módulos: % %', curso, mod1, mod2;
 end $$;
 
 notify pgrst, 'reload schema';

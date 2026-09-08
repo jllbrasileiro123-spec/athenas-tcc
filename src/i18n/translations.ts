@@ -976,32 +976,32 @@ export const translations = {
   'placement.cta': { pt: 'Verificar meu conhecimento', en: 'Check my knowledge' },
   'placement.retakeCta': { pt: 'Refazer o teste de conhecimento', en: 'Retake the knowledge test' },
   'placement.asideHint': {
-    pt: 'O teste é a primeira etapa e define quais aulas você pula. Se preferir, comece pela aula 1.',
-    en: 'The test is the first step and defines which lessons you skip. If you prefer, start at lesson 1.',
+    pt: 'O teste é obrigatório ao entrar: ele define se você começa no Módulo 1 ou pode avançar.',
+    en: 'The test is required when you enter: it decides if you start at Module 1 or can jump ahead.',
   },
   'placement.startFromZero': { pt: 'Pular o teste e ver a aula 1', en: 'Skip the test and open lesson 1' },
-  'placement.skipTest': { pt: 'Pular o teste e ir para a aula 1 →', en: 'Skip the test and go to lesson 1 →' },
+  'placement.skipTest': { pt: 'Voltar à formação →', en: 'Back to the program →' },
   'placement.stepTitle': {
-    pt: 'Etapa 1 — Verifique seu conhecimento',
-    en: 'Step 1 — Check your knowledge',
+    pt: 'Etapa 1 — Descubra seu nível',
+    en: 'Step 1 — Find your level',
   },
   'placement.stepBody': {
-    pt: 'Antes de começar as aulas, responda o teste rápido. Em cada aula que você acertar 70% ou mais, ela já entra como concluída — você pula direto para o que ainda não sabe.',
-    en: 'Before starting the lessons, take the quick test. Each lesson where you score 70% or more is marked complete — you jump straight to what you still need.',
+    pt: 'Antes de liberar as aulas, o teste mostra se você precisa começar do início ou pode pular módulos. Acertando 70% ou mais de um módulo, ele já entra como concluído.',
+    en: 'Before unlocking lessons, the test shows if you need to start from the beginning or can skip modules. Scoring 70% or more on a module marks it complete.',
   },
   'placement.stepCta': { pt: 'Começar o teste', en: 'Start the test' },
-  'placement.popupKicker': { pt: 'Desbloqueio por nivelamento', en: 'Placement unlock' },
+  'placement.popupKicker': { pt: 'Obrigatório · Nivelamento', en: 'Required · Placement' },
   'placement.popupTitle': {
-    pt: 'Quer pular direto para o seu nível?',
-    en: 'Want to jump straight to your level?',
+    pt: 'Antes de começar: qual é o seu nível?',
+    en: 'Before you start: what is your level?',
   },
   'placement.popupBodyModules': {
-    pt: 'Esta formação tem {count} módulos e só o primeiro começa liberado. O teste de nivelamento mede módulo por módulo: o que você já domina é concluído na hora, e você começa no módulo certo — inclusive no intermediário.',
-    en: 'This program has {count} modules and only the first starts unlocked. The placement test checks module by module: what you already master is completed right away, and you start at the right module — intermediate included.',
+    pt: 'Esta formação tem {count} módulos. Faça o teste agora para saber se precisa começar do Módulo 1 ou se pode pular direto para um módulo mais avançado.',
+    en: 'This program has {count} modules. Take the test now to see if you need Module 1 or can jump to a more advanced module.',
   },
   'placement.popupBody': {
-    pt: 'O teste de nivelamento mede o que você já sabe e conclui essas aulas na hora, para você não repetir conteúdo.',
-    en: 'The placement test measures what you already know and completes those lessons right away, so you don’t repeat content.',
+    pt: 'Faça o teste agora para saber se precisa começar do início ou se pode avançar no que você já domina.',
+    en: 'Take the test now to see if you need to start from the beginning or can skip what you already know.',
   },
   'placement.popupRule1': {
     pt: 'Acertar 70% ou mais das perguntas de um módulo conclui o módulo.',
@@ -1011,10 +1011,22 @@ export const translations = {
     pt: 'Concluir um módulo desbloqueia o seguinte automaticamente.',
     en: 'Completing a module unlocks the next one automatically.',
   },
-  'placement.popupTakeTest': { pt: 'Fazer o teste agora', en: 'Take the test now' },
+  'placement.popupRule3': {
+    pt: 'Sem o teste, você não sabe se pode pular — por isso ele abre junto com o curso.',
+    en: 'Without the test you won’t know if you can skip — that’s why it opens with the course.',
+  },
+  'placement.popupTakeTest': { pt: 'Fazer o teste e descobrir meu nível', en: 'Take the test and find my level' },
   'placement.popupStartFirst': {
-    pt: 'Começar pelo Módulo 1',
-    en: 'Start at Module 1',
+    pt: 'Já sei: quero começar pelo Módulo 1',
+    en: 'I already know: start at Module 1',
+  },
+  'placement.popupSignIn': {
+    pt: 'Entrar para fazer o nivelamento',
+    en: 'Sign in to take the placement test',
+  },
+  'placement.ownerTestCta': {
+    pt: 'Começar grátis e testar o nivelamento',
+    en: 'Start free and test placement',
   },
   'placement.resultModules': {
     pt: 'Você concluiu {unlocked} de {total} módulos pelo teste.',
