@@ -34,6 +34,7 @@ No SQL Editor do Supabase, execute os arquivos na seguinte ordem:
 | 3 | `supabase/gamification.sql` | Trilha, XP, sequência, moedas e congelador de sequência |
 | 4 | `supabase/quiz-questions.sql` | Status de revisão de curso e banco de perguntas de quiz |
 | 5 | `supabase/atividades-5-a-8.sql` | Nivelamento, dúvidas por aula, certificado e pesquisa SUS |
+| 6 | `supabase/modulos.sql` | Módulos com desbloqueio em cascata, podcast, materiais e nivelamento por módulo |
 
 ### 3. Conceder acesso de administrador
 

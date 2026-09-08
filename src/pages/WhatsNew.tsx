@@ -17,6 +17,13 @@ type DemoItem = {
 
 const ITEMS: DemoItem[] = [
   {
+    title: 'whatsNew.modulesTitle',
+    body: 'whatsNew.modulesBody',
+    where: 'whatsNew.modulesWhere',
+    to: '/explorar',
+    cta: 'whatsNew.openExplore',
+  },
+  {
     title: 'whatsNew.placementTitle',
     body: 'whatsNew.placementBody',
     where: 'whatsNew.placementWhere',

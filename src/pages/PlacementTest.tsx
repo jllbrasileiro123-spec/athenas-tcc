@@ -101,10 +101,15 @@ export function PlacementTest() {
           <div className="mt-8 space-y-4">
             <div className="rounded-2xl border border-brand-gold/30 bg-white p-6 shadow-sm">
               <p className="text-lg font-bold text-neutral-900">
-                {t('placement.resultTitle', {
-                  unlocked: String(result.unlocked_count),
-                  total: String(result.lesson_count),
-                })}
+                {result.module_count > 0
+                  ? t('placement.resultModules', {
+                      unlocked: String(result.unlocked_module_count),
+                      total: String(result.module_count),
+                    })
+                  : t('placement.resultTitle', {
+                      unlocked: String(result.unlocked_count),
+                      total: String(result.lesson_count),
+                    })}
               </p>
               <p className="mt-2 text-sm text-neutral-600">
                 {t('placement.resultScore', {
@@ -112,8 +117,13 @@ export function PlacementTest() {
                   total: String(result.total_count),
                 })}
               </p>
+              {result.next_module_title && (
+                <p className="mt-3 text-sm font-semibold text-brand-gold">
+                  {t('placement.startAtModule', { module: result.next_module_title })}
+                </p>
+              )}
               {result.next_lesson_title ? (
-                <p className="mt-3 text-sm text-neutral-800 font-semibold">
+                <p className="mt-1 text-sm text-neutral-800 font-semibold">
                   {t('placement.startAt', { lesson: result.next_lesson_title })}
                 </p>
               ) : (
@@ -156,7 +166,9 @@ export function PlacementTest() {
                     {i + 1}. {q.prompt}
                   </legend>
                   <p className="text-xs text-neutral-500">
-                    {t('placement.aboutLesson', { lesson: q.lesson_title })}
+                    {q.module_title
+                      ? t('placement.aboutModule', { module: q.module_title })
+                      : t('placement.aboutLesson', { lesson: q.lesson_title })}
                   </p>
                   <div className="space-y-1.5 pt-1">
                     {q.choices.map((choice, idx) => (

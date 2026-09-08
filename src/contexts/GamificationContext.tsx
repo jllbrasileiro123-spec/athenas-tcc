@@ -119,6 +119,9 @@ function asTrail(raw: unknown): CourseTrail | null {
         completed: Boolean(row.completed),
         completed_at: (row.completed_at as string | null) ?? null,
         via_placement_test: Boolean(row.via_placement_test),
+        module_id: row.module_id ? String(row.module_id) : null,
+        item_kind: String(row.item_kind ?? 'explicacao'),
+        audio_url: (row.audio_url as string | null) ?? null,
       }
     }),
   }

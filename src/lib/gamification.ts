@@ -22,11 +22,21 @@ export type TrailLesson = {
   completed_at: string | null
   /** Liberada pelo teste de nivelamento (via_teste_nivelamento no plano) */
   via_placement_test: boolean
+  module_id: string | null
+  /** Papel no módulo: explicacao | tutorial | podcast | exercicio */
+  item_kind: string
+  audio_url: string | null
+}
+
+/** Podcast é reforço opcional: não trava a aula seguinte. */
+export function isOptionalItem(itemKind: string | null | undefined) {
+  return itemKind === 'podcast'
 }
 
 /**
- * Atividade 4: um nó só libera quando todos os anteriores estão concluídos.
- * Instrutor vê tudo; aulas já concluídas (inclusive via nivelamento) ficam acessíveis.
+ * Atividade 4: um nó só libera quando os anteriores obrigatórios estão
+ * concluídos. Instrutor vê tudo; aulas já concluídas (inclusive via
+ * nivelamento) e o podcast opcional ficam sempre acessíveis.
  */
 export function isLessonSequentiallyUnlocked(
   lessons: TrailLesson[],
@@ -38,8 +48,16 @@ export function isLessonSequentiallyUnlocked(
   const idx = sorted.findIndex((l) => l.id === lessonId)
   if (idx < 0) return false
   const lesson = sorted[idx]
-  if (lesson.is_preview || lesson.completed) return true
-  return sorted.slice(0, idx).every((l) => l.completed)
+  if (lesson.completed) return true
+
+  const previousDone = sorted
+    .slice(0, idx)
+    .every((l) => l.completed || isOptionalItem(l.item_kind))
+
+  // O podcast acompanha o módulo: libera junto com o item obrigatório anterior
+  if (isOptionalItem(lesson.item_kind)) return previousDone
+  if (lesson.is_preview && !lesson.module_id) return true
+  return previousDone
 }
 
 export type CourseTrail = {

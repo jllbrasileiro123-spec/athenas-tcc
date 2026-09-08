@@ -7,6 +7,9 @@ import { InstructorBadge } from '../components/InstructorBadge'
 import { TrilhaProgresso } from '../components/TrilhaProgresso'
 import { deleteHostedVideo } from '../lib/videoStorage'
 import { fetchPlacementTest } from '../lib/placementTest'
+import { fetchCourseModules, type CourseModule } from '../lib/courseModules'
+import { ModuleList } from '../components/ModuleList'
+import { PlacementPopup } from '../components/PlacementPopup'
 import { useGamification } from '../contexts/GamificationContext'
 import type { Course, Lesson } from '../types/database'
 import type { CourseTrail } from '../lib/gamification'
@@ -37,6 +40,8 @@ export function CourseDetail() {
   const [hasPlacement, setHasPlacement] = useState(false)
   const [placementTaken, setPlacementTaken] = useState(false)
   const [justEnrolled, setJustEnrolled] = useState(false)
+  const [modules, setModules] = useState<CourseModule[]>([])
+  const [popupDismissed, setPopupDismissed] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -71,6 +76,12 @@ export function CourseDetail() {
         const { test } = await fetchPlacementTest(courseId)
         setHasPlacement((test?.questions.length ?? 0) > 0)
         setPlacementTaken(Boolean(test?.already_taken))
+
+        const { modules: mods } = await fetchCourseModules(courseId)
+        setModules(mods)
+        setPopupDismissed(
+          sessionStorage.getItem(`athenas.placementPopup.${courseId}`) === 'off'
+        )
       }
       setLoading(false)
     }
@@ -170,6 +181,14 @@ export function CourseDetail() {
   }
   /** Teste de nivelamento pendente: é o primeiro passo da formação */
   const needsPlacement = hasPlacement && !placementTaken
+  const hasModules = modules.length > 0
+  /** Popup de desbloqueio: só para quem já está na formação e não fez o teste */
+  const showPlacementPopup = needsPlacement && enrolled && !isOwner && !popupDismissed
+
+  function dismissPlacementPopup() {
+    setPopupDismissed(true)
+    if (id) sessionStorage.setItem(`athenas.placementPopup.${id}`, 'off')
+  }
 
   return (
     <div className="page-shell">
@@ -350,7 +369,15 @@ export function CourseDetail() {
               </div>
             </div>
           )}
-          {(enrolled || isOwner) && trail && trail.lessons.length > 0 && (
+          {(enrolled || isOwner) && hasModules && (
+            <ModuleList
+              courseId={id!}
+              modules={modules}
+              isOwner={isOwner}
+              placementAvailable={needsPlacement}
+            />
+          )}
+          {(enrolled || isOwner) && !hasModules && trail && trail.lessons.length > 0 && (
             <TrilhaProgresso
               courseId={id!}
               lessons={trail.lessons}
@@ -359,7 +386,8 @@ export function CourseDetail() {
               canAccess={canAccessTrailLesson}
             />
           )}
-          {(isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
+          {(!hasModules || (!enrolled && !isOwner)) &&
+            (isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
             <ul className={`bg-white border border-neutral-200 rounded-2xl divide-y divide-neutral-100 ${
               (enrolled || isOwner) && trail && trail.lessons.length > 0 ? 'mt-8' : ''
             }`}>
@@ -428,6 +456,14 @@ export function CourseDetail() {
           )}
         </section>
       </div>
+
+      {showPlacementPopup && id && (
+        <PlacementPopup
+          courseId={id}
+          moduleCount={modules.length}
+          onDismiss={dismissPlacementPopup}
+        />
+      )}
     </div>
   )
 }
