@@ -58,6 +58,11 @@ export interface Lesson {
   is_preview: boolean
   content_type?: LessonContentType
   xp_reward?: number
+  /** Módulo a que a aula pertence (null nas formações antigas) */
+  module_id?: string | null
+  /** Papel no módulo: explicacao | tutorial | podcast | exercicio */
+  item_kind?: 'explicacao' | 'tutorial' | 'podcast' | 'exercicio' | null
+  audio_url?: string | null
   created_at: string
 }
 

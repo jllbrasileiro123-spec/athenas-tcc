@@ -12,6 +12,7 @@
 --                      e matricula todos os usuários existentes
 --
 -- Pré-requisitos: schema.sql, gamification.sql e quiz-questions.sql aplicados.
+-- Depois deste arquivo, rode supabase/modulos.sql (módulos com desbloqueio).
 -- Rodar de novo é seguro (idempotente); o seed refaz as formações demo.
 -- ============================================================
 
@@ -682,78 +683,8 @@ begin
   raise notice 'Seed OK. Instrutor=% | Curso 1=% | Curso 2=%', instructor, c1, c2;
 end $$;
 
--- Atualiza a trilha para expor via_placement_test (alias do plano: via_teste_nivelamento)
-create or replace function public.get_course_trail(p_course_id uuid)
-returns jsonb
-language plpgsql
-stable
-security definer
-set search_path = public
-as $$
-declare
-  uid uuid := auth.uid();
-  result jsonb;
-begin
-  if uid is null then
-    raise exception 'not authenticated';
-  end if;
-
-  if not exists (
-    select 1 from public.courses c
-    where c.id = p_course_id
-      and (
-        c.published = true
-        or c.instructor_id = uid
-        or exists (
-          select 1 from public.enrollments e
-          where e.course_id = c.id and e.user_id = uid
-        )
-      )
-  ) then
-    raise exception 'course not found';
-  end if;
-
-  select jsonb_build_object(
-    'course_id', p_course_id,
-    'lessons', coalesce((
-      select jsonb_agg(row_to_json(x) order by x.sort_order)
-      from (
-        select
-          l.id,
-          l.title,
-          l.description,
-          l.sort_order,
-          l.content_type,
-          l.xp_reward,
-          l.is_preview,
-          l.duration_minutes,
-          coalesce(p.completed, false) as completed,
-          p.completed_at,
-          coalesce(p.via_placement_test, false) as via_placement_test
-        from public.lessons l
-        left join public.lesson_progress p
-          on p.lesson_id = l.id and p.user_id = uid
-        where l.course_id = p_course_id
-      ) x
-    ), '[]'::jsonb),
-    'completed_count', (
-      select count(*)::int
-      from public.lessons l
-      join public.lesson_progress p on p.lesson_id = l.id
-      where l.course_id = p_course_id
-        and p.user_id = uid
-        and p.completed = true
-    ),
-    'total_lessons', (
-      select count(*)::int from public.lessons where course_id = p_course_id
-    )
-  ) into result;
-
-  return result;
-end;
-$$;
-
-revoke all on function public.get_course_trail(uuid) from public;
-grant execute on function public.get_course_trail(uuid) to authenticated;
+-- A trilha (get_course_trail) vive em gamification.sql e é atualizada por
+-- modulos.sql, que é o último arquivo da ordem. Não redefina aqui: rodar este
+-- arquivo de novo depois dos módulos apagaria os campos de módulo da trilha.
 
 notify pgrst, 'reload schema';

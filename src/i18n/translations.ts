@@ -565,6 +565,34 @@ export const translations = {
   'trail.typeLesson': { pt: 'Lição', en: 'Lesson' },
   'trail.typeQuiz': { pt: 'Quiz', en: 'Quiz' },
   'trail.typeExam': { pt: 'Simulado', en: 'Exam' },
+  'module.cascadeHint': {
+    pt: 'O Módulo 1 já vem liberado. Os próximos abrem quando você conclui o módulo anterior — o exercício de avaliação é obrigatório.',
+    en: 'Module 1 starts unlocked. The next ones open when you finish the previous module — the assessment exercise is required.',
+  },
+  'module.locked': { pt: 'Bloqueado', en: 'Locked' },
+  'module.completed': { pt: 'Concluído', en: 'Completed' },
+  'module.lockedBody': {
+    pt: 'Conclua o módulo anterior para abrir este. Se você já domina o conteúdo, faça o teste de nivelamento e pule direto para cá.',
+    en: 'Finish the previous module to open this one. If you already know the content, take the placement test and jump straight here.',
+  },
+  'module.lockedPlacementCta': {
+    pt: 'Desbloquear pelo teste de nivelamento',
+    en: 'Unlock with the placement test',
+  },
+  'module.progress': {
+    pt: '{done} de {total} itens obrigatórios concluídos',
+    en: '{done} of {total} required items completed',
+  },
+  'module.materials': { pt: 'Materiais do módulo', en: 'Module materials' },
+  'module.optional': { pt: 'opcional', en: 'optional' },
+  'module.kindExplicacao': { pt: 'Vídeo de explicação', en: 'Explanation video' },
+  'module.kindTutorial': { pt: 'Vídeo de tutorial', en: 'Tutorial video' },
+  'module.kindPodcast': { pt: 'Podcast (áudio)', en: 'Podcast (audio)' },
+  'module.kindExercicio': { pt: 'Exercício de avaliação', en: 'Assessment exercise' },
+  'module.noAudio': {
+    pt: 'Este podcast ainda não tem áudio publicado.',
+    en: 'This podcast has no audio published yet.',
+  },
   'trail.locked': { pt: 'Conclua a aula anterior', en: 'Finish the previous lesson' },
   'trail.lockedShort': { pt: 'Bloq.', en: 'Lock' },
   'trail.unlockHint': {
@@ -962,12 +990,47 @@ export const translations = {
     en: 'Before starting the lessons, take the quick test. Each lesson where you score 70% or more is marked complete — you jump straight to what you still need.',
   },
   'placement.stepCta': { pt: 'Começar o teste', en: 'Start the test' },
+  'placement.popupKicker': { pt: 'Desbloqueio por nivelamento', en: 'Placement unlock' },
+  'placement.popupTitle': {
+    pt: 'Quer pular direto para o seu nível?',
+    en: 'Want to jump straight to your level?',
+  },
+  'placement.popupBodyModules': {
+    pt: 'Esta formação tem {count} módulos e só o primeiro começa liberado. O teste de nivelamento mede módulo por módulo: o que você já domina é concluído na hora, e você começa no módulo certo — inclusive no intermediário.',
+    en: 'This program has {count} modules and only the first starts unlocked. The placement test checks module by module: what you already master is completed right away, and you start at the right module — intermediate included.',
+  },
+  'placement.popupBody': {
+    pt: 'O teste de nivelamento mede o que você já sabe e conclui essas aulas na hora, para você não repetir conteúdo.',
+    en: 'The placement test measures what you already know and completes those lessons right away, so you don’t repeat content.',
+  },
+  'placement.popupRule1': {
+    pt: 'Acertar 70% ou mais das perguntas de um módulo conclui o módulo.',
+    en: 'Scoring 70% or more on a module’s questions completes that module.',
+  },
+  'placement.popupRule2': {
+    pt: 'Concluir um módulo desbloqueia o seguinte automaticamente.',
+    en: 'Completing a module unlocks the next one automatically.',
+  },
+  'placement.popupTakeTest': { pt: 'Fazer o teste agora', en: 'Take the test now' },
+  'placement.popupStartFirst': {
+    pt: 'Começar pelo Módulo 1',
+    en: 'Start at Module 1',
+  },
+  'placement.resultModules': {
+    pt: 'Você concluiu {unlocked} de {total} módulos pelo teste.',
+    en: 'You completed {unlocked} of {total} modules through the test.',
+  },
+  'placement.startAtModule': {
+    pt: 'Seu ponto de partida: {module}',
+    en: 'Your starting point: {module}',
+  },
   'placement.submit': { pt: 'Enviar teste', en: 'Submit test' },
   'placement.unanswered': {
     pt: 'Responda todas as perguntas antes de enviar.',
     en: 'Answer every question before submitting.',
   },
   'placement.aboutLesson': { pt: 'Sobre: {lesson}', en: 'About: {lesson}' },
+  'placement.aboutModule': { pt: 'Módulo: {module}', en: 'Module: {module}' },
   'placement.retake': {
     pt: 'Você já fez este teste. Enviar de novo substitui o resultado anterior.',
     en: 'You already took this test. Submitting again replaces the previous result.',
@@ -1179,6 +1242,18 @@ export const translations = {
   'whatsNew.surveyWhere': {
     pt: 'Onde ver: rodapé → Pesquisa de usabilidade.',
     en: 'Where to look: footer → Usability survey.',
+  },
+  'whatsNew.modulesTitle': {
+    pt: 'Módulos com desbloqueio em cascata',
+    en: 'Modules with cascading unlock',
+  },
+  'whatsNew.modulesBody': {
+    pt: 'Cada módulo tem vídeo de explicação, vídeo de tutorial, podcast, exercício de avaliação e materiais. Só o Módulo 1 começa liberado; os outros abrem ao concluir o anterior — ou direto pelo popup de nivelamento, que pode te levar ao intermediário.',
+    en: 'Each module has an explanation video, a tutorial video, a podcast, an assessment exercise, and materials. Only Module 1 starts unlocked; the others open when you finish the previous one — or straight from the placement popup, which can take you to the intermediate level.',
+  },
+  'whatsNew.modulesWhere': {
+    pt: 'Onde ver: formação "ATHENAS · Trilha por módulos" no catálogo.',
+    en: 'Where to look: the "ATHENAS · Trilha por módulos" program in the catalog.',
   },
   'whatsNew.protocolTitle': {
     pt: 'Roteiro de teste (Atividade 8)',

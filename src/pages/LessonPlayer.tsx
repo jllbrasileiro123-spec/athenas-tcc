@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useGamification } from '../contexts/GamificationContext'
 import { LessonVideoPlayer } from '../components/LessonVideoPlayer'
+import { LessonAudioPlayer } from '../components/LessonAudioPlayer'
 import { CelebrationModal } from '../components/CelebrationModal'
 import { QuizTaker } from '../components/QuizTaker'
 import { LessonDoubts } from '../components/LessonDoubts'
@@ -136,6 +137,7 @@ export function LessonPlayer() {
         { isOwner }
       ))
   const isQuiz = current?.content_type === 'quiz' || current?.content_type === 'simulado'
+  const isPodcast = trailLessons.find((l) => l.id === lessonId)?.item_kind === 'podcast'
 
   if (loading) {
     return (
@@ -171,7 +173,14 @@ export function LessonPlayer() {
 
         <div className="grid lg:grid-cols-3 gap-6 mt-4">
           <div className="lg:col-span-2">
-            {isQuiz ? (
+            {isPodcast ? (
+              <LessonAudioPlayer
+                audioUrl={current.audio_url ?? current.video_url}
+                title={current.title}
+                noAudioLabel={t('module.noAudio')}
+                onNearComplete={completed ? undefined : () => void markComplete()}
+              />
+            ) : isQuiz ? (
               <QuizTaker
                 lessonId={current.id}
                 completed={completed}

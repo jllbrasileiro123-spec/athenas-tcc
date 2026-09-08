@@ -5,8 +5,12 @@ export const PLACEMENT_THRESHOLD = 0.7
 
 export type PlacementQuestion = {
   id: string
-  lesson_id: string
+  lesson_id: string | null
   lesson_title: string
+  /** Preenchido nas formações organizadas em módulos */
+  module_id: string | null
+  module_title: string
+  module_level: string
   prompt: string
   choices: string[]
   sort_order: number
@@ -25,8 +29,12 @@ export type PlacementResult = {
   total_count: number
   unlocked_count: number
   lesson_count: number
+  /** Módulos concluídos pelo teste (0 nas formações sem módulos) */
+  unlocked_module_count: number
+  module_count: number
   next_lesson_id: string | null
   next_lesson_title: string | null
+  next_module_title: string | null
 }
 
 export function isMissingPlacement(message: string | undefined | null): boolean {
@@ -54,8 +62,11 @@ export async function fetchPlacementTest(
       already_taken: Boolean(raw.already_taken),
       questions: questions.map((q) => ({
         id: String(q.id),
-        lesson_id: String(q.lesson_id),
+        lesson_id: q.lesson_id ? String(q.lesson_id) : null,
         lesson_title: String(q.lesson_title ?? ''),
+        module_id: q.module_id ? String(q.module_id) : null,
+        module_title: String(q.module_title ?? ''),
+        module_level: String(q.module_level ?? ''),
         prompt: String(q.prompt ?? ''),
         choices: Array.isArray(q.choices) ? q.choices.map(String) : [],
         sort_order: Number(q.sort_order ?? 0),
@@ -84,8 +95,11 @@ export async function submitPlacementTest(
       total_count: Number(raw.total_count ?? 0),
       unlocked_count: Number(raw.unlocked_count ?? 0),
       lesson_count: Number(raw.lesson_count ?? 0),
+      unlocked_module_count: Number(raw.unlocked_module_count ?? 0),
+      module_count: Number(raw.module_count ?? 0),
       next_lesson_id: raw.next_lesson_id ? String(raw.next_lesson_id) : null,
       next_lesson_title: raw.next_lesson_title ? String(raw.next_lesson_title) : null,
+      next_module_title: raw.next_module_title ? String(raw.next_module_title) : null,
     },
     error: null,
   }
