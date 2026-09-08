@@ -10,6 +10,7 @@ import { QuizTaker } from '../components/QuizTaker'
 import { LessonDoubts } from '../components/LessonDoubts'
 import type { Course, Lesson } from '../types/database'
 import type { CompleteLessonResult, TrailLesson } from '../lib/gamification'
+import { isLessonSequentiallyUnlocked } from '../lib/gamification'
 
 export function LessonPlayer() {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>()
@@ -52,6 +53,7 @@ export function LessonPlayer() {
 
       const lessonData = lesson as Lesson
       let canWatch = lessonData.is_preview
+      let isOwner = false
 
       if (!canWatch && user) {
         const { data: enr } = await supabase
@@ -69,6 +71,9 @@ export function LessonPlayer() {
             .eq('instructor_id', user.id)
             .maybeSingle()
           canWatch = !!owned
+          isOwner = !!owned
+        } else {
+          isOwner = (c as { instructor_id?: string } | null)?.instructor_id === user.id
         }
       }
 
@@ -77,13 +82,21 @@ export function LessonPlayer() {
         setCurrent(null)
         setCompleted(false)
       } else {
-        setCurrent(lessonData)
         const trail = await fetchTrail(cId)
         if (trail) {
           setTrailLessons(trail.lessons)
-          setCompleted(trail.lessons.some((l) => l.id === lId && l.completed))
+          const unlocked = isLessonSequentiallyUnlocked(trail.lessons, lId, { isOwner })
+          if (!unlocked && !lessonData.is_preview) {
+            setAccessDenied(true)
+            setCurrent(null)
+            setCompleted(false)
+          } else {
+            setCurrent(lessonData)
+            setCompleted(trail.lessons.some((l) => l.id === lId && l.completed))
+          }
         } else {
           setTrailLessons([])
+          setCurrent(lessonData)
           setCompleted(false)
         }
       }
@@ -111,6 +124,17 @@ export function LessonPlayer() {
 
   const currentIndex = lessons.findIndex((l) => l.id === lessonId)
   const next = lessons[currentIndex + 1]
+  const isOwner = !!user && course?.instructor_id === user.id
+  const nextUnlocked =
+    !!next &&
+    (trailLessons.length === 0 ||
+      isLessonSequentiallyUnlocked(
+        trailLessons.map((l) =>
+          l.id === current?.id && completed ? { ...l, completed: true } : l
+        ),
+        next.id,
+        { isOwner }
+      ))
   const isQuiz = current?.content_type === 'quiz' || current?.content_type === 'simulado'
 
   if (loading) {
@@ -125,7 +149,9 @@ export function LessonPlayer() {
     return (
       <div className="page-shell">
         <div className="max-w-lg mx-auto px-4 py-16 text-center">
-          <p className="text-neutral-600 mb-4">{t('lesson.accessDenied')}</p>
+          <p className="text-neutral-600 mb-4">
+            {trailLessons.length > 0 ? t('lesson.lockedSequential') : t('lesson.accessDenied')}
+          </p>
           <Link to={`/curso/${courseId}`} className="link-athenas">
             ← {course?.title ?? t('course.backToCourse')}
           </Link>
@@ -185,10 +211,13 @@ export function LessonPlayer() {
                   {completing ? t('common.loading') : t('lesson.complete')}
                 </button>
               )}
-              {next && (
+              {next && nextUnlocked && (
                 <Link to={`/assistir/${courseId}/${next.id}`} className="btn-secondary">
                   {t('lesson.next')}
                 </Link>
+              )}
+              {next && !nextUnlocked && completed && (
+                <span className="text-xs text-neutral-500">{t('trail.locked')}</span>
               )}
             </div>
 
@@ -205,18 +234,43 @@ export function LessonPlayer() {
             <h2 className="font-semibold mb-3 text-neutral-900">{t('lesson.list')}</h2>
             <ul className="space-y-1 text-sm">
               {lessons.map((l, i) => {
-                const done = trailLessons.some((n) => n.id === l.id && n.completed)
+                const trailNode = trailLessons.find((n) => n.id === l.id)
+                const done = !!trailNode?.completed
+                const unlocked =
+                  isOwner ||
+                  l.is_preview ||
+                  trailLessons.length === 0 ||
+                  isLessonSequentiallyUnlocked(trailLessons, l.id, { isOwner })
+                const label = (
+                  <>
+                    {done ? '✓ ' : `${i + 1}. `}
+                    {l.title}
+                    {trailNode?.via_placement_test ? (
+                      <span className="block text-[10px] text-emerald-700">{t('trail.viaPlacement')}</span>
+                    ) : null}
+                    {!unlocked ? (
+                      <span className="block text-[10px] text-neutral-400">{t('trail.locked')}</span>
+                    ) : null}
+                  </>
+                )
                 return (
                   <li key={l.id}>
-                    <Link
-                      to={`/assistir/${courseId}/${l.id}`}
-                      className={`block px-2 py-2 rounded-lg hover:bg-brand-gold-soft/50 transition-colors ${
-                        l.id === lessonId ? 'bg-brand-gold-soft text-brand-gold font-medium' : 'text-neutral-800'
-                      }`}
-                    >
-                      {done ? '✓ ' : `${i + 1}. `}
-                      {l.title}
-                    </Link>
+                    {unlocked ? (
+                      <Link
+                        to={`/assistir/${courseId}/${l.id}`}
+                        className={`block px-2 py-2 rounded-lg hover:bg-brand-gold-soft/50 transition-colors ${
+                          l.id === lessonId
+                            ? 'bg-brand-gold-soft text-brand-gold font-medium'
+                            : 'text-neutral-800'
+                        }`}
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      <span className="block px-2 py-2 rounded-lg text-neutral-400 opacity-70">
+                        {label}
+                      </span>
+                    )}
                   </li>
                 )
               })}

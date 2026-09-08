@@ -3,6 +3,7 @@
 --
 -- Mapeamento (nomes do spec → tabelas):
 --   progresso_usuario_aula → lesson_progress (já existia)
+--   via_teste_nivelamento  → lesson_progress.via_placement_test
 --   xp_usuario             → user_xp + xp_events
 --   sequencia_usuario      → user_streaks + user_streak_days
 --   moedas_usuario         → user_coins
@@ -12,10 +13,16 @@
 --   lição = 10 XP, quiz = 15 XP, simulado = 30 XP
 --   1 XP = 1 moeda
 --   congelador = 200 moedas (perdoa 1 dia perdido)
+--
+-- Desbloqueio (Atividade 4): no frontend, aula N só libera se 1..N-1
+-- estiverem concluídas (inclui conclusão via teste de nivelamento).
 
 -- ========== Tipo e XP da aula ==========
 alter table public.lessons
   add column if not exists content_type text;
+
+alter table public.lesson_progress
+  add column if not exists via_placement_test boolean not null default false;
 
 update public.lessons
   set content_type = 'lesson'
@@ -390,7 +397,8 @@ begin
           l.is_preview,
           l.duration_minutes,
           coalesce(p.completed, false) as completed,
-          p.completed_at
+          p.completed_at,
+          coalesce(p.via_placement_test, false) as via_placement_test
         from public.lessons l
         left join public.lesson_progress p
           on p.lesson_id = l.id and p.user_id = uid

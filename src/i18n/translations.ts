@@ -565,6 +565,20 @@ export const translations = {
   'trail.typeLesson': { pt: 'Lição', en: 'Lesson' },
   'trail.typeQuiz': { pt: 'Quiz', en: 'Quiz' },
   'trail.typeExam': { pt: 'Simulado', en: 'Exam' },
+  'trail.locked': { pt: 'Conclua a aula anterior', en: 'Finish the previous lesson' },
+  'trail.lockedShort': { pt: 'Bloq.', en: 'Lock' },
+  'trail.unlockHint': {
+    pt: 'Aulas liberam em ordem: só a próxima da trilha fica disponível (Atividade 4).',
+    en: 'Lessons unlock in order: only the next trail node is available (Activity 4).',
+  },
+  'trail.viaPlacement': {
+    pt: 'Liberada no nivelamento',
+    en: 'Unlocked by placement',
+  },
+  'lesson.lockedSequential': {
+    pt: 'Esta aula ainda está bloqueada. Conclua a anterior na trilha (ou faça o teste de nivelamento).',
+    en: 'This lesson is still locked. Finish the previous one on the trail (or take the placement test).',
+  },
 
   'celebrate.title': { pt: 'Você concluiu {title}! 🔥', en: 'You completed {title}! 🔥' },
   'celebrate.xp': { pt: '+{xp} XP', en: '+{xp} XP' },
@@ -825,6 +839,104 @@ export const translations = {
     en: 'Score computed but not stored: run supabase/atividades-5-a-8.sql to create the sus_responses table.',
   },
   'footer.survey': { pt: 'Pesquisa de usabilidade', en: 'Usability survey' },
+  'footer.protocol': { pt: 'Roteiro de teste', en: 'Test protocol' },
+
+  'protocol.kicker': { pt: 'Atividade 8', en: 'Activity 8' },
+  'protocol.title': {
+    pt: 'Roteiro de teste com o público-alvo',
+    en: 'Target-audience test protocol',
+  },
+  'protocol.desc': {
+    pt: 'Use este roteiro com 8–12 participantes. Peça que façam as tarefas sem ajuda, anote tempo e conclusões, aplique o SUS e feche com a entrevista curta.',
+    en: 'Use this protocol with 8–12 participants. Ask them to do the tasks without help, note time and completion, run SUS, then close with the short interview.',
+  },
+  'protocol.tasksTitle': { pt: 'Tarefas do participante', en: 'Participant tasks' },
+  'protocol.tasksHint': {
+    pt: 'Meta: pelo menos 80% concluem as tarefas 1–4 sem intervenção.',
+    en: 'Goal: at least 80% finish tasks 1–4 without facilitator help.',
+  },
+  'protocol.task1': { pt: 'Cadastro e confirmação de e-mail', en: 'Sign up and confirm email' },
+  'protocol.task1Hint': {
+    pt: 'Criar conta em /cadastro e entrar na plataforma.',
+    en: 'Create an account at /cadastro and sign in.',
+  },
+  'protocol.task2': { pt: 'Matricular-se em uma formação', en: 'Enroll in a program' },
+  'protocol.task2Hint': {
+    pt: 'Abrir Explorar, escolher uma formação demo e começar (grátis).',
+    en: 'Open Explore, pick a demo program, and start (free).',
+  },
+  'protocol.task3': {
+    pt: 'Fazer o teste de nivelamento e interpretar o resultado',
+    en: 'Take the placement test and interpret the result',
+  },
+  'protocol.task3Hint': {
+    pt: 'Na página do curso, iniciar o teste e ler quantos tópicos foram liberados.',
+    en: 'On the course page, start the test and read how many topics were unlocked.',
+  },
+  'protocol.task4': {
+    pt: 'Concluir uma aula e observar a trilha (nó, XP, sequência)',
+    en: 'Complete a lesson and watch the trail (node, XP, streak)',
+  },
+  'protocol.task4Hint': {
+    pt: 'Assistir ≥90% do vídeo ou passar no quiz; ver XP e nó da trilha atualizarem.',
+    en: 'Watch ≥90% of the video or pass the quiz; see XP and trail node update.',
+  },
+  'protocol.task5': {
+    pt: 'Usar o chatbot Athena para uma dúvida do curso',
+    en: 'Use the Athena chatbot for a course question',
+  },
+  'protocol.task5Hint': {
+    pt: 'Abrir o chat flutuante e perguntar algo sobre o conteúdo da formação.',
+    en: 'Open the floating chat and ask something about the program content.',
+  },
+  'protocol.task6': {
+    pt: '(Opcional) Solicitar acesso como instrutor',
+    en: '(Optional) Apply to become an instructor',
+  },
+  'protocol.task6Hint': {
+    pt: 'Menu → Tornar-se instrutor e enviar a solicitação.',
+    en: 'Menu → Become an instructor and submit the request.',
+  },
+  'protocol.interviewTitle': { pt: 'Entrevista pós-teste (3–5 perguntas)', en: 'Post-test interview (3–5 questions)' },
+  'protocol.interviewHint': {
+    pt: 'Anote respostas abertas — não precisa gravar áudio.',
+    en: 'Write down open answers — no need to record audio.',
+  },
+  'protocol.interview1': {
+    pt: 'O que mais te confundiu na primeira vez que usou a plataforma?',
+    en: 'What confused you most the first time you used the platform?',
+  },
+  'protocol.interview2': {
+    pt: 'O que você mais gostou?',
+    en: 'What did you like most?',
+  },
+  'protocol.interview3': {
+    pt: 'Você entendeu a trilha (aulas bloqueadas / XP / sequência) sem explicação prévia?',
+    en: 'Did you understand the trail (locked lessons / XP / streak) without prior explanation?',
+  },
+  'protocol.interview4': {
+    pt: 'O resultado do teste de nivelamento fez sentido para você?',
+    en: 'Did the placement-test result make sense to you?',
+  },
+  'protocol.interview5': {
+    pt: 'O chatbot ajudou ou atrapalhou? Por quê?',
+    en: 'Did the chatbot help or get in the way? Why?',
+  },
+  'protocol.metricsTitle': { pt: 'Métricas de sucesso sugeridas', en: 'Suggested success metrics' },
+  'protocol.metric1': {
+    pt: 'Conclusão das tarefas 1–4 sem intervenção em ≥80% dos participantes',
+    en: 'Tasks 1–4 completed without help for ≥80% of participants',
+  },
+  'protocol.metric2': {
+    pt: 'Nota SUS ≥ 68 (acima da média na literatura)',
+    en: 'SUS score ≥ 68 (above average in the literature)',
+  },
+  'protocol.metric3': {
+    pt: 'Ninguém interpreta o resultado do nivelamento de forma incorreta',
+    en: 'Nobody misinterprets the placement-test result',
+  },
+  'protocol.openDemo': { pt: 'Abrir Demo Lab', en: 'Open Demo Lab' },
+  'protocol.openSurvey': { pt: 'Abrir pesquisa SUS', en: 'Open SUS survey' },
 
   'placement.kicker': { pt: 'Etapa 1 · Teste de conhecimento', en: 'Step 1 · Knowledge test' },
   'placement.shortCta': { pt: 'Teste de conhecimento', en: 'Knowledge test' },
@@ -1067,6 +1179,18 @@ export const translations = {
   'whatsNew.surveyWhere': {
     pt: 'Onde ver: rodapé → Pesquisa de usabilidade.',
     en: 'Where to look: footer → Usability survey.',
+  },
+  'whatsNew.protocolTitle': {
+    pt: 'Roteiro de teste (Atividade 8)',
+    en: 'Test protocol (Activity 8)',
+  },
+  'whatsNew.protocolBody': {
+    pt: 'Protocolo com as 6 tarefas do plano, entrevista pós-teste e métricas SUS ≥ 68.',
+    en: 'Protocol with the plan’s 6 tasks, post-test interview, and SUS ≥ 68 metrics.',
+  },
+  'whatsNew.protocolWhere': {
+    pt: 'Onde ver: rodapé → Roteiro de teste, ou /roteiro-teste.',
+    en: 'Where to look: footer → Test protocol, or /roteiro-teste.',
   },
 
   'whatsNew.pwaTitle': { pt: 'App instalável (PWA)', en: 'Installable app (PWA)' },

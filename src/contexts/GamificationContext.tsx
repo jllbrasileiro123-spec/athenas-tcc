@@ -102,18 +102,25 @@ function asTrail(raw: unknown): CourseTrail | null {
     course_id: String(d.course_id ?? ''),
     completed_count: Number(d.completed_count ?? 0),
     total_lessons: Number(d.total_lessons ?? lessons.length),
-    lessons: lessons.map((l) => ({
-      id: String(l.id),
-      title: String(l.title ?? ''),
-      description: l.description ?? null,
-      sort_order: Number(l.sort_order ?? 0),
-      content_type: l.content_type === 'quiz' || l.content_type === 'simulado' ? l.content_type : 'lesson',
-      xp_reward: Number(l.xp_reward ?? 10),
-      is_preview: Boolean(l.is_preview),
-      duration_minutes: Number(l.duration_minutes ?? 0),
-      completed: Boolean(l.completed),
-      completed_at: l.completed_at ?? null,
-    })),
+    lessons: lessons.map((l) => {
+      const row = l as Record<string, unknown>
+      return {
+        id: String(row.id ?? ''),
+        title: String(row.title ?? ''),
+        description: (row.description as string | null) ?? null,
+        sort_order: Number(row.sort_order ?? 0),
+        content_type:
+          row.content_type === 'quiz' || row.content_type === 'simulado'
+            ? row.content_type
+            : 'lesson',
+        xp_reward: Number(row.xp_reward ?? 10),
+        is_preview: Boolean(row.is_preview),
+        duration_minutes: Number(row.duration_minutes ?? 0),
+        completed: Boolean(row.completed),
+        completed_at: (row.completed_at as string | null) ?? null,
+        via_placement_test: Boolean(row.via_placement_test),
+      }
+    }),
   }
 }
 

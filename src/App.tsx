@@ -40,6 +40,9 @@ const VerifyCertificate = lazy(() =>
   import('./pages/VerifyCertificate').then((m) => ({ default: m.VerifyCertificate }))
 )
 const Survey = lazy(() => import('./pages/Survey').then((m) => ({ default: m.Survey })))
+const UserTestProtocol = lazy(() =>
+  import('./pages/UserTestProtocol').then((m) => ({ default: m.UserTestProtocol }))
+)
 
 function PageFallback() {
   return <BrandSplash />
@@ -79,6 +82,7 @@ export default function App() {
           <Route path="demo-video" element={<DemoVideo />} />
           <Route path="certificado/:courseId" element={<Certificate />} />
           <Route path="pesquisa" element={<Survey />} />
+          <Route path="roteiro-teste" element={<UserTestProtocol />} />
           <Route path="tornar-se-instrutor" element={<BecomeInstructor />} />
           <Route
             path="admin/moderacao"

@@ -74,6 +74,8 @@ export interface LessonProgress {
   lesson_id: string
   completed: boolean
   completed_at: string | null
+  /** Equivalente a via_teste_nivelamento no plano do TCC */
+  via_placement_test?: boolean
 }
 
 export interface Database {
