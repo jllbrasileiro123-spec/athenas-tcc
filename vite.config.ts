@@ -10,6 +10,13 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    // Vídeo grande em public/demo trava o file watcher no Windows (EBUSY)
+    watch: {
+      ignored: [
+        '**/public/demo/modulo1-explicacao.mp4',
+        '**/public/demo/modulo1-explicacao-web.mp4',
+      ],
+    },
   },
   build: {
     rollupOptions: {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import type { TranslationKey } from '../i18n/translations'
 import type { CourseModule, ModuleItem, ModuleItemKind, ModuleLevel } from '../lib/courseModules'
+import { MaterialLink } from './MaterialLink'
 
 type ModuleListProps = {
   courseId: string
@@ -152,20 +153,7 @@ export function ModuleList({
                         <ul className="mt-2 space-y-1.5 text-sm">
                           {mod.materials.map((material) => (
                             <li key={material.id}>
-                              {material.url.startsWith('/') && !material.url.startsWith('/demo') ? (
-                                <Link to={material.url} className="link-athenas">
-                                  {material.title}
-                                </Link>
-                              ) : (
-                                <a
-                                  href={material.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="link-athenas"
-                                >
-                                  {material.title}
-                                </a>
-                              )}
+                              <MaterialLink material={material} />
                             </li>
                           ))}
                         </ul>

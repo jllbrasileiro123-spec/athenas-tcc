@@ -1,47 +1,46 @@
--- Rode no SQL Editor DEPOIS do schema.sql (Storage → vídeos das aulas)
--- Bucket público para o player HTML5; upload só na pasta do próprio usuário.
--- Limite 512 MB por arquivo — aulas longas + várias formações no hosting.
+-- Rode no SQL Editor (Storage → materiais: PDF, Word, apostilas)
+-- Bucket público; upload na pasta do próprio usuário (instrutor).
 
 insert into storage.buckets (id, name, public, file_size_limit)
-values ('course-videos', 'course-videos', true, 536870912)
+values ('course-materials', 'course-materials', true, 52428800)
 on conflict (id) do update set
   public = true,
-  file_size_limit = 536870912;
+  file_size_limit = 52428800;
 
--- 536870912 bytes = 512 MB por arquivo
+-- 52428800 bytes = 50 MB por arquivo (Word/PDF)
 
 do $$ begin
-  create policy "Vídeos: leitura pública"
+  create policy "Materiais: leitura pública"
     on storage.objects for select
-    using (bucket_id = 'course-videos');
+    using (bucket_id = 'course-materials');
 exception when duplicate_object then null;
 end $$;
 
 do $$ begin
-  create policy "Vídeos: upload do instrutor"
+  create policy "Materiais: upload do instrutor"
     on storage.objects for insert to authenticated
     with check (
-      bucket_id = 'course-videos'
+      bucket_id = 'course-materials'
       and (storage.foldername(name))[1] = auth.uid()::text
     );
 exception when duplicate_object then null;
 end $$;
 
 do $$ begin
-  create policy "Vídeos: atualizar próprio"
+  create policy "Materiais: atualizar próprio"
     on storage.objects for update to authenticated
     using (
-      bucket_id = 'course-videos'
+      bucket_id = 'course-materials'
       and (storage.foldername(name))[1] = auth.uid()::text
     );
 exception when duplicate_object then null;
 end $$;
 
 do $$ begin
-  create policy "Vídeos: apagar próprio"
+  create policy "Materiais: apagar próprio"
     on storage.objects for delete to authenticated
     using (
-      bucket_id = 'course-videos'
+      bucket_id = 'course-materials'
       and (storage.foldername(name))[1] = auth.uid()::text
     );
 exception when duplicate_object then null;

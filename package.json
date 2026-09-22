@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node scripts/start.mjs",
-    "apple:secret": "node scripts/generate-apple-secret.mjs"
+    "apple:secret": "node scripts/generate-apple-secret.mjs",
+    "upload:aula1": "node scripts/upload-aula1-media.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -100,7 +100,20 @@ function asModule(raw: Record<string, unknown>): CourseModule {
     required_done: Number(raw.required_done ?? 0),
     next_item_id: raw.next_item_id ? String(raw.next_item_id) : null,
     items: items.map(asItem),
-    materials: materials.map((m) => ({
+    materials: materials
+      .filter((m) => {
+        const u = String(m.url ?? '')
+        const kind = String(m.kind ?? '')
+        // Placeholders antigos apontavam para vídeo demo — não mostrar como apostila
+        if (
+          (kind === 'pdf' || kind === 'apostila') &&
+          (u.includes('/demo/athenas-demo.mp4') || u.endsWith('.mp4'))
+        ) {
+          return false
+        }
+        return true
+      })
+      .map((m) => ({
       id: String(m.id ?? ''),
       title: String(m.title ?? ''),
       url: String(m.url ?? ''),

@@ -1,13 +1,18 @@
 import { supabase } from './supabase'
 
 export const VIDEO_BUCKET = 'course-videos'
-export const MAX_VIDEO_BYTES = 150 * 1024 * 1024 // 150 MB
+/** Limite alinhado ao bucket (512 MB) — aulas longas no hosting */
+export const MAX_VIDEO_BYTES = 512 * 1024 * 1024
 
 const VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo']
 
 export type YouTubeRef = {
   videoId: string | null
   playlistId: string | null
+}
+
+export function formatMaxVideoLabel(): string {
+  return `${Math.round(MAX_VIDEO_BYTES / (1024 * 1024))} MB`
 }
 
 export function isYouTubeUrl(url: string | null | undefined): boolean {
