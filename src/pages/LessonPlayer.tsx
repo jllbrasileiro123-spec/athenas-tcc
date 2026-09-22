@@ -9,6 +9,12 @@ import { LessonAudioPlayer } from '../components/LessonAudioPlayer'
 import { CelebrationModal } from '../components/CelebrationModal'
 import { QuizTaker } from '../components/QuizTaker'
 import { LessonDoubts } from '../components/LessonDoubts'
+import { MaterialLink } from '../components/MaterialLink'
+import {
+  fetchCourseModules,
+  type CourseModule,
+  type ModuleMaterial,
+} from '../lib/courseModules'
 import type { Course, Lesson } from '../types/database'
 import type { CompleteLessonResult, TrailLesson } from '../lib/gamification'
 import { isLessonSequentiallyUnlocked } from '../lib/gamification'
@@ -23,6 +29,8 @@ export function LessonPlayer() {
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [trailLessons, setTrailLessons] = useState<TrailLesson[]>([])
   const [current, setCurrent] = useState<Lesson | null>(null)
+  const [moduleMaterials, setModuleMaterials] = useState<ModuleMaterial[]>([])
+  const [sidebarModules, setSidebarModules] = useState<CourseModule[]>([])
   const [loading, setLoading] = useState(true)
   const [accessDenied, setAccessDenied] = useState(false)
   const [completed, setCompleted] = useState(false)
@@ -37,6 +45,8 @@ export function LessonPlayer() {
     async function load() {
       setAccessDenied(false)
       setCelebration(null)
+      setModuleMaterials([])
+      setSidebarModules([])
       completingRef.current = false
       const [{ data: c }, { data: ls }, { data: lesson }] = await Promise.all([
         supabase.from('courses').select('title, instructor_id').eq('id', cId).single(),
@@ -83,7 +93,15 @@ export function LessonPlayer() {
         setCurrent(null)
         setCompleted(false)
       } else {
-        const trail = await fetchTrail(cId)
+        const [trail, modsResult] = await Promise.all([
+          fetchTrail(cId),
+          fetchCourseModules(cId),
+        ])
+        setSidebarModules(modsResult.modules)
+        if (lessonData.module_id) {
+          const mod = modsResult.modules.find((m) => m.id === lessonData.module_id)
+          setModuleMaterials(mod?.materials ?? [])
+        }
         if (trail) {
           setTrailLessons(trail.lessons)
           const unlocked = isLessonSequentiallyUnlocked(trail.lessons, lId, { isOwner })
@@ -206,6 +224,20 @@ export function LessonPlayer() {
             {current.description && (
               <p className="text-neutral-600 mt-2">{current.description}</p>
             )}
+            {moduleMaterials.length > 0 && (
+              <div className="mt-4 rounded-xl border border-brand-gold/30 bg-brand-gold-soft/20 p-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-neutral-700">
+                  {t('module.materials')}
+                </p>
+                <ul className="mt-2 space-y-1.5 text-sm">
+                  {moduleMaterials.map((material) => (
+                    <li key={material.id}>
+                      <MaterialLink material={material} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="mt-4 flex flex-wrap items-center gap-3">
               {completed && (
                 <span className="text-sm font-bold text-brand-gold">{t('lesson.completed')}</span>
@@ -240,50 +272,119 @@ export function LessonPlayer() {
           </div>
 
           <aside className="card-athenas p-4 h-fit max-h-[70vh] overflow-y-auto">
-            <h2 className="font-semibold mb-3 text-neutral-900">{t('lesson.list')}</h2>
-            <ul className="space-y-1 text-sm">
-              {lessons.map((l, i) => {
-                const trailNode = trailLessons.find((n) => n.id === l.id)
-                const done = !!trailNode?.completed
-                const unlocked =
-                  isOwner ||
-                  l.is_preview ||
-                  trailLessons.length === 0 ||
-                  isLessonSequentiallyUnlocked(trailLessons, l.id, { isOwner })
-                const label = (
-                  <>
-                    {done ? '✓ ' : `${i + 1}. `}
-                    {l.title}
-                    {trailNode?.via_placement_test ? (
-                      <span className="block text-[10px] text-emerald-700">{t('trail.viaPlacement')}</span>
-                    ) : null}
-                    {!unlocked ? (
-                      <span className="block text-[10px] text-neutral-400">{t('trail.locked')}</span>
-                    ) : null}
-                  </>
-                )
-                return (
-                  <li key={l.id}>
-                    {unlocked ? (
-                      <Link
-                        to={`/assistir/${courseId}/${l.id}`}
-                        className={`block px-2 py-2 rounded-lg hover:bg-brand-gold-soft/50 transition-colors ${
-                          l.id === lessonId
-                            ? 'bg-brand-gold-soft text-brand-gold font-medium'
-                            : 'text-neutral-800'
-                        }`}
-                      >
-                        {label}
-                      </Link>
-                    ) : (
-                      <span className="block px-2 py-2 rounded-lg text-neutral-400 opacity-70">
-                        {label}
-                      </span>
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
+            <h2 className="font-semibold mb-3 text-neutral-900">
+              {sidebarModules.length > 0 ? t('course.content') : t('lesson.list')}
+            </h2>
+            {sidebarModules.length > 0 ? (
+              <div className="space-y-4 text-sm">
+                {sidebarModules.map((mod, mi) => (
+                  <div key={mod.id}>
+                    <p className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-1.5">
+                      {mi + 1}. {mod.title}
+                    </p>
+                    <ul className="space-y-0.5">
+                      {mod.items.map((item) => {
+                        const trailNode = trailLessons.find((n) => n.id === item.id)
+                        const done = item.completed
+                        const unlocked =
+                          isOwner ||
+                          mod.unlocked ||
+                          trailLessons.length === 0 ||
+                          isLessonSequentiallyUnlocked(trailLessons, item.id, { isOwner })
+                        const active = item.id === lessonId
+                        const inner = (
+                          <>
+                            {done ? '✓ ' : '· '}
+                            {item.title.replace(/^M\d+ · /, '')}
+                            {trailNode?.via_placement_test ? (
+                              <span className="block text-[10px] text-emerald-700">
+                                {t('trail.viaPlacement')}
+                              </span>
+                            ) : null}
+                            {!unlocked ? (
+                              <span className="block text-[10px] text-neutral-400">
+                                {t('trail.locked')}
+                              </span>
+                            ) : null}
+                          </>
+                        )
+                        return (
+                          <li key={item.id}>
+                            {unlocked ? (
+                              <Link
+                                to={`/assistir/${courseId}/${item.id}`}
+                                className={`block px-2 py-1.5 rounded-lg hover:bg-brand-gold-soft/50 ${
+                                  active
+                                    ? 'bg-brand-gold-soft text-brand-gold font-medium'
+                                    : 'text-neutral-800'
+                                }`}
+                              >
+                                {inner}
+                              </Link>
+                            ) : (
+                              <span className="block px-2 py-1.5 rounded-lg text-neutral-400 opacity-70">
+                                {inner}
+                              </span>
+                            )}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                ))}
+                <Link to={`/curso/${courseId}`} className="link-athenas text-xs inline-block pt-2">
+                  ← {t('course.backToCourse')}
+                </Link>
+              </div>
+            ) : (
+              <ul className="space-y-1 text-sm">
+                {lessons.map((l, i) => {
+                  const trailNode = trailLessons.find((n) => n.id === l.id)
+                  const done = !!trailNode?.completed
+                  const unlocked =
+                    isOwner ||
+                    l.is_preview ||
+                    trailLessons.length === 0 ||
+                    isLessonSequentiallyUnlocked(trailLessons, l.id, { isOwner })
+                  const label = (
+                    <>
+                      {done ? '✓ ' : `${i + 1}. `}
+                      {l.title}
+                      {trailNode?.via_placement_test ? (
+                        <span className="block text-[10px] text-emerald-700">
+                          {t('trail.viaPlacement')}
+                        </span>
+                      ) : null}
+                      {!unlocked ? (
+                        <span className="block text-[10px] text-neutral-400">
+                          {t('trail.locked')}
+                        </span>
+                      ) : null}
+                    </>
+                  )
+                  return (
+                    <li key={l.id}>
+                      {unlocked ? (
+                        <Link
+                          to={`/assistir/${courseId}/${l.id}`}
+                          className={`block px-2 py-2 rounded-lg hover:bg-brand-gold-soft/50 transition-colors ${
+                            l.id === lessonId
+                              ? 'bg-brand-gold-soft text-brand-gold font-medium'
+                              : 'text-neutral-800'
+                          }`}
+                        >
+                          {label}
+                        </Link>
+                      ) : (
+                        <span className="block px-2 py-2 rounded-lg text-neutral-400 opacity-70">
+                          {label}
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
           </aside>
         </div>
       </div>

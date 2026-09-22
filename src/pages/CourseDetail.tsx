@@ -10,6 +10,7 @@ import { fetchPlacementTest } from '../lib/placementTest'
 import { fetchCourseModules, type CourseModule } from '../lib/courseModules'
 import { ModuleList } from '../components/ModuleList'
 import { PlacementPopup } from '../components/PlacementPopup'
+import { AddModuleForm } from '../components/AddModuleForm'
 import { useGamification } from '../contexts/GamificationContext'
 import type { Course, Lesson } from '../types/database'
 import type { CourseTrail } from '../lib/gamification'
@@ -145,6 +146,18 @@ export function CourseDetail() {
       setChoseStartFromZero(true)
       if (id) sessionStorage.setItem(`athenas.placementStartZero.${id}`, '1')
     }
+  }
+
+  async function reloadModulesAndLessons() {
+    if (!id) return
+    const [{ modules: mods }, { data: lessonsData }, trailData] = await Promise.all([
+      fetchCourseModules(id),
+      supabase.from('lessons').select('*').eq('course_id', id).order('sort_order'),
+      fetchTrail(id),
+    ])
+    setModules(mods)
+    if (lessonsData) setLessons(lessonsData as Lesson[])
+    if (trailData) setTrail(trailData)
   }
 
   function startLearning() {
@@ -420,6 +433,17 @@ export function CourseDetail() {
               placementAvailable={needsPlacement}
             />
           )}
+          {isOwner && user && id && (
+            <div className="mt-6">
+              <AddModuleForm
+                courseId={id}
+                userId={user.id}
+                moduleIndex={modules.length}
+                nextLessonSort={lessons.length}
+                onCreated={() => void reloadModulesAndLessons()}
+              />
+            </div>
+          )}
           {(enrolled || isOwner) && !hasModules && trail && trail.lessons.length > 0 && (
             <TrilhaProgresso
               courseId={id!}
@@ -429,7 +453,7 @@ export function CourseDetail() {
               canAccess={canAccessTrailLesson}
             />
           )}
-          {(!hasModules || (!enrolled && !isOwner)) &&
+          {!hasModules &&
             (isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
             <ul className={`bg-white border border-neutral-200 rounded-2xl divide-y divide-neutral-100 ${
               (enrolled || isOwner) && trail && trail.lessons.length > 0 ? 'mt-8' : ''

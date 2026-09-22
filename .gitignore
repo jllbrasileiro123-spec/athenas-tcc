@@ -4,3 +4,7 @@ dist
 .env.local
 *.local
 *.tsbuildinfo
+
+# Vídeos grandes — ficam no Supabase Storage (não no GitHub)
+public/demo/modulo1-explicacao.mp4
+public/demo/modulo1-explicacao-web.mp4

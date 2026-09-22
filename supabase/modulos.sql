@@ -670,6 +670,10 @@ declare
   mod1 uuid; mod2 uuid; mod3 uuid; mod4 uuid;
   ex1 uuid; ex2 uuid; ex3 uuid; ex4 uuid;
   demo_video text := '/demo/athenas-demo.mp4';
+  -- Vídeo real da 1ª aula (arquivo local em public/demo/; não vai pro GitHub por tamanho)
+  -- Preferir versão web comprimida; no hosting use npm run upload:aula1 (Supabase Storage)
+  m1_video text := '/demo/modulo1-explicacao-web.mp4';
+  m1_material text := '/demo/Modulo1_Material_de_Apoio.docx';
   demo_audio text := '/demo/athenas-podcast.m4a';
 begin
   select id into instructor from public.profiles where role = 'admin' order by created_at limit 1;
@@ -718,7 +722,7 @@ begin
   -- ---------- Módulo 1 ----------
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
   values
-    (curso, mod1, 'M1 · Explicação — Como o ATHENAS funciona', 'Conteúdo teórico: matrícula, trilha e conclusão de aula.', demo_video, null, 1, 0, true, 'lesson', 'explicacao', 10),
+    (curso, mod1, 'M1 · Explicação — Como o ATHENAS funciona', 'Aula 1 com vídeo real da formação e material de apoio em Word.', m1_video, null, 15, 0, true, 'lesson', 'explicacao', 10),
     (curso, mod1, 'M1 · Tutorial — Assistindo sua primeira aula', 'Passo a passo no player até a aula contar como concluída.', demo_video, null, 1, 1, true, 'lesson', 'tutorial', 10),
     (curso, mod1, 'M1 · Podcast — Resumo em áudio', 'Áudio da explicação + tutorial para ouvir no trajeto (opcional).', null, demo_audio, 1, 2, true, 'lesson', 'podcast', 10);
 
@@ -735,8 +739,7 @@ begin
      '["Nada","O próximo módulo é desbloqueado","O curso é encerrado","A matrícula é cancelada"]'::jsonb, 1, 2);
 
   insert into public.module_materials (module_id, title, url, kind, sort_order) values
-    (mod1, 'Apostila — Guia de primeiros passos (PDF)', '/demo/athenas-demo.mp4', 'apostila', 0),
-    (mod1, 'Link — Termos de uso da plataforma', '/termos', 'link', 1);
+    (mod1, 'Material de apoio — Módulo 1 (Word)', m1_material, 'apostila', 0);
 
   -- ---------- Módulo 2 ----------
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
@@ -758,8 +761,7 @@ begin
      '["Abre o app","Conclui uma aula no dia","Compra moedas","Troca de curso"]'::jsonb, 1, 2);
 
   insert into public.module_materials (module_id, title, url, kind, sort_order) values
-    (mod2, 'PDF — Tabela de XP e limiares', '/demo/athenas-demo.mp4', 'pdf', 0),
-    (mod2, 'Link — Novidades da plataforma', '/novidades', 'link', 1);
+    (mod2, 'Link — Novidades da plataforma', '/novidades', 'link', 0);
 
   -- ---------- Módulo 3 (intermediário) ----------
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
@@ -779,9 +781,6 @@ begin
      '["Nenhum tratamento de erro","Tratamento de erro e registro do que rodou","Somente boa intenção","Execução manual diária"]'::jsonb, 1, 1),
     (ex3, 'Qual tarefa é a melhor candidata a automação?',
      '["Repetitiva, frequente e com regra clara","Feita uma vez por ano","Que exige decisão subjetiva","Que ninguém entende"]'::jsonb, 0, 2);
-
-  insert into public.module_materials (module_id, title, url, kind, sort_order) values
-    (mod3, 'Apostila — Checklist de automação', '/demo/athenas-demo.mp4', 'apostila', 0);
 
   -- ---------- Módulo 4 (avançado) ----------
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
@@ -845,6 +844,8 @@ declare
   mod1 uuid; mod2 uuid;
   ex1 uuid; ex2 uuid;
   demo_video text := '/demo/athenas-demo.mp4';
+  m1_video text := '/demo/modulo1-explicacao-web.mp4';
+  m1_material text := '/demo/Modulo1_Material_de_Apoio.docx';
   demo_audio text := '/demo/athenas-podcast.m4a';
 begin
   select id into instructor from public.profiles where role = 'admin' order by created_at limit 1;
@@ -879,7 +880,7 @@ begin
 
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
   values
-    (curso, mod1, 'M1 · Explicação', 'Conteúdo base do curso de teste.', demo_video, null, 1, 0, true, 'lesson', 'explicacao', 10),
+    (curso, mod1, 'M1 · Explicação', 'Aula 1 com vídeo real e material de apoio do Módulo 1.', m1_video, null, 15, 0, true, 'lesson', 'explicacao', 10),
     (curso, mod1, 'M1 · Tutorial', 'Passo a passo no player.', demo_video, null, 1, 1, true, 'lesson', 'tutorial', 10),
     (curso, mod1, 'M1 · Podcast', 'Áudio opcional.', null, demo_audio, 1, 2, true, 'lesson', 'podcast', 10);
 
@@ -894,7 +895,8 @@ begin
      '["50%","60%","70%","100%"]'::jsonb, 2, 1);
 
   insert into public.module_materials (module_id, title, url, kind, sort_order) values
-    (mod1, 'Link — Roteiro de teste', '/roteiro-teste', 'link', 0);
+    (mod1, 'Material de apoio — Módulo 1 (Word)', m1_material, 'apostila', 0),
+    (mod1, 'Link — Roteiro de teste', '/roteiro-teste', 'link', 1);
 
   insert into public.lessons (course_id, module_id, title, description, video_url, audio_url, duration_minutes, sort_order, is_preview, content_type, item_kind, xp_reward)
   values

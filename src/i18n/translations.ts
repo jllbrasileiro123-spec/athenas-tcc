@@ -404,8 +404,8 @@ export const translations = {
     en: 'The first lesson will be a free preview.',
   },
   'create.lessonsHintHosted': {
-    pt: 'Envie o vídeo (MP4 até 150 MB) ou use link do YouTube. A 1ª aula é prévia grátis.',
-    en: 'Upload video (MP4 up to 150 MB) or use a YouTube link. 1st lesson is free preview.',
+    pt: 'Envie o vídeo (MP4 até 512 MB no Supabase) ou use link do YouTube — melhor quando forem muitas aulas longas. A 1ª aula é prévia grátis.',
+    en: 'Upload video (MP4 up to 512 MB on Supabase) or use a YouTube link — best when you have many long lessons. 1st lesson is free preview.',
   },
   'create.modeUpload': { pt: 'Enviar vídeo', en: 'Upload video' },
   'create.modeYoutube': { pt: 'YouTube', en: 'YouTube' },
@@ -592,6 +592,48 @@ export const translations = {
   'module.noAudio': {
     pt: 'Este podcast ainda não tem áudio publicado.',
     en: 'This podcast has no audio published yet.',
+  },
+  'module.addCta': { pt: 'Adicionar Módulo {n}', en: 'Add Module {n}' },
+  'module.createKicker': { pt: 'Novo módulo', en: 'New module' },
+  'module.createTitle': {
+    pt: 'Criar Módulo {n} no mesmo formato da trilha',
+    en: 'Create Module {n} in the trail format',
+  },
+  'module.createBody': {
+    pt: 'Já cria Explicação, Tutorial, Podcast (opcional) e Exercício — igual ao Módulo 1 na tela do aluno.',
+    en: 'Creates Explanation, Tutorial, Podcast (optional) and Exercise — same as Module 1 on the student screen.',
+  },
+  'module.createStructure': {
+    pt: 'Estrutura automática: 3 itens obrigatórios + podcast opcional. O exercício libera o próximo módulo ao acertar 70%.',
+    en: 'Automatic structure: 3 required items + optional podcast. The exercise unlocks the next module at 70%.',
+  },
+  'module.createSubmit': { pt: 'Criar módulo', en: 'Create module' },
+  'module.createEmptyTitle': {
+    pt: 'Digite o título do módulo.',
+    en: 'Enter the module title.',
+  },
+  'module.fieldTitle': { pt: 'Título do módulo', en: 'Module title' },
+  'module.fieldDesc': { pt: 'Descrição', en: 'Description' },
+  'module.fieldLevel': { pt: 'Nível', en: 'Level' },
+  'module.fileExplicacao': { pt: 'Vídeo de explicação', en: 'Explanation video' },
+  'module.fileTutorial': { pt: 'Vídeo de tutorial', en: 'Tutorial video' },
+  'module.filePodcast': { pt: 'Podcast (áudio, opcional)', en: 'Podcast (audio, optional)' },
+  'module.fileMaterial': { pt: 'Material de apoio (Word/PDF)', en: 'Support material (Word/PDF)' },
+  'module.fileVideoHint': {
+    pt: 'MP4 até {max} — sobe no Supabase Storage',
+    en: 'MP4 up to {max} — uploads to Supabase Storage',
+  },
+  'module.filePodcastHint': {
+    pt: 'MP3/M4A — opcional',
+    en: 'MP3/M4A — optional',
+  },
+  'module.fileMaterialHint': {
+    pt: 'DOCX ou PDF — aparece em Materiais do módulo',
+    en: 'DOCX or PDF — shows under Module materials',
+  },
+  'module.noMaterialBucket': {
+    pt: 'Bucket course-materials não existe. Rode supabase/storage-course-materials.sql no Supabase.',
+    en: 'course-materials bucket missing. Run supabase/storage-course-materials.sql in Supabase.',
   },
   'trail.locked': { pt: 'Conclua a aula anterior', en: 'Finish the previous lesson' },
   'trail.lockedShort': { pt: 'Bloq.', en: 'Lock' },
