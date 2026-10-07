@@ -174,7 +174,7 @@ export function DemoVideo() {
 
               <div className="mt-5 aspect-video overflow-hidden rounded-2xl border border-brand-gold/20 bg-black">
                 <video
-                  src="/demo/athenas-demo.mp4"
+                  src={`${import.meta.env.BASE_URL}demo/athenas-demo.mp4`}
                   controls
                   playsInline
                   className="h-full w-full"

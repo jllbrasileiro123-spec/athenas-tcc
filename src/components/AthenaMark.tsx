@@ -19,12 +19,13 @@ export function AthenaMark({
   variant = 'header',
   alt = 'Athena',
 }: MarkProps) {
-  const src =
-    variant === 'mensagem' ? '/brand/avatar-athena.png' : '/brand/avatar-athena-header.png'
+  const base = import.meta.env.BASE_URL
+  const headerSrc = `${base}brand/avatar-athena-header.png`
+  const src = variant === 'mensagem' ? `${base}brand/avatar-athena.png` : headerSrc
 
   const img = (
     <img
-      src={framed ? src : '/brand/avatar-athena-header.png'}
+      src={framed ? src : headerSrc}
       alt={alt}
       className={framed ? undefined : `object-contain ${className}`}
       draggable={false}

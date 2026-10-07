@@ -9,7 +9,7 @@ type MarkProps = {
 export function BrandMark({ className = 'h-8 w-8', framed = false, alt = 'ATHENAS' }: MarkProps) {
   const img = (
     <img
-      src="/brand/logo-templo.png"
+      src={`${import.meta.env.BASE_URL}brand/logo-templo.png`}
       alt={alt}
       className={framed ? 'h-full w-full object-contain p-[12%]' : `object-contain ${className}`}
       draggable={false}

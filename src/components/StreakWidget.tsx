@@ -54,12 +54,12 @@ export function StreakWidget() {
           aria-expanded={open}
           aria-label={`${t('streak.aria')}. ${t('streak.coinsAria')}`}
         >
-          <img src="/icons/streak-flame.png" alt="" className="h-5 w-5 object-contain" draggable={false} />
+          <img src={`${import.meta.env.BASE_URL}icons/streak-flame.png`} alt="" className="h-5 w-5 object-contain" draggable={false} />
           <span className="text-sm font-bold text-neutral-900 tabular-nums">
             {status.current_streak}
           </span>
           <span className="mx-0.5 h-5 w-px bg-neutral-400" aria-hidden />
-          <img src="/icons/coin-a.png" alt="" className="h-5 w-5 object-contain" draggable={false} />
+          <img src={`${import.meta.env.BASE_URL}icons/coin-a.png`} alt="" className="h-5 w-5 object-contain" draggable={false} />
           <span className="text-sm font-bold text-neutral-900 tabular-nums">
             {status.coin_balance}
           </span>
