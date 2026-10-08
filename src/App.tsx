@@ -26,6 +26,9 @@ const BecomeInstructor = lazy(() =>
 const AdminModeration = lazy(() =>
   import('./pages/AdminModeration').then((m) => ({ default: m.AdminModeration }))
 )
+const AdminReports = lazy(() =>
+  import('./pages/AdminReports').then((m) => ({ default: m.AdminReports }))
+)
 const Legal = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Legal })))
 const WhatsNew = lazy(() => import('./pages/WhatsNew').then((m) => ({ default: m.WhatsNew })))
 const DemoVideo = lazy(() => import('./pages/DemoVideo').then((m) => ({ default: m.DemoVideo })))
@@ -89,6 +92,14 @@ export default function App() {
             element={
               <AdminRoute>
                 <AdminModeration />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="admin/relatorios"
+            element={
+              <AdminRoute>
+                <AdminReports />
               </AdminRoute>
             }
           />

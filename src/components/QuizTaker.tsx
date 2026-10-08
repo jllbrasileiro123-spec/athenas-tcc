@@ -10,6 +10,14 @@ export type QuizQuestion = {
   sort_order: number
 }
 
+/** Correção por pergunta; correct_index/explanation só vêm quando passou */
+type QuestionReview = {
+  id: string
+  is_correct: boolean
+  correct_index?: number
+  explanation?: string | null
+}
+
 type SubmitResult = {
   ok: boolean
   passed: boolean
@@ -17,6 +25,7 @@ type SubmitResult = {
   total: number
   percent: number
   completion: CompleteLessonResult | null
+  review: QuestionReview[]
 }
 
 export function QuizTaker({
@@ -82,6 +91,7 @@ export function QuizTaker({
       total: Number(raw.total ?? 0),
       percent: Number(raw.percent ?? 0),
       completion: raw.completion ?? null,
+      review: Array.isArray(raw.review) ? raw.review : [],
     }
     setResult(parsed)
     if (parsed.passed && parsed.completion && !parsed.completion.already_completed) {
@@ -107,7 +117,9 @@ export function QuizTaker({
 
   return (
     <div className="rounded-2xl border border-brand-gold/20 bg-white p-5 sm:p-6 space-y-6">
-      {questions.map((q, i) => (
+      {questions.map((q, i) => {
+        const review = result?.review.find((r) => r.id === q.id)
+        return (
         <fieldset key={q.id} className="space-y-2">
           <legend className="text-sm font-bold text-neutral-900">
             {i + 1}. {q.prompt}
@@ -128,14 +140,36 @@ export function QuizTaker({
                   className="mt-0.5"
                   checked={answers[q.id] === idx}
                   disabled={completed && !result}
-                  onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: idx }))}
+                  onChange={() => {
+                    setAnswers((prev) => ({ ...prev, [q.id]: idx }))
+                    if (result && !result.passed) setResult(null)
+                  }}
                 />
                 <span>{choice}</span>
               </label>
             ))}
           </div>
+          {review && (
+            <div
+              className={`rounded-xl px-3 py-2 text-sm ${
+                review.is_correct
+                  ? 'bg-emerald-50 border border-emerald-200 text-emerald-900'
+                  : 'bg-red-50 border border-red-200 text-red-900'
+              }`}
+            >
+              <p className="font-semibold">
+                {review.is_correct
+                  ? t('quiz.right')
+                  : review.correct_index !== undefined
+                    ? t('quiz.wrongPassed', { answer: q.choices[review.correct_index] ?? '' })
+                    : t('quiz.wrong')}
+              </p>
+              {review.explanation && <p className="mt-1 leading-relaxed">{review.explanation}</p>}
+            </div>
+          )}
         </fieldset>
-      ))}
+        )
+      })}
 
       {error && (
         <p className="alert-error" role="alert">

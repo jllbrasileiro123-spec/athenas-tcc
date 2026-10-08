@@ -1,7 +1,7 @@
 {
-  "name": "ATHENAS — Formações inteligentes",
+  "name": "ATHENAS — IA no Cotidiano Jurídico",
   "short_name": "ATHENAS",
-  "description": "Plataforma de formações em tecnologia e inteligência artificial, com assistente Athena.",
+  "description": "Capacitação em uso responsável de IA para profissionais do Direito, com a assistente Athena.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

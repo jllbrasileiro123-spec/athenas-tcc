@@ -671,7 +671,7 @@ declare
   ex1 uuid; ex2 uuid; ex3 uuid; ex4 uuid;
   demo_video text := '/demo/athenas-demo.mp4';
   -- Vídeo real da 1ª aula (arquivo local em public/demo/; não vai pro GitHub por tamanho)
-  -- Preferir versão web comprimida; no hosting use npm run upload:aula1 (Supabase Storage)
+  -- Preferir versão web comprimida; no hosting use npm run upload:aula (Supabase Storage)
   m1_video text := '/demo/modulo1-explicacao-web.mp4';
   m1_material text := '/demo/Modulo1_Material_de_Apoio.docx';
   demo_audio text := '/demo/athenas-podcast.m4a';

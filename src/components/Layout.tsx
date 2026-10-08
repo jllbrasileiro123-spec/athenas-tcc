@@ -19,7 +19,8 @@ export function Layout() {
   const isAdmin = profile?.role === 'admin'
   const onMyCourses = location.pathname.startsWith('/meus-cursos')
   const onTeach = location.pathname.startsWith('/instrutor')
-  const onAdmin = location.pathname.startsWith('/admin')
+  const onAdmin = location.pathname.startsWith('/admin/moderacao')
+  const onReports = location.pathname.startsWith('/admin/relatorios')
 
   function navClass(active: boolean) {
     return `shrink-0 whitespace-nowrap px-3 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -58,6 +59,11 @@ export function Layout() {
                 {isAdmin && (
                   <NavLink to="/admin/moderacao" className={() => navClass(onAdmin)}>
                     {t('menu.adminModeration')}
+                  </NavLink>
+                )}
+                {isAdmin && (
+                  <NavLink to="/admin/relatorios" className={() => navClass(onReports)}>
+                    {t('menu.adminReports')}
                   </NavLink>
                 )}
               </>
@@ -116,9 +122,6 @@ export function Layout() {
               </Link>
               <Link to="/novidades" className="hover:text-brand-gold transition-colors">
                 {t('footer.whatsNew')}
-              </Link>
-              <Link to="/demo-video" className="hover:text-brand-gold transition-colors">
-                {t('footer.demoVideo')}
               </Link>
               <Link to="/verificar" className="hover:text-brand-gold transition-colors">
                 {t('footer.verify')}

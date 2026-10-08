@@ -183,14 +183,16 @@ export function UserAvatarMenu() {
                   {t('menu.adminModeration')}
                 </MenuLink>
               )}
+              {profile?.role === 'admin' && (
+                <MenuLink icon={<IconShield />} to="/admin/relatorios" onClick={() => setOpen(false)}>
+                  {t('menu.adminReports')}
+                </MenuLink>
+              )}
               <MenuLink icon={<IconLock />} to="/alterar-senha" onClick={() => setOpen(false)}>
                 {t('menu.password')}
               </MenuLink>
               <MenuLink icon={<IconSpark />} to="/novidades" onClick={() => setOpen(false)}>
                 {t('menu.whatsNew')}
-              </MenuLink>
-              <MenuLink icon={<IconTeach />} to="/demo-video" onClick={() => setOpen(false)}>
-                {t('footer.demoVideo')}
               </MenuLink>
 
               <Divider />

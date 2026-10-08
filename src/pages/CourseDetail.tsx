@@ -11,6 +11,7 @@ import { fetchCourseModules, type CourseModule } from '../lib/courseModules'
 import { ModuleList } from '../components/ModuleList'
 import { PlacementPopup } from '../components/PlacementPopup'
 import { AddModuleForm } from '../components/AddModuleForm'
+import { CourseFeedbackModal } from '../components/CourseFeedbackModal'
 import { useGamification } from '../contexts/GamificationContext'
 import type { Course, Lesson } from '../types/database'
 import type { CourseTrail } from '../lib/gamification'
@@ -45,6 +46,7 @@ export function CourseDetail() {
   /** Só some depois do teste OU se o aluno escolher começar do Módulo 1 */
   const [choseStartFromZero, setChoseStartFromZero] = useState(false)
   const [gateBusy, setGateBusy] = useState(false)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -395,9 +397,20 @@ export function CourseDetail() {
               <p className="font-bold text-neutral-900">{t('certificate.readyTitle')}</p>
               <p className="text-sm text-neutral-600 mt-0.5">{t('certificate.readyBody')}</p>
             </div>
-            <Link to={`/certificado/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
-              {t('certificate.getCta')}
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              {enrolled && (
+                <button
+                  type="button"
+                  onClick={() => setFeedbackOpen(true)}
+                  className="btn-secondary !px-4 !py-2.5 text-sm"
+                >
+                  {t('feedback.rateCta')}
+                </button>
+              )}
+              <Link to={`/certificado/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
+                {t('certificate.getCta')}
+              </Link>
+            </div>
           </div>
         )}
 
@@ -534,6 +547,18 @@ export function CourseDetail() {
           onStartFromBeginning={() => void handleStartFromBeginning()}
         />
       )}
+
+      {/* Popup de feedback: abre sozinho quando o aluno conclui a trilha e ainda não avaliou */}
+      {id && course && enrolled && trail && trail.total_lessons > 0 &&
+        trail.completed_count >= trail.total_lessons && (
+          <CourseFeedbackModal
+            courseId={id}
+            courseTitle={course.title}
+            auto
+            open={feedbackOpen || undefined}
+            onClose={() => setFeedbackOpen(false)}
+          />
+        )}
     </div>
   )
 }

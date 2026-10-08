@@ -1,6 +1,14 @@
-# Athenas — Plataforma de Formações Online
+# Athenas — IA no Cotidiano Jurídico
 
-Aplicação web para publicação e consumo de cursos em vídeo, com trilha de progresso gamificada, matrícula de alunos, área de instrutores e autenticação real por e-mail.
+Plataforma do TCC para **capacitação de profissionais do Direito no uso responsável de Inteligência Artificial**. Cada aula é um módulo com vídeo, material de apoio e exercício de avaliação, dentro de uma trilha gamificada (XP, sequência e moedas) com a assistente Athena.
+
+## Conteúdo do curso
+
+| Módulo | Aula | Material |
+| --- | --- | --- |
+| 1 | Fundamentos de IA e o Cenário Jurídico Brasileiro | Word (Turing, IA/ML/DL/LLM, alucinações, vieses, OAB 001/2024, CNJ 615/2025, LGPD, PL 2.338/2023) |
+
+O vídeo e o material ficam no Supabase Storage. O exercício do Módulo 1 está em `supabase/exercicio-modulo1.sql`.
 
 **Stack:** React + Vite · Supabase (banco de dados, autenticação e API)
 
@@ -35,6 +43,11 @@ No SQL Editor do Supabase, execute os arquivos na seguinte ordem:
 | 4 | `supabase/quiz-questions.sql` | Status de revisão de curso e banco de perguntas de quiz |
 | 5 | `supabase/atividades-5-a-8.sql` | Nivelamento, dúvidas por aula, certificado e pesquisa SUS |
 | 6 | `supabase/modulos.sql` | Módulos com desbloqueio em cascata, podcast, materiais e nivelamento por módulo |
+| 7 | `supabase/storage-course-videos.sql` e `storage-course-materials.sql` | Buckets de vídeo e material |
+| 8 | `supabase/exercicio-modulo1.sql` | Exercício de avaliação do Módulo 1 |
+| 9 | `supabase/feedback-relatorios.sql` | Histórico dos quizzes, feedback do curso e relatórios do admin |
+
+> `modulos.sql` e `seed-demo-course.sql` também criam **cursos de demonstração**. Se rodar de novo, use `supabase/limpeza-deixar-so-aulas-reais.sql` para deixar só o conteúdo do TCC.
 
 ### 3. Conceder acesso de administrador
 
@@ -62,6 +75,16 @@ Copie a URL e a `anon key` do seu projeto Supabase para o arquivo `.env`:
 VITE_SUPABASE_URL=sua-url-aqui
 VITE_SUPABASE_ANON_KEY=sua-chave-aqui
 ```
+
+## Publicando uma nova aula
+
+Cada aula vira um módulo do curso. Com `SUPABASE_SERVICE_ROLE_KEY` no `.env` (nunca commitar):
+
+```bash
+npm run upload:aula -- --modulo 2 --titulo "Título da aula" --video "caminho/aula2.mp4" --material "caminho/Modulo2.docx"
+```
+
+`--video` também aceita link do YouTube. No plano Free do Supabase cada arquivo pode ter até 50 MB.
 
 ## Executando o projeto
 
