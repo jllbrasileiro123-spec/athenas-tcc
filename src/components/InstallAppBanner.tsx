@@ -28,7 +28,7 @@ export function captureInstallPrompt() {
   })
 }
 
-const PUBLIC_PATHS = new Set(['/', '/login', '/cadastro', '/esqueci-senha', '/redefinir-senha', '/auth/callback'])
+const PUBLIC_PATHS = new Set(['/', '/sobre', '/login', '/cadastro', '/esqueci-senha', '/redefinir-senha', '/auth/callback'])
 
 export function InstallAppBanner() {
   const { t } = useLanguage()

@@ -165,7 +165,7 @@ const copy: Record<
     account: {
       text: 'Use Entrar ou Cadastre-se na tela inicial. Se precisar confirmar e-mail, olhe a caixa de entrada.',
       followups: ['Esqueci minha senha', 'Como me matricular?'],
-      navigate: { label: 'Ir para Entrar', to: '/' },
+      navigate: { label: 'Ir para Entrar', to: '/login' },
     },
     athena: {
       text: 'Sou a Athena: oriento e executo ações rápidas (senha, busca, progresso). Para casos complexos, escalo ao suporte humano.',
@@ -263,7 +263,7 @@ const copy: Record<
     account: {
       text: 'Use Sign in or Sign up on the home screen. Confirm email if required.',
       followups: ['I forgot my password', 'How do I enroll?'],
-      navigate: { label: 'Go to Sign in', to: '/' },
+      navigate: { label: 'Go to Sign in', to: '/login' },
     },
     athena: {
       text: 'I am Athena: I guide and run quick actions (password, search, progress). For complex cases I escalate to human support.',

@@ -25,7 +25,7 @@ export function AuthCallback() {
 
       if (oauthError) {
         const msg = decodeURIComponent(oauthError.replace(/\+/g, ' '))
-        if (!cancelled) navigate(`/?oauth_error=${encodeURIComponent(msg)}`, { replace: true })
+        if (!cancelled) navigate(`/login?oauth_error=${encodeURIComponent(msg)}`, { replace: true })
         return
       }
 
@@ -43,7 +43,7 @@ export function AuthCallback() {
             } = await supabase.auth.getSession()
             if (!existing) {
               if (!cancelled) {
-                navigate(`/?oauth_error=${encodeURIComponent(error.message)}`, { replace: true })
+                navigate(`/login?oauth_error=${encodeURIComponent(error.message)}`, { replace: true })
               }
               return
             }
@@ -56,7 +56,7 @@ export function AuthCallback() {
         error: sessionError,
       } = await supabase.auth.getSession()
       if (sessionError) {
-        if (!cancelled) navigate(`/?oauth_error=${encodeURIComponent(sessionError.message)}`, { replace: true })
+        if (!cancelled) navigate(`/login?oauth_error=${encodeURIComponent(sessionError.message)}`, { replace: true })
         return
       }
 
@@ -76,7 +76,7 @@ export function AuthCallback() {
 
       timeoutId = setTimeout(() => {
         if (!cancelled) {
-          navigate(`/?oauth_error=${encodeURIComponent(t('authCallback.noSession'))}`, { replace: true })
+          navigate(`/login?oauth_error=${encodeURIComponent(t('authCallback.noSession'))}`, { replace: true })
         }
       }, 10000)
     }

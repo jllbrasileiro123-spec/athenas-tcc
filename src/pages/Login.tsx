@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { SignupModal } from '../components/SignupModal'
+import { SignupForm } from '../components/SignupForm'
 import { SocialLogin } from '../components/SocialLogin'
 import { BrandMark } from '../components/BrandMark'
 import { isSupabaseConfigured } from '../lib/supabase'
@@ -38,7 +38,12 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
   const [remember, setRemember] = useState(() => !!localStorage.getItem(STORAGE_EMAIL))
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [showSignup, setShowSignup] = useState(openSignup)
+  // Entrar e Cadastrar são a mesma tela: só troca o lado direito do cartão
+  const signup = openSignup
+  const switchTo = (path: '/login' | '/cadastro') => {
+    setError(null)
+    navigate(path, { replace: true, state: location.state })
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -93,26 +98,52 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
           </p>
         </div>
       )}
-      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[520px] border border-brand-gold/20">
+      <div className="w-full max-w-[920px]">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 -ml-3 text-sm font-semibold text-neutral-600 transition-colors hover:bg-brand-gold-soft/60 hover:text-neutral-900"
+        >
+          <span aria-hidden>←</span> {t('auth.backHome')}
+        </Link>
+      </div>
+      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[700px] border border-brand-gold/20">
         <div className="bg-neutral-950 text-white p-6 sm:p-10 md:p-12 flex flex-col justify-between md:w-[42%] border-r border-brand-gold/20">
-          <div>
+          <Link to="/" className="block w-fit" aria-label={t('auth.backHome')}>
             <BrandMark className="h-12 sm:h-14 w-auto max-w-[11rem]" alt="ATHENAS" />
             <p className="mt-3 text-sm font-semibold tracking-[0.25em] uppercase text-brand-gold">
               ATHENAS
             </p>
-          </div>
+          </Link>
           <div className="mt-6 md:mt-0">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">{t('login.welcome')}</h1>
-            <p className="text-neutral-400 mt-3 md:mt-4 text-sm leading-relaxed">{t('login.welcomeDesc')}</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
+              {signup ? t('signup.welcome') : t('login.welcome')}
+            </h1>
+            <p className="text-neutral-400 mt-3 md:mt-4 text-sm leading-relaxed">
+              {signup ? t('signup.welcomeDesc') : t('login.welcomeDesc')}
+            </p>
           </div>
         </div>
 
         <div className="bg-brand-cream/40 p-6 sm:p-10 md:p-12 flex flex-col justify-center md:w-[58%]">
           <div className="mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('login.title')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              {signup ? t('signup.title') : t('login.title')}
+            </h2>
             <p className="text-neutral-500 text-sm mt-1">{t('login.subtitle')}</p>
           </div>
 
+          {signup ? (
+            <>
+              <SignupForm onDone={() => switchTo('/login')} />
+              <p className="text-center text-sm text-neutral-600 mt-6">
+                {t('signup.haveAccount')}{' '}
+                <button type="button" onClick={() => switchTo('/login')} className="font-bold text-brand-gold hover:underline">
+                  {t('signup.loginLink')}
+                </button>
+              </p>
+            </>
+          ) : (
+          <>
           <form onSubmit={handleLogin} className="space-y-4">
             {error && <p className="alert-error">{error}</p>}
 
@@ -168,7 +199,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
 
           <p className="text-center text-sm text-neutral-600 mt-6">
             {t('login.noAccount')}{' '}
-            <button type="button" onClick={() => setShowSignup(true)} className="font-bold text-brand-gold hover:underline">
+            <button type="button" onClick={() => switchTo('/cadastro')} className="font-bold text-brand-gold hover:underline">
               {t('login.signupLink')}
             </button>
           </p>
@@ -177,10 +208,10 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
               {t('login.forgot')}
             </Link>
           </p>
+          </>
+          )}
         </div>
       </div>
-
-      {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
     </div>
   )
 }

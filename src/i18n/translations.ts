@@ -61,6 +61,14 @@ export const translations = {
     en: 'Sign in did not complete. Check Google in Supabase.',
   },
 
+  'auth.backHome': { pt: 'Voltar ao início', en: 'Back to home' },
+  'signup.welcome': { pt: 'Comece sua formação', en: 'Start your training' },
+  'signup.welcomeDesc': {
+    pt: 'Crie sua conta gratuita e aprenda a usar IA no escritório com responsabilidade, do Módulo 1 ao certificado.',
+    en: 'Create your free account and learn to use AI responsibly at the firm, from Module 1 to the certificate.',
+  },
+  'signup.haveAccount': { pt: 'Já tem conta?', en: 'Already have an account?' },
+  'signup.loginLink': { pt: 'Entrar', en: 'Sign in' },
   'signup.title': { pt: 'Criar conta', en: 'Create account' },
   'signup.confirmEmail': { pt: 'Confirme seu e-mail', en: 'Confirm your email' },
   'signup.sentTo': {

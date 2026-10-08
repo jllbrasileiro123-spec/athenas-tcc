@@ -78,7 +78,7 @@ export function Layout() {
               </>
             ) : (
               <>
-                <Link to="/" className="btn-secondary !px-3 !py-1.5 text-xs">
+                <Link to="/login" className="btn-secondary !px-3 !py-1.5 text-xs">
                   {t('nav.login')}
                 </Link>
                 <Link to="/cadastro" className="btn-primary !px-3 !py-1.5 text-xs">

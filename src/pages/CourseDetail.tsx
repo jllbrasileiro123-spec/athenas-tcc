@@ -99,7 +99,7 @@ export function CourseDetail() {
   /** Garante matrícula antes do teste / trilha (cursos gratuitos e pagos no fluxo demo). */
   async function ensureEnrolled(): Promise<boolean> {
     if (!user || !id) {
-      navigate('/', { state: { from: { pathname: `/curso/${id}` } } })
+      navigate('/login', { state: { from: { pathname: `/curso/${id}` } } })
       return false
     }
     if (enrolled) return true
@@ -121,7 +121,7 @@ export function CourseDetail() {
 
   async function handleEnroll() {
     if (!user) {
-      navigate('/', { state: { from: { pathname: `/curso/${id}` } } })
+      navigate('/login', { state: { from: { pathname: `/curso/${id}` } } })
       return
     }
     setEnrolling(true)
@@ -376,7 +376,7 @@ export function CourseDetail() {
                 )}
                 {!user && (
                   <p className="text-xs text-neutral-500 mt-2 text-center">
-                    <Link to="/" className="link-athenas">{t('course.signInToEnroll')}</Link>{' '}
+                    <Link to="/login" className="link-athenas">{t('course.signInToEnroll')}</Link>{' '}
                     {t('course.toEnroll')}
                   </p>
                 )}

@@ -74,7 +74,7 @@ export function PlacementPopup({
             </>
           ) : (
             <Link
-              to="/"
+              to="/login"
               state={{ from: { pathname: `/curso/${courseId}` } }}
               className="btn-primary w-full !py-3 inline-flex justify-center"
             >

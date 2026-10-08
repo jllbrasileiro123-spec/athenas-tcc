@@ -7,6 +7,7 @@ import { AdminRoute } from './components/AdminRoute'
 import { BrandSplash } from './components/BrandSplash'
 import { InstallAppBanner } from './components/InstallAppBanner'
 import { Login } from './pages/Login'
+import { Landing } from './pages/Landing'
 import { AuthCallback } from './pages/AuthCallback'
 
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })))
@@ -64,7 +65,8 @@ export default function App() {
     <Suspense fallback={<PageFallback />}>
       <InstallAppBanner />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/sobre" element={<Landing alwaysShow />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Login openSignup />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
