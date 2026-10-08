@@ -4,26 +4,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { SignupForm } from '../components/SignupForm'
 import { SocialLogin } from '../components/SocialLogin'
-import { BrandMark } from '../components/BrandMark'
+import { AuthShell, LockIcon, MailIcon } from '../components/AuthShell'
 import { isSupabaseConfigured } from '../lib/supabase'
 
 const STORAGE_EMAIL = 'athenas_remember_email'
-
-function MailIcon() {
-  return (
-    <svg className="w-4 h-4 text-neutral-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-    </svg>
-  )
-}
-
-function LockIcon() {
-  return (
-    <svg className="w-4 h-4 text-neutral-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-    </svg>
-  )
-}
 
 export function Login({ openSignup = false }: { openSignup?: boolean }) {
   const { signIn, user } = useAuth()
@@ -87,50 +71,24 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
   }
 
   return (
-    <div className="min-h-dvh bg-brand-cream flex flex-col items-center justify-center p-4 gap-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
-      {!isSupabaseConfigured && (
-        <div className="w-full max-w-[920px] alert-brand">
-          <p className="font-semibold">Supabase ainda não configurado</p>
-          <p className="mt-1 text-neutral-700">
-            Edite o arquivo <code className="font-mono text-xs">.env</code> com a URL e a chave{' '}
-            <code className="font-mono text-xs">anon</code> do seu projeto Supabase e reinicie{' '}
-            <code className="font-mono text-xs">npm run dev</code>.
-          </p>
-        </div>
-      )}
-      <div className="w-full max-w-[920px]">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 -ml-3 text-sm font-semibold text-neutral-600 transition-colors hover:bg-brand-gold-soft/60 hover:text-neutral-900"
-        >
-          <span aria-hidden>←</span> {t('auth.backHome')}
-        </Link>
-      </div>
-      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[700px] border border-brand-gold/20">
-        <div className="bg-neutral-950 text-white p-6 sm:p-10 md:p-12 flex flex-col justify-between md:w-[42%] border-r border-brand-gold/20">
-          <Link to="/" className="block w-fit" aria-label={t('auth.backHome')}>
-            <BrandMark className="h-12 sm:h-14 w-auto max-w-[11rem]" alt="ATHENAS" />
-            <p className="mt-3 text-sm font-semibold tracking-[0.25em] uppercase text-brand-gold">
-              ATHENAS
-            </p>
-          </Link>
-          <div className="mt-6 md:mt-0">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
-              {signup ? t('signup.welcome') : t('login.welcome')}
-            </h1>
-            <p className="text-neutral-400 mt-3 md:mt-4 text-sm leading-relaxed">
-              {signup ? t('signup.welcomeDesc') : t('login.welcomeDesc')}
+    <AuthShell
+      panelTitle={signup ? t('signup.welcome') : t('login.welcome')}
+      panelDesc={signup ? t('signup.welcomeDesc') : t('login.welcomeDesc')}
+      title={signup ? t('signup.title') : t('login.title')}
+      subtitle={t('login.subtitle')}
+      notice={
+        !isSupabaseConfigured && (
+          <div className="w-full max-w-[920px] alert-brand">
+            <p className="font-semibold">Supabase ainda não configurado</p>
+            <p className="mt-1 text-neutral-700">
+              Edite o arquivo <code className="font-mono text-xs">.env</code> com a URL e a chave{' '}
+              <code className="font-mono text-xs">anon</code> do seu projeto Supabase e reinicie{' '}
+              <code className="font-mono text-xs">npm run dev</code>.
             </p>
           </div>
-        </div>
-
-        <div className="bg-brand-cream/40 p-6 sm:p-10 md:p-12 flex flex-col justify-center md:w-[58%]">
-          <div className="mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              {signup ? t('signup.title') : t('login.title')}
-            </h2>
-            <p className="text-neutral-500 text-sm mt-1">{t('login.subtitle')}</p>
-          </div>
+        )
+      }
+    >
 
           {signup ? (
             <>
@@ -210,8 +168,6 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
           </p>
           </>
           )}
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   )
 }

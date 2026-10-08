@@ -299,6 +299,22 @@ export const translations = {
 
   'protected.loading': { pt: 'Carregando...', en: 'Loading...' },
 
+  'forgot.panelTitle': { pt: 'Recupere seu acesso', en: 'Get back in' },
+  'forgot.panelDesc': {
+    pt: 'Acontece com todo mundo. Em poucos minutos você volta para a sua trilha de onde parou.',
+    en: 'It happens to everyone. In a few minutes you’ll be back on your trail where you left off.',
+  },
+  'forgot.checkSpam': {
+    pt: 'Não chegou? Confira a caixa de spam ou promoções.',
+    en: 'Not there? Check your spam or promotions folder.',
+  },
+  'forgot.tryOther': { pt: 'Usar outro e-mail', en: 'Use another email' },
+  'forgot.remembered': { pt: 'Lembrou a senha?', en: 'Remembered it?' },
+  'password.panelTitle': { pt: 'Crie uma senha nova', en: 'Create a new password' },
+  'password.panelDesc': {
+    pt: 'Escolha uma senha que você não usa em outros sites. Depois é só entrar e continuar a formação.',
+    en: 'Pick a password you don’t use elsewhere. Then sign in and keep going.',
+  },
   'forgot.title': { pt: 'Esqueceu a senha?', en: 'Forgot your password?' },
   'forgot.desc': {
     pt: 'Enviaremos um link para você definir uma senha nova.',

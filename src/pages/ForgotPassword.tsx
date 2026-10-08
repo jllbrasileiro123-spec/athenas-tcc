@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { BrandMark } from '../components/BrandMark'
+import { AuthField, AuthShell, MailIcon, authInputClass } from '../components/AuthShell'
 
 export function ForgotPassword() {
   const { resetPassword } = useAuth()
@@ -15,9 +15,13 @@ export function ForgotPassword() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (!email.includes('@')) {
+      setError(t('login.emailInvalid'))
+      return
+    }
     setError(null)
     setLoading(true)
-    const { error: err } = await resetPassword(email)
+    const { error: err } = await resetPassword(email.trim())
     setLoading(false)
     if (err) {
       setError(err)
@@ -27,51 +31,57 @@ export function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-cream flex flex-col">
-      <header className="border-b border-brand-gold/20 bg-white px-6 py-4">
-        <Link to="/" className="inline-flex items-center gap-2 text-neutral-950 font-bold text-xl tracking-widest uppercase">
-          <BrandMark framed className="h-8 w-8" alt="" />
-          ATHENAS
-        </Link>
-      </header>
-
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-[400px] rounded-2xl border border-brand-gold/20 bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold mb-2">{t('forgot.title')}</h1>
-          <p className="text-neutral-600 text-sm mb-6">{t('forgot.desc')}</p>
-
-          {sent ? (
-            <div className="alert-brand">
-              <p className="font-semibold">{t('forgot.sentTitle')}</p>
-              <p className="mt-1 text-neutral-700">{t('forgot.sentBody', { email })}</p>
-              <Link to="/login" className="link-athenas inline-block mt-4">
-                {t('signup.backLogin')}
-              </Link>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && <p className="alert-error">{error}</p>}
-              <div>
-                <label className="block text-sm font-bold mb-1">{t('forgot.emailLabel')}</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-athenas !rounded-xl"
-                />
-              </div>
-              <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5">
-                {loading ? t('forgot.submitting') : t('forgot.submit')}
-              </button>
-              <Link to="/login" className="link-athenas block text-center text-sm">
-                {t('signup.backLogin')}
-              </Link>
-            </form>
-          )}
+    <AuthShell
+      back={{ to: '/login', label: t('signup.backLogin') }}
+      panelTitle={t('forgot.panelTitle')}
+      panelDesc={t('forgot.panelDesc')}
+      title={sent ? t('forgot.sentTitle') : t('forgot.title')}
+      subtitle={sent ? undefined : t('forgot.desc')}
+    >
+      {sent ? (
+        <div>
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-gold-soft [&_svg]:h-6 [&_svg]:w-6 [&_svg]:text-[#8a6a12]">
+            <MailIcon />
+          </div>
+          <p className="mt-5 text-neutral-700 leading-relaxed">{t('forgot.sentBody', { email })}</p>
+          <p className="mt-2 text-sm text-neutral-500">{t('forgot.checkSpam')}</p>
+          <Link to="/login" className="btn-primary w-full mt-8 !py-4 tracking-[0.2em] uppercase">
+            {t('signup.backLogin')}
+          </Link>
+          <button
+            type="button"
+            onClick={() => setSent(false)}
+            className="mt-4 block w-full text-center text-sm text-neutral-500 hover:text-brand-gold hover:underline"
+          >
+            {t('forgot.tryOther')}
+          </button>
         </div>
-      </main>
-    </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <p className="alert-error">{error}</p>}
+          <AuthField icon={<MailIcon />}>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              aria-label={t('forgot.emailLabel')}
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={authInputClass}
+            />
+          </AuthField>
+          <button type="submit" disabled={loading} className="btn-primary w-full !mt-6 !py-4 tracking-[0.2em] uppercase">
+            {loading ? t('forgot.submitting') : t('forgot.submit')}
+          </button>
+          <p className="text-center text-sm text-neutral-600 !mt-6">
+            {t('forgot.remembered')}{' '}
+            <Link to="/login" className="font-bold text-brand-gold hover:underline">
+              {t('signup.loginLink')}
+            </Link>
+          </p>
+        </form>
+      )}
+    </AuthShell>
   )
 }

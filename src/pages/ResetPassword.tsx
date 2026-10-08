@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { BrandMark } from '../components/BrandMark'
+import { AuthField, AuthShell, LockIcon, authInputClass } from '../components/AuthShell'
 
 export function ResetPassword() {
   const { updatePassword } = useAuth()
@@ -15,6 +15,7 @@ export function ResetPassword() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
     void supabase.auth.getSession().then(({ data: { session } }) => {
@@ -52,67 +53,64 @@ export function ResetPassword() {
     setTimeout(() => navigate('/login', { replace: true }), 2000)
   }
 
-  if (!ready && !done) {
-    return (
-      <div className="min-h-screen bg-brand-cream flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="spinner-athenas mx-auto mb-3" />
-          <p className="text-neutral-600">{t('password.openingLink')}</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-brand-cream flex items-center justify-center px-4">
-      <div className="w-full max-w-[400px] rounded-2xl border border-brand-gold/20 bg-white p-6 shadow-sm">
-        <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-gold mb-4">
-          <BrandMark framed className="h-5 w-5" alt="" />
-          ATHENAS
-        </p>
-        {done ? (
-          <>
-            <h1 className="text-2xl font-bold text-neutral-900">{t('password.resetDone')}</h1>
-            <p className="text-neutral-600 mt-2">{t('password.redirecting')}</p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-2xl font-bold mb-2">{t('password.resetTitle')}</h1>
-            <p className="text-neutral-600 text-sm mb-6">{t('password.resetDesc')}</p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && <p className="alert-error">{error}</p>}
-              <div>
-                <label className="block text-sm font-bold mb-1">{t('password.new')}</label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-athenas !rounded-xl"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold mb-1">{t('password.confirmFull')}</label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  className="input-athenas !rounded-xl"
-                />
-              </div>
-              <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5">
-                {loading ? t('password.saving') : t('password.saveNew')}
-              </button>
-            </form>
-          </>
-        )}
-        <Link to="/login" className="link-athenas block text-center text-sm mt-6">
+    <AuthShell
+      back={{ to: '/login', label: t('signup.backLogin') }}
+      panelTitle={t('password.panelTitle')}
+      panelDesc={t('password.panelDesc')}
+      title={done ? t('password.resetDone') : t('password.resetTitle')}
+      subtitle={done ? t('password.redirecting') : ready ? t('password.resetDesc') : undefined}
+    >
+      {done ? (
+        <Link to="/login" className="btn-primary w-full !py-4 tracking-[0.2em] uppercase">
           {t('nav.login')}
         </Link>
-      </div>
-    </div>
+      ) : !ready ? (
+        <div className="flex items-center gap-3 text-neutral-600">
+          <div className="spinner-athenas" />
+          <p>{t('password.openingLink')}</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <p className="alert-error">{error}</p>}
+          <AuthField icon={<LockIcon />}>
+            <input
+              type={show ? 'text' : 'password'}
+              required
+              minLength={6}
+              autoComplete="new-password"
+              aria-label={t('password.new')}
+              placeholder={`${t('password.new')} (${t('signup.passwordHint').toLowerCase()})`}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={authInputClass}
+            />
+            <button
+              type="button"
+              onClick={() => setShow((v) => !v)}
+              className="text-xs font-bold text-brand-gold shrink-0 hover:underline"
+            >
+              {show ? t('login.hide') : t('login.show')}
+            </button>
+          </AuthField>
+          <AuthField icon={<LockIcon />}>
+            <input
+              type={show ? 'text' : 'password'}
+              required
+              minLength={6}
+              autoComplete="new-password"
+              aria-label={t('password.confirmFull')}
+              placeholder={t('password.confirmFull')}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className={authInputClass}
+            />
+          </AuthField>
+          <button type="submit" disabled={loading} className="btn-primary w-full !mt-6 !py-4 tracking-[0.2em] uppercase">
+            {loading ? t('password.saving') : t('password.saveNew')}
+          </button>
+        </form>
+      )}
+    </AuthShell>
   )
 }
