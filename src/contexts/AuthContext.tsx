@@ -176,7 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signInWithOAuth = async (provider: 'google') => {
-    const redirectTo = `${window.location.origin}/auth/callback`
+    const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -189,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resetPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/redefinir-senha`,
+      redirectTo: `${window.location.origin}${import.meta.env.BASE_URL}redefinir-senha`,
     })
     return { error: error?.message ?? null }
   }
