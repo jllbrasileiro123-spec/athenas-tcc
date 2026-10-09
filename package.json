@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "start": "node scripts/start.mjs",
     "apple:secret": "node scripts/generate-apple-secret.mjs",
-    "upload:aula": "node scripts/upload-aula.mjs"
+    "upload:aula": "node scripts/upload-aula.mjs",
+    "criar:alunos": "node scripts/criar-alunos.mjs"
   },
   "engines": {
     "node": ">=20"

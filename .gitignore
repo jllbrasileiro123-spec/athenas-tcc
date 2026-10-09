@@ -8,3 +8,8 @@ dist
 # Vídeos grandes — ficam no Supabase Storage (não no GitHub)
 public/demo/modulo1-explicacao.mp4
 public/demo/modulo1-explicacao-web.mp4
+
+# Lista de alunos e senhas geradas (dados pessoais)
+scripts/alunos.csv
+scripts/alunos-credenciais.csv
+acessos-advogados.xlsx
