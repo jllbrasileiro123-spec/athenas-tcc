@@ -5,6 +5,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { deleteHostedVideo } from '../lib/videoStorage'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
+import { BrandMark } from '../components/BrandMark'
+import { useGamification } from '../contexts/GamificationContext'
+import type { CourseTrail } from '../lib/gamification'
 import type { TranslationKey } from '../i18n/translations'
 import type { Course, Lesson } from '../types/database'
 
@@ -25,7 +28,7 @@ export function MyCourses() {
 
   const isInstructor = profile?.role === 'instructor' || profile?.role === 'admin'
   const viewParam = searchParams.get('view')
-  const tab: Tab = viewParam === 'teaching' ? 'teaching' : 'learning'
+  const requestedTab: Tab = viewParam === 'teaching' ? 'teaching' : 'learning'
 
   useEffect(() => {
     if (!viewParam) {
@@ -147,6 +150,10 @@ export function MyCourses() {
     setTeaching((prev) => prev.filter((c) => c.id !== courseId))
   }
 
+  // Aluno sem cursos próprios não vê a aba de ensino (Tornar-se instrutor fica no menu da conta)
+  const showTabs = isInstructor || teaching.length > 0
+  const tab: Tab = showTabs ? requestedTab : 'learning'
+
   const pageTitle = tab === 'teaching' ? t('myCourses.teachingTitle') : t('myCourses.title')
   const pageSubtitle =
     tab === 'teaching' ? t('myCourses.teachingSubtitle') : t('myCourses.learningSubtitle')
@@ -156,7 +163,7 @@ export function MyCourses() {
       <div className="max-w-4xl mx-auto px-4 py-10 lg:py-12">
         <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{pageTitle}</h1>
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-neutral-900">{pageTitle}</h1>
             <p className="mt-2 text-sm text-neutral-600 max-w-lg">{pageSubtitle}</p>
           </div>
           {tab === 'teaching' && isInstructor && !loading && (
@@ -169,7 +176,7 @@ export function MyCourses() {
           )}
         </header>
 
-        {!loading && (
+        {!loading && showTabs && (
           <div className="flex flex-wrap gap-2 mb-8 p-1 bg-white border border-brand-gold/20 rounded-full w-full sm:w-fit shadow-sm">
             <button
               type="button"
@@ -260,34 +267,72 @@ function LearningSection({
   }
 
   return (
-    <div className="grid sm:grid-cols-2 gap-5">
+    <div className="flex flex-col gap-5">
       {courses.map((course) => (
-        <div
-          key={course.id}
-          className="card-athenas overflow-hidden"
-        >
-          <div className="aspect-video bg-gradient-to-br from-neutral-800 to-neutral-950 flex items-center justify-center">
-            <span className="text-4xl font-bold text-brand-gold/70">{course.title.charAt(0)}</span>
-          </div>
-          <div className="p-5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-gold">
-              {t('myCourses.learningBadge')}
-            </span>
-            <h3 className="font-bold text-neutral-900 mt-1">{course.title}</h3>
-            <p className="text-xs text-neutral-500 mt-1">
-              {course.lesson_count ?? 0}{' '}
-              {course.lesson_count === 1 ? t('common.lesson') : t('common.lessons')}
-            </p>
-            <Link
-              to={`/curso/${course.id}`}
-              className="inline-block mt-4 text-sm link-athenas"
-            >
-              {t('myCourses.continue')} →
-            </Link>
-          </div>
-        </div>
+        <LearningCard key={course.id} course={course} t={t} />
       ))}
     </div>
+  )
+}
+
+/** Cartão do curso matriculado: progresso da trilha e botão para continuar. */
+function LearningCard({ course, t }: { course: Course; t: TFn }) {
+  const { fetchTrail } = useGamification()
+  const [trail, setTrail] = useState<CourseTrail | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    void fetchTrail(course.id).then((data) => {
+      if (alive) setTrail(data)
+    })
+    return () => {
+      alive = false
+    }
+  }, [course.id, fetchTrail])
+
+  const total = trail?.total_lessons ?? course.lesson_count ?? 0
+  const done = trail?.completed_count ?? 0
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0
+  const next = trail?.lessons.find((l) => !l.completed) ?? null
+  const finished = total > 0 && done >= total
+
+  return (
+    <article className="flex flex-col overflow-hidden rounded-3xl border border-brand-line bg-white sm:flex-row">
+      <div className="flex items-center justify-center bg-neutral-950 p-6 sm:w-48 sm:shrink-0">
+        <BrandMark framed className="h-20 w-20 sm:h-24 sm:w-24" alt="" />
+      </div>
+      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
+          {t('myCourses.learningBadge')}
+        </p>
+        <h3 className="font-display text-3xl font-bold leading-tight text-neutral-900">{course.title}</h3>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex justify-between text-[13px] font-bold">
+            <span className="text-neutral-600">
+              {t('lesson.itemsDone', { done: String(done), total: String(total) })}
+            </span>
+            <span className="text-brand-gold-ink">{pct}%</span>
+          </div>
+          <div className="h-2.5 overflow-hidden rounded-full bg-brand-line">
+            <div className="h-full rounded-full bg-brand-gold transition-all duration-500" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+        {next && (
+          <p className="text-sm text-neutral-600">
+            <span className="font-bold text-neutral-900">{t('trail.continueEyebrow')}:</span> {next.title}
+          </p>
+        )}
+        <Link
+          to={finished ? `/certificado/${course.id}` : `/curso/${course.id}`}
+          className="mt-1 inline-flex h-12 items-center justify-center gap-2 self-start rounded-[14px] bg-neutral-950 px-6 text-[15px] font-extrabold text-brand-gold-soft hover:bg-black"
+        >
+          {finished ? t('certificate.getCta') : t('myCourses.continue')}
+          <svg className="h-4 w-4 text-brand-gold-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </Link>
+      </div>
+    </article>
   )
 }
 

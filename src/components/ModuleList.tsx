@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
-import type { TranslationKey } from '../i18n/translations'
-import type { CourseModule, ModuleItem, ModuleItemKind, ModuleLevel } from '../lib/courseModules'
+import {
+  moduleShortTitle,
+  moduleTopics,
+  type CourseModule,
+  type ModuleItem,
+} from '../lib/courseModules'
 import { MaterialLink } from './MaterialLink'
 
 type ModuleListProps = {
@@ -14,17 +18,21 @@ type ModuleListProps = {
   placementAvailable?: boolean
 }
 
-const KIND_LABEL: Record<ModuleItemKind, TranslationKey> = {
-  explicacao: 'module.kindExplicacao',
-  tutorial: 'module.kindTutorial',
-  podcast: 'module.kindPodcast',
-  exercicio: 'module.kindExercicio',
-}
+type ItemState = 'done' | 'open' | 'locked'
+type ModuleState = 'done' | 'current' | 'locked'
 
-const LEVEL_LABEL: Record<ModuleLevel, TranslationKey> = {
-  iniciante: 'level.beginner',
-  intermediario: 'level.intermediate',
-  avancado: 'level.advanced',
+/** Dentro de um módulo liberado, cada item abre quando os obrigatórios anteriores estão feitos. */
+function itemStates(mod: CourseModule, unlocked: boolean, isOwner: boolean): ItemState[] {
+  let previousDone = true
+  return mod.items.map((item) => {
+    const state: ItemState = item.completed
+      ? 'done'
+      : unlocked && (isOwner || previousDone)
+        ? 'open'
+        : 'locked'
+    if (item.required && !item.completed) previousDone = false
+    return state
+  })
 }
 
 export function ModuleList({
@@ -34,136 +42,142 @@ export function ModuleList({
   placementAvailable = false,
 }: ModuleListProps) {
   const { t } = useLanguage()
-  const firstOpen = modules.find((m) => (isOwner || m.unlocked) && !m.completed)
-  const [openId, setOpenId] = useState<string | null>(firstOpen?.id ?? modules[0]?.id ?? null)
+  // Só o módulo em andamento abre sozinho; os outros ficam numa linha e abrem no clique
+  const [openId, setOpenId] = useState<string | null>(
+    () => modules.find((m) => (isOwner || m.unlocked) && !m.completed)?.id ?? null
+  )
 
   if (modules.length === 0) return null
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm text-neutral-600">{t('module.cascadeHint')}</p>
-
+    <div className="flex flex-col gap-4">
       {modules.map((mod, index) => {
         const unlocked = isOwner || mod.unlocked
+        const state: ModuleState = mod.completed ? 'done' : unlocked ? 'current' : 'locked'
+        const topics = moduleTopics(mod.description)
+        const states = itemStates(mod, unlocked, isOwner)
         const open = openId === mod.id
-        const pct =
-          mod.required_total > 0
-            ? Math.round((mod.required_done / mod.required_total) * 100)
-            : 0
 
         return (
-          <section
+          <article
             key={mod.id}
-            className={`rounded-2xl border bg-white overflow-hidden ${
-              unlocked ? 'border-brand-gold/30' : 'border-neutral-200'
-            }`}
+            className={`overflow-hidden rounded-[20px] bg-white ${
+              state === 'current'
+                ? 'border-2 border-brand-gold'
+                : 'border border-brand-line'
+            } ${state === 'locked' ? 'opacity-80' : ''}`}
           >
             <button
               type="button"
               onClick={() => setOpenId(open ? null : mod.id)}
-              className="w-full flex items-start gap-3 px-5 py-4 text-left hover:bg-brand-gold-soft/20"
+              aria-expanded={open}
+              className={`flex w-full items-center gap-4 px-5 text-left sm:px-6 ${open ? 'py-5' : 'py-4'} hover:bg-brand-cream/50`}
             >
               <span
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                  mod.completed
-                    ? 'bg-neutral-950 text-brand-gold'
-                    : unlocked
-                      ? 'bg-brand-gold-soft text-neutral-900'
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] font-display text-2xl font-bold sm:h-[52px] sm:w-[52px] ${
+                  state === 'done'
+                    ? 'bg-brand-gold text-neutral-950'
+                    : state === 'current'
+                      ? 'bg-neutral-950 text-brand-gold-light'
                       : 'bg-neutral-100 text-neutral-400'
                 }`}
               >
-                {mod.completed ? '✓' : index + 1}
+                {index + 1}
               </span>
-
-              <span className="min-w-0 flex-1">
-                <span className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`font-bold ${unlocked ? 'text-neutral-900' : 'text-neutral-400'}`}
-                  >
-                    {mod.title}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-neutral-950 text-brand-gold px-2 py-0.5 rounded-full">
-                    {t(LEVEL_LABEL[mod.level])}
-                  </span>
-                  {mod.completed && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
-                      {t('module.completed')}
-                    </span>
-                  )}
-                  {!unlocked && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                      {t('module.locked')}
-                    </span>
-                  )}
-                </span>
-
-                {mod.description && (
-                  <span className="mt-1 block text-sm text-neutral-500">{mod.description}</span>
-                )}
-
-                <span className="mt-2 block text-xs font-semibold text-neutral-500">
-                  {t('module.progress', {
-                    done: String(mod.required_done),
-                    total: String(mod.required_total),
-                  })}
-                </span>
-                <span className="mt-1 block h-1.5 rounded-full bg-brand-gold-soft overflow-hidden">
-                  <span
-                    className="block h-full rounded-full bg-brand-gold transition-all duration-500"
-                    style={{ width: `${pct}%` }}
-                  />
-                </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-neutral-500">
+                  {t('module.label', { n: String(index + 1) })}
+                </p>
+                <h3 className="mt-0.5 text-base font-extrabold leading-snug text-neutral-900 sm:text-lg">
+                  {moduleShortTitle(mod.title)}
+                </h3>
+              </div>
+              <span
+                className={`hidden shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-extrabold sm:inline-block ${
+                  state === 'done'
+                    ? 'bg-emerald-50 text-emerald-800'
+                    : state === 'current'
+                      ? 'bg-brand-gold-soft text-brand-gold-ink'
+                      : 'bg-neutral-100 text-neutral-500'
+                }`}
+              >
+                {state === 'done'
+                  ? t('module.completed')
+                  : state === 'current'
+                    ? t('module.inProgress')
+                    : t('module.locked')}
               </span>
+              <svg
+                className={`h-5 w-5 shrink-0 text-neutral-400 transition-transform ${open ? 'rotate-180' : ''}`}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </button>
 
-            {open && (
-              <div className="border-t border-neutral-100 px-5 py-4">
-                {!unlocked ? (
-                  <div className="space-y-3">
-                    <p className="text-sm text-neutral-600">{t('module.lockedBody')}</p>
-                    {placementAvailable && (
-                      <Link
-                        to={`/nivelamento/${courseId}`}
-                        className="btn-secondary inline-flex !px-4 !py-2 text-sm"
-                      >
-                        {t('module.lockedPlacementCta')}
-                      </Link>
-                    )}
-                  </div>
-                ) : (
-                  <>
-                    <ul className="space-y-2">
-                      {mod.items.map((item) => (
-                        <ModuleItemRow
-                          key={item.id}
-                          courseId={courseId}
-                          item={item}
-                          kindLabel={t(KIND_LABEL[item.item_kind])}
-                          optionalLabel={t('module.optional')}
-                          viaPlacementLabel={t('trail.viaPlacement')}
-                        />
-                      ))}
-                    </ul>
-
-                    {mod.materials.length > 0 && (
-                      <div className="mt-5 rounded-xl border border-brand-gold/20 bg-brand-gold-soft/20 p-4">
-                        <p className="text-xs font-bold uppercase tracking-wider text-neutral-700">
-                          {t('module.materials')}
-                        </p>
-                        <ul className="mt-2 space-y-1.5 text-sm">
-                          {mod.materials.map((material) => (
-                            <li key={material.id}>
-                              <MaterialLink material={material} />
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </>
-                )}
+            {open && topics.length > 0 && (
+              <div className="flex flex-col gap-2 px-5 pb-4 sm:pl-[94px] sm:pr-6">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                  {t('module.topics')}
+                </p>
+                <ul className="flex flex-wrap gap-2">
+                  {topics.map((topic) => (
+                    <li
+                      key={topic}
+                      className="rounded-[10px] border border-brand-line bg-brand-cream px-3 py-1.5 text-[13px] font-semibold text-neutral-700"
+                    >
+                      {topic}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
-          </section>
+
+            {open && (
+            <div className="border-t border-[#f0eadb] px-5 pb-3 pt-2 sm:pl-[94px] sm:pr-6">
+              <ul className="flex flex-col">
+                {mod.items.map((item, i) => (
+                  <ModuleItemRow key={item.id} courseId={courseId} item={item} state={states[i]} />
+                ))}
+              </ul>
+
+              {!unlocked && (
+                <div className="mb-2 mt-1 flex flex-col gap-3 rounded-xl bg-neutral-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-neutral-600">{t('module.lockedBody')}</p>
+                  {placementAvailable && (
+                    <Link
+                      to={`/nivelamento/${courseId}`}
+                      className="btn-secondary shrink-0 !px-4 !py-2 text-sm"
+                    >
+                      {t('module.lockedPlacementCta')}
+                    </Link>
+                  )}
+                </div>
+              )}
+
+              {unlocked && mod.materials.length > 0 && (
+                <div className="mb-2 mt-2 rounded-xl border border-brand-line bg-brand-cream/60 p-4">
+                  <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-neutral-700">
+                    {t('module.materials')}
+                  </p>
+                  <ul className="mt-2 space-y-1.5 text-sm">
+                    {mod.materials.map((material) => (
+                      <li key={material.id}>
+                        <MaterialLink material={material} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            )}
+          </article>
         )
       })}
     </div>
@@ -173,42 +187,111 @@ export function ModuleList({
 function ModuleItemRow({
   courseId,
   item,
-  kindLabel,
-  optionalLabel,
-  viaPlacementLabel,
+  state,
 }: {
   courseId: string
   item: ModuleItem
-  kindLabel: string
-  optionalLabel: string
-  viaPlacementLabel: string
+  state: ItemState
 }) {
-  return (
-    <li>
-      <Link
-        to={`/assistir/${courseId}/${item.id}`}
-        className="flex items-start gap-3 rounded-xl border border-neutral-200 px-3 py-2.5 hover:border-brand-gold/60 hover:bg-brand-gold-soft/20"
+  const { t } = useLanguage()
+  const isQuiz = item.content_type !== 'lesson'
+  const kind = isQuiz
+    ? t('module.kindShortQuiz')
+    : item.item_kind === 'podcast'
+      ? t('module.kindShortPodcast')
+      : t('module.kindShortLesson')
+  const meta = [
+    kind,
+    !isQuiz && item.duration_minutes > 0 ? `${item.duration_minutes} min` : null,
+    `+${item.xp_reward} XP`,
+    !item.required ? t('module.optional') : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
+
+  const body = (
+    <>
+      <span
+        className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full ${
+          state === 'done'
+            ? 'bg-brand-gold text-neutral-950'
+            : state === 'open'
+              ? 'bg-brand-gold-soft text-neutral-950'
+              : 'bg-neutral-100 text-neutral-400'
+        }`}
       >
+        {state === 'done' ? <IconCheck /> : state === 'open' ? <IconPlay /> : <IconLock />}
+      </span>
+      <span className="min-w-0 flex-1">
         <span
-          className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-            item.completed ? 'bg-neutral-950 text-brand-gold' : 'bg-neutral-100 text-neutral-500'
+          className={`block text-[15px] font-bold ${
+            state === 'locked' ? 'text-neutral-400' : 'text-neutral-900'
           }`}
         >
-          {item.completed ? '✓' : ''}
+          {item.title}
         </span>
-        <span className="min-w-0">
-          <span className="block text-sm font-semibold text-neutral-900">{item.title}</span>
-          <span className="mt-0.5 block text-[10px] font-bold uppercase tracking-wider text-brand-gold">
-            {kindLabel} · +{item.xp_reward} XP
-            {!item.required && ` · ${optionalLabel}`}
+        <span className="block text-xs font-semibold text-neutral-500">{meta}</span>
+        {item.via_placement_test && (
+          <span className="block text-xs font-semibold text-emerald-700">
+            {t('trail.viaPlacement')}
           </span>
-          {item.via_placement_test && (
-            <span className="mt-0.5 block text-[10px] font-semibold text-emerald-700">
-              {viaPlacementLabel}
-            </span>
-          )}
-        </span>
-      </Link>
+        )}
+      </span>
+      <span
+        className={`shrink-0 text-xs font-bold ${
+          state === 'done'
+            ? 'text-emerald-800'
+            : state === 'open'
+              ? 'text-brand-gold-ink'
+              : 'text-neutral-400'
+        }`}
+      >
+        {state === 'done'
+          ? t('trail.itemDone')
+          : state === 'open'
+            ? t('trail.itemStart')
+            : t('trail.itemLocked')}
+      </span>
+    </>
+  )
+
+  return (
+    <li>
+      {state === 'locked' ? (
+        <div className="flex items-center gap-3.5 py-2.5">{body}</div>
+      ) : (
+        <Link
+          to={`/assistir/${courseId}/${item.id}`}
+          className="-mx-2 flex items-center gap-3.5 rounded-xl px-2 py-2.5 hover:bg-brand-cream"
+        >
+          {body}
+        </Link>
+      )}
     </li>
+  )
+}
+
+function IconCheck() {
+  return (
+    <svg className="h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
+    </svg>
+  )
+}
+
+function IconPlay() {
+  return (
+    <svg className="h-[13px] w-[13px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M7 4.5v15l12-7.5Z" />
+    </svg>
+  )
+}
+
+function IconLock() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
   )
 }

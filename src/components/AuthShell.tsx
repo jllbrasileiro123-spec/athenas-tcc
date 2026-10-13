@@ -38,21 +38,33 @@ export function AuthShell({
           <span aria-hidden>←</span> {back.label ?? t('auth.backHome')}
         </Link>
       </div>
-      <div className="w-full max-w-[920px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[700px] border border-brand-gold/20">
+      <div className="w-full max-w-[920px] bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row md:min-h-[700px] border border-brand-gold/20">
         <div className="bg-neutral-950 text-white p-6 sm:p-10 md:p-12 flex flex-col justify-between md:w-[42%] border-r border-brand-gold/20">
-          <Link to="/" className="block w-fit" aria-label={t('auth.backHome')}>
-            <BrandMark className="h-12 sm:h-14 w-auto max-w-[11rem]" alt="ATHENAS" />
-            <p className="mt-3 text-sm font-semibold tracking-[0.25em] uppercase text-brand-gold">ATHENAS</p>
+          <Link to="/" className="flex w-fit items-center gap-3" aria-label={t('auth.backHome')}>
+            <BrandMark framed className="h-12 w-12 sm:h-14 sm:w-14" alt="" />
+            <span className="font-display text-2xl font-bold tracking-[0.08em] text-brand-gold-light">ATHENAS</span>
           </Link>
           <div className="mt-6 md:mt-0">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">{panelTitle}</h1>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.05]">{panelTitle}</h1>
             <p className="text-neutral-400 mt-3 md:mt-4 text-sm leading-relaxed">{panelDesc}</p>
+            <ul className="mt-6 hidden flex-col gap-2.5 sm:flex">
+              {(['auth.perk1', 'auth.perk2', 'auth.perk3'] as const).map((key) => (
+                <li key={key} className="flex items-center gap-2.5 text-sm font-semibold text-brand-gold-soft">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-gold text-neutral-950">
+                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="m5 12.5 4.5 4.5L19 7.5" />
+                    </svg>
+                  </span>
+                  {t(key)}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
         <div className="bg-brand-cream/40 p-6 sm:p-10 md:p-12 flex flex-col justify-center md:w-[58%]">
           <div className="mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">{title}</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-neutral-900">{title}</h2>
             {subtitle && <p className="text-neutral-500 text-sm mt-1">{subtitle}</p>}
           </div>
           {children}

@@ -88,7 +88,7 @@ export function ResetPassword() {
             <button
               type="button"
               onClick={() => setShow((v) => !v)}
-              className="text-xs font-bold text-brand-gold shrink-0 hover:underline"
+              className="text-xs font-bold text-brand-gold-ink shrink-0 hover:underline"
             >
               {show ? t('login.hide') : t('login.show')}
             </button>

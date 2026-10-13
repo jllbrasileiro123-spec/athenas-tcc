@@ -25,21 +25,21 @@ export function Layout() {
   function navClass(active: boolean) {
     return `shrink-0 whitespace-nowrap px-3 py-2 rounded-full text-sm font-semibold transition-colors ${
       active
-        ? 'bg-neutral-950 text-brand-gold'
-        : 'text-neutral-700 hover:bg-brand-gold-soft hover:text-neutral-900'
+        ? 'bg-white/10 text-white'
+        : 'text-neutral-400 hover:bg-white/5 hover:text-white'
     }`
   }
 
   return (
     <div className="min-h-dvh flex flex-col bg-brand-cream">
-      <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur border-b border-brand-gold/20 shadow-sm pt-[env(safe-area-inset-top)]">
+      <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950 border-b border-brand-gold/20 shadow-sm pt-[env(safe-area-inset-top)]">
         <div className="max-w-7xl mx-auto h-14 md:h-16 px-3 sm:px-4 flex items-center gap-2 sm:gap-3">
           <Link
             to="/explorar"
-            className="inline-flex items-center gap-2 text-neutral-950 font-bold text-base sm:text-lg shrink-0 tracking-widest uppercase"
+            className="inline-flex items-center gap-2.5 shrink-0"
           >
             <BrandMark framed className="h-8 w-8" alt="" />
-            <span className="hidden sm:inline">ATHENAS</span>
+            <span className="hidden sm:inline font-display text-xl font-bold tracking-[0.08em] text-brand-gold-light">ATHENAS</span>
           </Link>
 
           <nav className="hidden md:flex flex-1 min-w-0 items-center gap-1 overflow-x-auto scrollbar-none py-0.5">

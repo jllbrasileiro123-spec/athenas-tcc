@@ -181,10 +181,10 @@ export function AthenaAssistant({
 
   const panel = (
       <div
-        className={`rounded-2xl border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col ${
+        className={`border border-brand-gold/25 bg-neutral-950 text-white p-4 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/5 flex flex-col ${
           dock
-            ? 'h-[min(70dvh,560px)] w-[min(100vw-1.5rem,360px)]'
-            : 'max-h-[min(70dvh,640px)] lg:max-h-[min(80vh,640px)]'
+            ? 'rounded-3xl h-[min(72dvh,560px)] w-full md:h-[min(75dvh,600px)] md:w-[400px]'
+            : 'rounded-2xl max-h-[min(70dvh,640px)] lg:max-h-[min(80vh,640px)]'
         }`}
       >
         <div className="flex items-start justify-between gap-2 mb-3 shrink-0">
@@ -197,10 +197,10 @@ export function AthenaAssistant({
             }}
             aria-expanded={showBody}
           >
-            <AthenaMark framed variant="header" className="h-14 w-14 lg:h-[72px] lg:w-[72px]" alt="Athena" />
+            <AthenaMark framed variant="header" className={dock ? 'h-12 w-12' : 'h-14 w-14 lg:h-[72px] lg:w-[72px]'} alt="Athena" />
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-brand-gold">Athena</p>
-              <h3 className="font-bold text-base leading-tight">{t('assistant.title')}</h3>
+              <h3 className="font-display text-2xl font-bold leading-tight">{t('assistant.title')}</h3>
               {!forceExpanded && !dock && (
                 <p className="lg:hidden text-[11px] text-neutral-400 mt-0.5">
                   {expanded ? t('assistant.close') : t('assistant.open')}
@@ -221,7 +221,7 @@ export function AthenaAssistant({
             {(dock || !forceExpanded) && (
               <button
                 type="button"
-                className={`h-8 w-8 rounded-full text-brand-gold hover:bg-white/10 ${dock ? '' : 'lg:hidden'}`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full text-xl text-brand-gold hover:bg-white/10 ${dock ? '' : 'lg:hidden'}`}
                 onClick={() => {
                   if (dock && onClose) onClose()
                   else setExpanded((v) => !v)
@@ -251,7 +251,7 @@ export function AthenaAssistant({
                   <AthenaMark framed variant="mensagem" className="mb-0.5" alt="" />
                 )}
                 <div
-                  className={`text-xs leading-relaxed px-3 py-2.5 rounded-xl max-w-[88%] whitespace-pre-wrap ${
+                  className={`text-[13px] leading-relaxed px-3.5 py-2.5 rounded-2xl max-w-[88%] whitespace-pre-wrap ${
                     m.role === 'user'
                       ? 'bg-white text-neutral-900 shadow-sm'
                       : 'bg-neutral-800 text-neutral-50 shadow-sm ring-1 ring-white/5'

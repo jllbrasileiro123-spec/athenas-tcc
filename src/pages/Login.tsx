@@ -95,7 +95,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
               <SignupForm onDone={() => switchTo('/login')} />
               <p className="text-center text-sm text-neutral-600 mt-6">
                 {t('signup.haveAccount')}{' '}
-                <button type="button" onClick={() => switchTo('/login')} className="font-bold text-brand-gold hover:underline">
+                <button type="button" onClick={() => switchTo('/login')} className="font-bold text-brand-gold-ink hover:underline">
                   {t('signup.loginLink')}
                 </button>
               </p>
@@ -132,7 +132,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="text-xs font-bold text-brand-gold shrink-0 hover:underline"
+                className="text-xs font-bold text-brand-gold-ink shrink-0 hover:underline"
               >
                 {showPassword ? t('login.hide') : t('login.show')}
               </button>
@@ -157,12 +157,12 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
 
           <p className="text-center text-sm text-neutral-600 mt-6">
             {t('login.noAccount')}{' '}
-            <button type="button" onClick={() => switchTo('/cadastro')} className="font-bold text-brand-gold hover:underline">
+            <button type="button" onClick={() => switchTo('/cadastro')} className="font-bold text-brand-gold-ink hover:underline">
               {t('login.signupLink')}
             </button>
           </p>
           <p className="text-center text-sm mt-2">
-            <Link to="/esqueci-senha" className="text-neutral-500 hover:text-brand-gold hover:underline">
+            <Link to="/esqueci-senha" className="text-neutral-500 hover:text-brand-gold-ink hover:underline">
               {t('login.forgot')}
             </Link>
           </p>

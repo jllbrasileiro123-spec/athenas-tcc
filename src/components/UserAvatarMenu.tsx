@@ -131,23 +131,10 @@ export function UserAvatarMenu() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[99] bg-neutral-950/50 md:hidden"
-          onClick={() => {
-            setOpen(false)
-            setPanel('menu')
-          }}
-        />
-      )}
-
-      {open && (
-        <div
-          className={`fixed inset-x-0 bottom-0 z-[100] max-h-[min(85dvh,640px)] overflow-y-auto rounded-t-3xl border border-brand-gold/30 bg-white shadow-xl pb-[env(safe-area-inset-bottom)] md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 md:max-h-[min(80vh,560px)] md:rounded-2xl md:pb-0 ${
-            panel === 'help' ? 'md:w-[320px]' : 'md:w-[288px]'
+          className={`fixed right-3 top-[calc(3.5rem+env(safe-area-inset-top)+0.5rem)] md:absolute md:right-0 md:top-full md:mt-2 z-[100] max-h-[min(80dvh,560px)] overflow-y-auto rounded-2xl border border-brand-gold/30 bg-white shadow-xl ${
+            panel === 'help' ? 'w-[min(320px,calc(100vw-1.5rem))]' : 'w-[min(288px,calc(100vw-1.5rem))]'
           }`}
         >
-          <div className="md:hidden flex justify-center pt-2 pb-1">
-            <span className="h-1 w-10 rounded-full bg-neutral-300" />
-          </div>
           <div className="px-4 py-3 bg-neutral-950 text-white border-b border-brand-gold/20">
             <p className="font-bold text-sm truncate text-brand-gold flex items-center gap-2 flex-wrap">
               <span className="truncate">{displayName}</span>

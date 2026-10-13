@@ -55,23 +55,19 @@ export function StreakWidget() {
           aria-label={`${t('streak.aria')}. ${t('streak.coinsAria')}`}
         >
           <img src={`${import.meta.env.BASE_URL}icons/streak-flame.png`} alt="" className="h-5 w-5 object-contain" draggable={false} />
-          <span className="text-sm font-bold text-neutral-900 tabular-nums">
+          <span className="text-sm font-bold text-brand-gold-soft tabular-nums">
             {status.current_streak}
           </span>
-          <span className="mx-0.5 h-5 w-px bg-neutral-400" aria-hidden />
+          <span className="mx-0.5 h-5 w-px bg-neutral-600" aria-hidden />
           <img src={`${import.meta.env.BASE_URL}icons/coin-a.png`} alt="" className="h-5 w-5 object-contain" draggable={false} />
-          <span className="text-sm font-bold text-neutral-900 tabular-nums">
+          <span className="text-sm font-bold text-brand-gold-soft tabular-nums">
             {status.coin_balance}
           </span>
         </button>
 
         {open && (
           <>
-            <div className="fixed inset-0 z-[89] bg-neutral-950/50 md:hidden" onClick={() => setOpen(false)} />
-            <div className="fixed inset-x-0 bottom-0 z-[90] max-h-[min(85dvh,640px)] overflow-y-auto rounded-t-3xl border border-brand-gold/30 bg-white shadow-xl p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 md:w-[min(320px,calc(100vw-1.5rem))] md:max-h-none md:rounded-2xl md:pb-4">
-              <div className="md:hidden flex justify-center pb-2">
-                <span className="h-1 w-10 rounded-full bg-neutral-300" />
-              </div>
+            <div className="fixed right-3 top-[calc(3.5rem+env(safe-area-inset-top)+0.5rem)] md:absolute md:right-0 md:top-full md:mt-2 z-[90] w-[min(320px,calc(100vw-1.5rem))] max-h-[min(80dvh,560px)] overflow-y-auto rounded-2xl border border-brand-gold/30 bg-white shadow-xl p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-bold text-neutral-900">

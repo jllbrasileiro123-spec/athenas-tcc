@@ -7,6 +7,13 @@
   --color-brand-gold-soft: #f5e6c8;
   --color-brand-cream: #faf6ee;
   --color-accent: #737373;
+  /* Dourado escuro para texto em fundo claro (o dourado puro não tem contraste) */
+  --color-brand-gold-ink: #7a5f0e;
+  --color-brand-gold-light: #e6c65a;
+  --color-brand-line: #ede3cc;
+
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
 }
 
 html {
@@ -28,6 +35,26 @@ button,
 a,
 [role='button'] {
   touch-action: manipulation;
+}
+
+/* O Tailwind 4 deixa botões com a seta padrão: tudo que é clicável mostra a mãozinha */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  select:not(:disabled),
+  summary,
+  label:has(> input:not(:disabled)),
+  input[type='checkbox']:not(:disabled),
+  input[type='radio']:not(:disabled),
+  input[type='file']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled,
+  input:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @media (display-mode: standalone) {
@@ -149,7 +176,7 @@ html:has(.landing) {
   }
 
   .landing-h2 {
-    @apply text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl;
+    @apply font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl;
   }
 }
 

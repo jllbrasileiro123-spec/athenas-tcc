@@ -138,6 +138,34 @@ export async function fetchCourseModules(
   return { modules: list.map(asModule), error: null }
 }
 
+/** Título sem o prefixo "Módulo N — " (o número já aparece no selo do bloco). */
+export function moduleShortTitle(title: string): string {
+  return title.replace(/^M[óo]dulo\s+\d+\s*[—–-]\s*/i, '').trim() || title
+}
+
+/**
+ * Assuntos do módulo a partir da descrição: separa por ";" e, se não houver,
+ * pela lista "a, b, c e d". Ex.: "Pesquisa jurisprudencial, redação assistida
+ * e análise de contratos." → ["Pesquisa jurisprudencial", "Redação assistida",
+ * "Análise de contratos"].
+ */
+export function moduleTopics(description: string | null | undefined): string[] {
+  const text = (description ?? '').trim().replace(/\.$/, '')
+  if (!text) return []
+  let parts = text.split(';')
+  if (parts.length === 1) {
+    parts = text.split(/,\s+/)
+    const last = parts.pop() ?? ''
+    const cut = last.lastIndexOf(' e ')
+    if (parts.length > 0 && cut > 0) parts.push(last.slice(0, cut), last.slice(cut + 3))
+    else parts.push(last)
+  }
+  return parts
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+}
+
 /** Primeiro item ainda não concluído de um módulo liberado. */
 export function nextOpenItem(modules: CourseModule[]): { moduleId: string; itemId: string } | null {
   for (const mod of modules) {

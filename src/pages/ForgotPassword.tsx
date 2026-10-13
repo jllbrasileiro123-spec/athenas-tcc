@@ -51,7 +51,7 @@ export function ForgotPassword() {
           <button
             type="button"
             onClick={() => setSent(false)}
-            className="mt-4 block w-full text-center text-sm text-neutral-500 hover:text-brand-gold hover:underline"
+            className="mt-4 block w-full text-center text-sm text-neutral-500 hover:text-brand-gold-ink hover:underline"
           >
             {t('forgot.tryOther')}
           </button>
@@ -76,7 +76,7 @@ export function ForgotPassword() {
           </button>
           <p className="text-center text-sm text-neutral-600 !mt-6">
             {t('forgot.remembered')}{' '}
-            <Link to="/login" className="font-bold text-brand-gold hover:underline">
+            <Link to="/login" className="font-bold text-brand-gold-ink hover:underline">
               {t('signup.loginLink')}
             </Link>
           </p>

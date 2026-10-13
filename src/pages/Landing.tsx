@@ -39,7 +39,7 @@ const STEPS = [
   {
     n: '03',
     title: 'Quiz com gabarito comentado',
-    body: '10 perguntas por módulo e 70% para avançar. Ao passar, cada resposta vem explicada.',
+    body: 'Um quiz no fim de cada módulo e 70% de acerto para avançar. Ao passar, cada resposta vem explicada.',
   },
   {
     n: '04',
@@ -126,7 +126,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setMenuOpen(false)}>
             <BrandMark framed className="h-9 w-9" alt="" />
-            <span className="text-sm font-bold tracking-[0.3em]">ATHENAS</span>
+            <span className="font-display text-xl font-bold tracking-[0.08em]">ATHENAS</span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1 text-sm text-neutral-600">
@@ -210,7 +210,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               IA no cotidiano jurídico
             </span>
 
-            <h1 className="mt-6 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="mt-6 font-display text-5xl font-bold leading-[1] sm:text-6xl lg:text-7xl xl:text-[84px]">
               A advocacia que usa IA{' '}
               <span className="landing-text-gold">com responsabilidade</span> começa aqui.
             </h1>
@@ -414,7 +414,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
             <ol className="landing-card divide-y divide-brand-gold/15 !p-0">
               {MODULES.map((mod, i) => (
                 <li key={mod.title} className="flex gap-4 px-6 py-5">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-950 font-mono text-xs font-bold text-brand-gold">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-950 font-display text-base font-bold text-brand-gold-light">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
@@ -494,7 +494,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
         <div className="landing-glow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden />
         <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
           <BrandMark framed className="mx-auto h-16 w-16" alt="" />
-          <h2 className="mt-8 text-4xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-8 font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
             Use a IA a seu favor, <span className="landing-text-gold">sem abrir mão da ética.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg text-neutral-600">
@@ -517,7 +517,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-neutral-500 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2.5">
             <BrandMark framed className="h-7 w-7" alt="" />
-            <span className="font-bold tracking-[0.3em] text-neutral-700">ATHENAS</span>
+            <span className="font-display text-lg font-bold tracking-[0.08em] text-neutral-800">ATHENAS</span>
             <span className="hidden sm:inline">· IA no cotidiano jurídico</span>
           </div>
           <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
@@ -544,7 +544,7 @@ function HeroMockup() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BrandMark framed className="h-7 w-7" alt="" />
-            <span className="text-xs font-bold tracking-[0.25em] text-neutral-700">ATHENAS</span>
+            <span className="font-display text-base font-bold tracking-[0.08em] text-neutral-800">ATHENAS</span>
           </div>
           <div className="flex items-center gap-3 text-xs font-semibold">
             <span className="flex items-center gap-1 text-orange-600">

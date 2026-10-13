@@ -3,12 +3,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { InstructorBadge } from '../components/InstructorBadge'
 import { TrilhaProgresso } from '../components/TrilhaProgresso'
 import { deleteHostedVideo } from '../lib/videoStorage'
 import { fetchPlacementTest } from '../lib/placementTest'
-import { fetchCourseModules, type CourseModule } from '../lib/courseModules'
+import { fetchCourseModules, nextOpenItem, type CourseModule } from '../lib/courseModules'
 import { ModuleList } from '../components/ModuleList'
+import { AssistantCard } from '../components/AssistantCard'
 import { PlacementPopup } from '../components/PlacementPopup'
 import { AddModuleForm } from '../components/AddModuleForm'
 import { CourseFeedbackModal } from '../components/CourseFeedbackModal'
@@ -220,7 +220,6 @@ export function CourseDetail() {
   }
   if (!course) return <p className="p-8 page-shell text-neutral-600">{t('course.notFound')}</p>
 
-  const instructor = course.profiles?.full_name ?? t('common.instructor')
   const levelLabel = levelLabels[course.level] ?? course.level
   const isOwner = user?.id === course.instructor_id
   const isFree = Number(course.price) === 0
@@ -241,149 +240,230 @@ export function CourseDetail() {
    */
   const showPlacementPopup = needsPlacement && enrolled && !choseStartFromZero
 
+  const doneModules = modules.filter((m) => m.completed).length
+  const progressDone = hasModules ? doneModules : (trail?.completed_count ?? 0)
+  const progressTotal = hasModules ? modules.length : (trail?.total_lessons ?? lessons.length)
+  const progressPct = progressTotal > 0 ? Math.round((progressDone / progressTotal) * 100) : 0
+  const courseDone =
+    !!trail && trail.total_lessons > 0 && trail.completed_count >= trail.total_lessons
+
+  /** Próximo item da trilha para o cartão "Continue de onde parou" */
+  const nextRef = hasModules ? nextOpenItem(modules) : null
+  const nextModuleIndex = nextRef ? modules.findIndex((m) => m.id === nextRef.moduleId) : -1
+  const nextItem =
+    nextModuleIndex >= 0
+      ? modules[nextModuleIndex].items.find((i) => i.id === nextRef?.itemId) ?? null
+      : null
+  const nextLesson = !hasModules ? trail?.lessons.find((l) => !l.completed) ?? null : null
+  const nextTitle = nextItem?.title ?? nextLesson?.title ?? null
+  const nextMeta = nextItem
+    ? [
+        t('module.label', { n: String(nextModuleIndex + 1) }),
+        nextItem.content_type !== 'lesson'
+          ? t('module.kindShortQuiz')
+          : nextItem.item_kind === 'podcast'
+            ? t('module.kindShortPodcast')
+            : t('module.kindShortLesson'),
+        nextItem.content_type === 'lesson' && nextItem.duration_minutes > 0
+          ? `${nextItem.duration_minutes} min`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    : null
+
+  function continueLearning() {
+    if (nextRef) navigate(`/assistir/${id}/${nextRef.itemId}`)
+    else startLearning()
+  }
+
   return (
     <div className="page-shell">
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <div className="aspect-video bg-gradient-to-br from-neutral-700 to-neutral-950 rounded-2xl flex items-center justify-center text-brand-gold text-6xl font-bold overflow-hidden border border-brand-gold/20">
-              {course.thumbnail_url ? (
-                <img src={course.thumbnail_url} alt="" className="w-full h-full object-cover" />
-              ) : (
-                course.title.charAt(0)
-              )}
-            </div>
-            <div className="flex flex-wrap items-center gap-3 mt-6">
-              <h1 className="text-3xl font-bold text-neutral-900">{course.title}</h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 lg:py-10">
+        <section className="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:gap-8">
+          <div className="flex flex-1 flex-col justify-center gap-3.5">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
+              {hasModules
+                ? t('trail.eyebrow', { n: String(modules.length) })
+                : `${lessons.length} ${lessons.length !== 1 ? t('common.lessons') : t('common.lesson')} · ${levelLabel}`}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="font-display text-4xl font-bold leading-[1.02] text-neutral-900 sm:text-5xl lg:text-[52px]">
+                {course.title}
+              </h1>
               {isOwner && (
                 <span className="text-xs font-bold uppercase tracking-wider bg-neutral-950 text-brand-gold px-3 py-1 rounded-full">
                   {t('myCourses.teachingBadge')}
                 </span>
               )}
             </div>
-            <p className="text-neutral-600 mt-2">{course.description}</p>
-            <p className="text-sm text-neutral-500 mt-4 flex flex-wrap items-center gap-2">
-              <span>
-                {t('course.by')} {instructor}
-              </span>
-              {(course.profiles?.role === 'instructor' || course.profiles?.role === 'admin') && (
-                <InstructorBadge label={t('course.instructorAthenas')} />
-              )}
-              <span>
-                · {lessons.length}{' '}
-                {lessons.length !== 1 ? t('common.lessons') : t('common.lesson')} · {levelLabel}
-              </span>
-            </p>
+            {course.description && (
+              <p className="hidden max-w-[560px] text-base leading-relaxed text-neutral-600 sm:block">
+                {course.description}
+              </p>
+            )}
+            {(enrolled || isOwner) && progressTotal > 0 && (
+              <div className="mt-1 flex max-w-[560px] flex-col gap-2">
+                <div className="flex justify-between text-[13px] font-bold">
+                  <span>{t('trail.yourProgress')}</span>
+                  <span className="text-brand-gold-ink">
+                    {hasModules
+                      ? t('trail.modulesProgress', {
+                          done: String(progressDone),
+                          total: String(progressTotal),
+                          pct: String(progressPct),
+                        })
+                      : `${progressDone}/${progressTotal} · ${progressPct}%`}
+                  </span>
+                </div>
+                <div className="h-2.5 overflow-hidden rounded-full bg-brand-line">
+                  <div
+                    className="h-full rounded-full bg-brand-gold transition-all duration-500"
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
-          <aside className="card-athenas p-6 h-fit sticky top-24">
-            <p className="text-2xl font-bold text-neutral-900">
-              {course.price > 0 ? `R$ ${Number(course.price).toFixed(2)}` : t('common.free')}
-            </p>
+          <aside className="flex w-full flex-col gap-4 rounded-3xl bg-neutral-950 p-6 text-brand-cream sm:p-7 lg:w-[440px] lg:shrink-0">
             {isOwner ? (
               <>
-                <p className="mt-3 text-sm text-neutral-600">{t('course.ownerHint')}</p>
-                {needsPlacement && !enrolled && (
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+                  {t('myCourses.teachingBadge')}
+                </p>
+                <p className="text-sm leading-relaxed text-neutral-300">{t('course.ownerHint')}</p>
+                <div className="mt-auto flex flex-col gap-2">
+                  {needsPlacement && !enrolled && (
+                    <button
+                      type="button"
+                      onClick={() => void handleEnroll()}
+                      disabled={enrolling || gateBusy}
+                      className="h-12 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105 disabled:opacity-60"
+                    >
+                      {enrolling || gateBusy ? t('course.enrolling') : t('placement.ownerTestCta')}
+                    </button>
+                  )}
+                  {lessons[0] && (
+                    <button
+                      type="button"
+                      onClick={startLearning}
+                      className="h-12 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105"
+                    >
+                      {t('course.previewCourse')}
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={() => void handleEnroll()}
-                    disabled={enrolling || gateBusy}
-                    className="btn-primary w-full mt-4 !py-3"
+                    disabled={deletingLessonId === 'course'}
+                    onClick={deleteOwnCourse}
+                    className="h-11 rounded-[14px] border border-red-400/40 text-sm font-semibold text-red-300 hover:bg-red-500/10 disabled:opacity-50"
                   >
-                    {enrolling || gateBusy
-                      ? t('course.enrolling')
-                      : t('placement.ownerTestCta')}
+                    {deletingLessonId === 'course' ? '...' : t('myCourses.deleteCourse')}
                   </button>
-                )}
-                {lessons[0] && (
-                  <button
-                    type="button"
-                    onClick={startLearning}
-                    className="btn-primary w-full mt-4 !py-3"
-                  >
-                    {t('course.previewCourse')}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  disabled={deletingLessonId === 'course'}
-                  onClick={deleteOwnCourse}
-                  className="w-full mt-2 py-2.5 text-sm font-semibold border border-red-200 text-red-700 rounded-full hover:bg-red-50 disabled:opacity-50"
-                >
-                  {deletingLessonId === 'course' ? '...' : t('myCourses.deleteCourse')}
-                </button>
+                </div>
               </>
-            ) : (
+            ) : !enrolled ? (
               <>
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+                  {t('trail.startEyebrow')}
+                </p>
+                <p className="font-display text-4xl font-bold">
+                  {course.price > 0 ? `R$ ${Number(course.price).toFixed(2)}` : t('common.free')}
+                </p>
                 {enrollError && (
-                  <p className="mt-3 alert-error" role="alert">
+                  <p className="alert-error" role="alert">
                     {enrollError}
                   </p>
                 )}
-                {enrolled ? (
-                  <>
-                    {justEnrolled && (
-                      <p className="mt-3 alert-brand text-xs">{t('course.enrolledNow')}</p>
-                    )}
-                    {/* Enquanto o nivelamento não for feito, o CTA principal é o teste */}
-                    {needsPlacement && !choseStartFromZero ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => void handleTakePlacement()}
-                          disabled={gateBusy}
-                          className="btn-primary w-full mt-4 !py-3 disabled:opacity-60"
-                        >
-                          {gateBusy ? t('common.loading') : t('placement.cta')}
-                        </button>
-                        <p className="text-xs text-neutral-500 mt-2 text-center leading-relaxed">
-                          {t('placement.asideHint')}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          type="button"
-                          onClick={startLearning}
-                          className="btn-primary w-full mt-4 !py-3"
-                        >
-                          {t('course.continue')}
-                        </button>
-                        {hasPlacement && (
-                          <Link
-                            to={`/nivelamento/${id}`}
-                            className="btn-secondary w-full mt-2 !py-3 inline-flex justify-center"
-                          >
-                            {t('placement.retakeCta')}
-                          </Link>
-                        )}
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => void handleEnroll()}
-                    disabled={enrolling || gateBusy}
-                    className="btn-primary w-full mt-4 !py-3"
-                  >
-                    {enrolling || gateBusy
-                      ? t('course.enrolling')
-                      : isFree
-                        ? t('course.startFree')
-                        : t('course.enroll')}
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => void handleEnroll()}
+                  disabled={enrolling || gateBusy}
+                  className="mt-auto h-12 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105 disabled:opacity-60"
+                >
+                  {enrolling || gateBusy
+                    ? t('course.enrolling')
+                    : isFree
+                      ? t('course.startFree')
+                      : t('course.enroll')}
+                </button>
                 {!user && (
-                  <p className="text-xs text-neutral-500 mt-2 text-center">
-                    <Link to="/login" className="link-athenas">{t('course.signInToEnroll')}</Link>{' '}
+                  <p className="text-center text-xs text-neutral-400">
+                    <Link to="/login" className="font-semibold text-brand-gold-light hover:underline">
+                      {t('course.signInToEnroll')}
+                    </Link>{' '}
                     {t('course.toEnroll')}
                   </p>
                 )}
               </>
+            ) : needsPlacement && !choseStartFromZero ? (
+              <>
+                {justEnrolled && <p className="alert-brand text-xs">{t('course.enrolledNow')}</p>}
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+                  {t('placement.stepTitle')}
+                </p>
+                <p className="text-sm leading-relaxed text-neutral-300">{t('placement.asideHint')}</p>
+                <button
+                  type="button"
+                  onClick={() => void handleTakePlacement()}
+                  disabled={gateBusy}
+                  className="mt-auto h-12 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105 disabled:opacity-60"
+                >
+                  {gateBusy ? t('common.loading') : t('placement.cta')}
+                </button>
+              </>
+            ) : (
+              <>
+                {justEnrolled && <p className="alert-brand text-xs">{t('course.enrolledNow')}</p>}
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+                  {courseDone ? t('certificate.readyTitle') : t('trail.continueEyebrow')}
+                </p>
+                {courseDone ? (
+                  <p className="text-sm leading-relaxed text-neutral-300">{t('trail.allDone')}</p>
+                ) : (
+                  nextTitle && (
+                    <div className="flex flex-col gap-1.5">
+                      {nextMeta && (
+                        <p className="text-[13px] font-semibold text-neutral-400">{nextMeta}</p>
+                      )}
+                      <p className="font-display text-[28px] font-bold leading-tight">{nextTitle}</p>
+                    </div>
+                  )
+                )}
+                <div className="mt-auto flex flex-wrap gap-3">
+                  {courseDone ? (
+                    <Link
+                      to={`/certificado/${id}`}
+                      className="flex h-12 flex-1 items-center justify-center rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105"
+                    >
+                      {t('certificate.getCta')}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={continueLearning}
+                      className="flex h-12 flex-1 items-center justify-center gap-2.5 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105"
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                        <path d="M7 4.5v15l12-7.5Z" />
+                      </svg>
+                      {t('trail.continueCta')}
+                    </button>
+                  )}
+                </div>
+                {hasPlacement && (
+                  <Link
+                    to={`/nivelamento/${id}`}
+                    className="self-center text-[13px] font-semibold text-neutral-400 hover:text-brand-gold-soft hover:underline"
+                  >
+                    {t('placement.retakeCta')}
+                  </Link>
+                )}
+              </>
             )}
           </aside>
-        </div>
+        </section>
 
         {manageError && (
           <p className="mt-6 alert-error" role="alert">
@@ -391,22 +471,20 @@ export function CourseDetail() {
           </p>
         )}
 
-        {trail && trail.total_lessons > 0 && trail.completed_count >= trail.total_lessons && (
+        {courseDone && enrolled && (
           <div className="mt-8 rounded-2xl border border-brand-gold/40 bg-brand-gold-soft/25 p-5 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="font-bold text-neutral-900">{t('certificate.readyTitle')}</p>
               <p className="text-sm text-neutral-600 mt-0.5">{t('certificate.readyBody')}</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {enrolled && (
-                <button
-                  type="button"
-                  onClick={() => setFeedbackOpen(true)}
-                  className="btn-secondary !px-4 !py-2.5 text-sm"
-                >
-                  {t('feedback.rateCta')}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => setFeedbackOpen(true)}
+                className="btn-secondary !px-4 !py-2.5 text-sm"
+              >
+                {t('feedback.rateCta')}
+              </button>
               <Link to={`/certificado/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
                 {t('certificate.getCta')}
               </Link>
@@ -414,127 +492,155 @@ export function CourseDetail() {
           </div>
         )}
 
-        <section className="mt-12">
-          <h2 className="text-xl font-bold mb-4 text-neutral-900">{t('course.content')}</h2>
+        <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-start">
+          <section className="min-w-0 flex-1">
+            <h2 className="mb-4 font-display text-3xl font-bold text-neutral-900">
+              {hasModules ? t('course.modulesTitle') : t('course.content')}
+            </h2>
 
-          {/* Etapa 1 da trilha: verificar conhecimento antes das aulas */}
-          {needsPlacement && (enrolled || isOwner) && (
-            <div className="mb-6 rounded-2xl border-2 border-brand-gold/50 bg-brand-gold-soft/25 p-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="flex items-start gap-3">
-                  <span className="h-9 w-9 shrink-0 rounded-full bg-neutral-950 text-brand-gold font-bold flex items-center justify-center text-sm">
-                    1
-                  </span>
-                  <div>
-                    <p className="font-bold text-neutral-900">{t('placement.stepTitle')}</p>
-                    <p className="text-sm text-neutral-600 mt-0.5 max-w-xl leading-relaxed">
-                      {t('placement.stepBody')}
-                    </p>
+            {/* Etapa 1 da trilha: verificar conhecimento antes das aulas */}
+            {needsPlacement && (enrolled || isOwner) && (
+              <div className="mb-6 rounded-2xl border-2 border-brand-gold/50 bg-brand-gold-soft/25 p-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <span className="h-9 w-9 shrink-0 rounded-full bg-neutral-950 text-brand-gold font-bold flex items-center justify-center text-sm">
+                      1
+                    </span>
+                    <div>
+                      <p className="font-bold text-neutral-900">{t('placement.stepTitle')}</p>
+                      <p className="text-sm text-neutral-600 mt-0.5 max-w-xl leading-relaxed">
+                        {t('placement.stepBody')}
+                      </p>
+                    </div>
                   </div>
+                  <Link to={`/nivelamento/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
+                    {t('placement.stepCta')}
+                  </Link>
                 </div>
-                <Link to={`/nivelamento/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
-                  {t('placement.stepCta')}
-                </Link>
               </div>
-            </div>
-          )}
-          {(enrolled || isOwner) && hasModules && (
-            <ModuleList
-              courseId={id!}
-              modules={modules}
-              isOwner={isOwner}
-              placementAvailable={needsPlacement}
-            />
-          )}
-          {isOwner && user && id && (
-            <div className="mt-6">
-              <AddModuleForm
-                courseId={id}
-                userId={user.id}
-                moduleIndex={modules.length}
-                nextLessonSort={lessons.length}
-                onCreated={() => void reloadModulesAndLessons()}
+            )}
+            {(enrolled || isOwner) && hasModules && (
+              <ModuleList
+                courseId={id!}
+                modules={modules}
+                isOwner={isOwner}
+                placementAvailable={needsPlacement}
               />
-            </div>
-          )}
-          {(enrolled || isOwner) && !hasModules && trail && trail.lessons.length > 0 && (
-            <TrilhaProgresso
-              courseId={id!}
-              lessons={trail.lessons}
-              completedCount={trail.completed_count}
-              totalLessons={trail.total_lessons}
-              canAccess={canAccessTrailLesson}
-            />
-          )}
-          {!hasModules &&
-            (isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
-            <ul className={`bg-white border border-neutral-200 rounded-2xl divide-y divide-neutral-100 ${
-              (enrolled || isOwner) && trail && trail.lessons.length > 0 ? 'mt-8' : ''
-            }`}>
-            {lessons.map((lesson, i) => (
-              <li
-                key={lesson.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3"
-              >
-                <div>
-                  <span className="text-neutral-400 text-sm mr-2">{i + 1}.</span>
-                  {lesson.title}
-                  {isOwner && (
-                    <p className="text-xs text-neutral-400 mt-0.5 ml-6">
-                      {lesson.video_url ? t('myCourses.hasVideo') : t('myCourses.noVideo')}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                  {isOwner && (
-                    <>
-                      {lesson.video_url && (
+            )}
+            {isOwner && user && id && (
+              <div className="mt-6">
+                <AddModuleForm
+                  courseId={id}
+                  userId={user.id}
+                  moduleIndex={modules.length}
+                  nextLessonSort={lessons.length}
+                  onCreated={() => void reloadModulesAndLessons()}
+                />
+              </div>
+            )}
+            {(enrolled || isOwner) && !hasModules && trail && trail.lessons.length > 0 && (
+              <TrilhaProgresso
+                courseId={id!}
+                lessons={trail.lessons}
+                completedCount={trail.completed_count}
+                totalLessons={trail.total_lessons}
+                canAccess={canAccessTrailLesson}
+              />
+            )}
+            {!hasModules &&
+              (isOwner || !enrolled || !trail || trail.lessons.length === 0) && (
+              <ul className={`bg-white border border-neutral-200 rounded-2xl divide-y divide-neutral-100 ${
+                (enrolled || isOwner) && trail && trail.lessons.length > 0 ? 'mt-8' : ''
+              }`}>
+              {lessons.map((lesson, i) => (
+                <li
+                  key={lesson.id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3"
+                >
+                  <div>
+                    <span className="text-neutral-400 text-sm mr-2">{i + 1}.</span>
+                    {lesson.title}
+                    {isOwner && (
+                      <p className="text-xs text-neutral-400 mt-0.5 ml-6">
+                        {lesson.video_url ? t('myCourses.hasVideo') : t('myCourses.noVideo')}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                    {isOwner && (
+                      <>
+                        {lesson.video_url && (
+                          <button
+                            type="button"
+                            disabled={deletingLessonId === lesson.id}
+                            onClick={() => removeLessonVideo(lesson.id)}
+                            className="text-xs font-semibold px-2.5 py-1 rounded-full border border-neutral-300 hover:border-brand-gold hover:bg-brand-gold-soft/40 disabled:opacity-50"
+                          >
+                            {t('myCourses.removeVideo')}
+                          </button>
+                        )}
                         <button
                           type="button"
                           disabled={deletingLessonId === lesson.id}
-                          onClick={() => removeLessonVideo(lesson.id)}
-                          className="text-xs font-semibold px-2.5 py-1 rounded-full border border-neutral-300 hover:border-brand-gold hover:bg-brand-gold-soft/40 disabled:opacity-50"
+                          onClick={() => deleteLessonById(lesson.id)}
+                          className="text-xs font-semibold px-2.5 py-1 rounded-full border border-red-200 text-red-700 hover:bg-red-50 disabled:opacity-50"
                         >
-                          {t('myCourses.removeVideo')}
+                          {t('myCourses.deleteLesson')}
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        disabled={deletingLessonId === lesson.id}
-                        onClick={() => deleteLessonById(lesson.id)}
-                        className="text-xs font-semibold px-2.5 py-1 rounded-full border border-red-200 text-red-700 hover:bg-red-50 disabled:opacity-50"
+                      </>
+                    )}
+                    {canAccessTrailLesson(lesson) ? (
+                      <Link
+                        to={`/assistir/${id}/${lesson.id}`}
+                        className="text-sm link-athenas"
                       >
-                        {t('myCourses.deleteLesson')}
-                      </button>
-                    </>
-                  )}
-                  {canAccessTrailLesson(lesson) ? (
-                    <Link
-                      to={`/assistir/${id}/${lesson.id}`}
-                      className="text-sm link-athenas"
-                    >
-                      {t('course.watch')}
-                    </Link>
-                  ) : enrolled && !isOwner ? (
-                    <span className="text-xs text-neutral-400">{t('trail.locked')}</span>
-                  ) : (
-                    !isOwner && (
-                      <span className="text-xs text-neutral-400">
-                        {isFree ? t('course.startFreeShort') : t('course.enrollToWatch')}
-                      </span>
-                    )
-                  )}
-                </div>
-              </li>
-            ))}
-            {lessons.length === 0 && (
-              <li className="px-4 py-8 text-center rounded-2xl border border-brand-gold/30 bg-brand-gold-soft/20 m-3 text-neutral-600 shadow-sm">
-                {t('course.noLessons')}
-              </li>
+                        {t('course.watch')}
+                      </Link>
+                    ) : enrolled && !isOwner ? (
+                      <span className="text-xs text-neutral-400">{t('trail.locked')}</span>
+                    ) : (
+                      !isOwner && (
+                        <span className="text-xs text-neutral-400">
+                          {isFree ? t('course.startFreeShort') : t('course.enrollToWatch')}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </li>
+              ))}
+              {lessons.length === 0 && (
+                <li className="px-4 py-8 text-center rounded-2xl border border-brand-gold/30 bg-brand-gold-soft/20 m-3 text-neutral-600 shadow-sm">
+                  {t('course.noLessons')}
+                </li>
+              )}
+              </ul>
             )}
-            </ul>
+          </section>
+
+          {(enrolled || isOwner) && (
+            <aside className="flex w-full flex-col gap-4 lg:w-[360px] lg:shrink-0 lg:pt-14">
+              <AssistantCard />
+
+              <div className="flex items-center gap-3.5 rounded-[20px] bg-brand-gold-soft p-5">
+                <svg className="h-9 w-9 shrink-0 text-brand-gold-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <circle cx="12" cy="9" r="6" />
+                  <path d="m8.5 14-1.5 8 5-3 5 3-1.5-8" />
+                </svg>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-extrabold">{t('certificate.cardTitle')}</p>
+                  <p className="text-[13px] leading-snug text-neutral-600">
+                    {courseDone ? t('certificate.cardReady') : t('certificate.cardLocked')}
+                  </p>
+                </div>
+                {courseDone && (
+                  <Link to={`/certificado/${id}`} className="btn-primary shrink-0 !px-4 !py-2 text-sm">
+                    {t('certificate.getCta')}
+                  </Link>
+                )}
+              </div>
+            </aside>
           )}
-        </section>
+        </div>
       </div>
 
       {showPlacementPopup && id && (
