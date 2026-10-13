@@ -544,7 +544,7 @@ begin
 
   if v_xp > 0 then
     update public.user_xp
-      set total_xp = total_xp + v_xp, updated_at = now()
+      set total_xp = public.user_xp.total_xp + v_xp, updated_at = now()
       where user_id = uid;
 
     insert into public.xp_events (user_id, amount, reason, lesson_id)
