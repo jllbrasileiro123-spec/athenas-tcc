@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { PhoenixMark } from './PhoenixMark'
+import { BrandMark } from './BrandMark'
 import { useGamification } from '../contexts/GamificationContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { FREEZE_COST } from '../lib/gamification'
@@ -117,7 +117,7 @@ export function StreakWidget() {
       {showBroken && (
         <div className="fixed inset-0 z-[180] flex items-center justify-center bg-neutral-950/70 px-4">
           <div className="w-full max-w-sm rounded-3xl bg-white border border-brand-gold/30 p-7 text-center shadow-xl">
-            <PhoenixMark className="mx-auto h-16 w-16" />
+            <BrandMark framed className="mx-auto h-16 w-16" alt="" />
             <p className="mt-4 text-lg font-bold text-neutral-900">
               {t('streak.brokenTitle', { n: String(status.broken_from) })}
             </p>

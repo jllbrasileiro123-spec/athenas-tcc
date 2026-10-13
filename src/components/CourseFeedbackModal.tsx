@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
-import { PhoenixMark } from './PhoenixMark'
+import { BrandMark } from './BrandMark'
 import {
   dismissFeedback,
   fetchMyFeedback,
@@ -99,7 +99,7 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
       <div className="celebration-pop w-full max-w-md max-h-[92vh] overflow-y-auto rounded-3xl border border-brand-gold/40 bg-brand-cream p-6 sm:p-8 shadow-2xl">
         {done ? (
           <div className="text-center">
-            <PhoenixMark className="mx-auto h-20 w-20" glow />
+            <BrandMark framed className="mx-auto h-20 w-20 brand-glow" alt="" />
             <p id="feedback-title" className="mt-4 text-xl font-bold text-neutral-900">
               {t('feedback.thanks')}
             </p>

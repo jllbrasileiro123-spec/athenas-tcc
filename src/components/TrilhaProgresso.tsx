@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PhoenixMark } from './PhoenixMark'
+import { BrandMark } from './BrandMark'
 import { useLanguage } from '../contexts/LanguageContext'
 import type { TranslationKey } from '../i18n/translations'
 import type { TrailLesson } from '../lib/gamification'
@@ -71,9 +71,9 @@ export function TrilhaProgresso({
                 }`}
               >
                 {lesson.completed ? (
-                  <PhoenixMark className="h-9 w-9" glow />
+                  <BrandMark framed className="h-9 w-9 brand-glow" alt="" />
                 ) : isCurrent && accessible ? (
-                  <PhoenixMark className="h-9 w-9" glow />
+                  <BrandMark framed className="h-9 w-9 brand-glow" alt="" />
                 ) : accessible ? (
                   <span className="text-sm font-bold text-neutral-700">{i + 1}</span>
                 ) : (

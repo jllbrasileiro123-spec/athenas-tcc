@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PhoenixMark } from './PhoenixMark'
+import { BrandMark } from './BrandMark'
 import { useLanguage } from '../contexts/LanguageContext'
 import type { CompleteLessonResult } from '../lib/gamification'
 
@@ -23,7 +23,7 @@ export function CelebrationModal({ result, courseId, onClose }: CelebrationModal
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-neutral-950/85 px-4">
       <div className="celebration-pop w-full max-w-md rounded-3xl border border-brand-gold/40 bg-brand-cream p-8 text-center shadow-2xl">
-        <PhoenixMark className="mx-auto h-28 w-28" glow />
+        <BrandMark framed className="mx-auto h-28 w-28 brand-glow" alt="" />
         <p className="mt-5 text-2xl font-bold text-neutral-900 leading-snug">
           {t('celebrate.title', { title: result.lesson_title })}
         </p>
