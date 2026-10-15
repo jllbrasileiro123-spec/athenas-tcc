@@ -11,7 +11,7 @@ export function MobileTabBar() {
 
   return (
     <nav
-      className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-brand-gold/20 bg-white/95 backdrop-blur pb-[env(safe-area-inset-bottom)]"
+      className="md:hidden fixed inset-x-0 bottom-0 z-50 border-t border-brand-gold/20 bg-white pb-[env(safe-area-inset-bottom)]"
       aria-label={t('nav.mobile')}
     >
       <div className="grid grid-cols-[repeat(auto-fit,minmax(0,1fr))] h-14">

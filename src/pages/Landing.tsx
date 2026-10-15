@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { BrandMark } from '../components/BrandMark'
 import { AthenaMark } from '../components/AthenaMark'
+import { BrandSplash } from '../components/BrandSplash'
 
 const base = import.meta.env.BASE_URL
 
@@ -95,7 +96,7 @@ const FAQ = [
 /* ------------------------------------------------------------------ */
 
 export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
-  const { user } = useAuth()
+  const { user, initializing } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -105,6 +106,9 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Evita piscar a landing para quem abre o app instalado já logado
+  if (initializing && !alwaysShow) return <BrandSplash fullScreen />
 
   // Quem já está logado (ex.: abriu o app instalado) vai direto para a plataforma
   if (user && !alwaysShow) return <Navigate to="/explorar" replace />
@@ -119,11 +123,11 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled || menuOpen
-            ? 'bg-brand-cream/85 backdrop-blur-xl border-b border-brand-gold/20'
+            ? 'bg-brand-cream/95 sm:bg-brand-cream/85 sm:backdrop-blur-xl border-b border-brand-gold/20'
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
           <Link to="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setMenuOpen(false)}>
             <BrandMark framed className="h-9 w-9" alt="" />
             <span className="font-display text-xl font-bold tracking-[0.08em]">ATHENAS</span>
@@ -156,7 +160,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
-              className="lg:hidden ml-1 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-800"
+              className="lg:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-800"
               aria-label="Abrir menu"
               aria-expanded={menuOpen}
             >
@@ -539,7 +543,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 function HeroMockup() {
   return (
     <div className="landing-fade-up relative mx-auto w-full max-w-lg [animation-delay:150ms] lg:max-w-none">
-      <div className="landing-mock relative rounded-3xl border border-brand-gold/20 bg-white p-5 shadow-2xl shadow-black/10 backdrop-blur sm:p-6">
+      <div className="landing-mock relative rounded-3xl border border-brand-gold/20 bg-white p-5 shadow-2xl shadow-black/10 sm:backdrop-blur sm:p-6">
         {/* barra do "app" */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

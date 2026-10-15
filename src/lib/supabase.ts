@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, processLock } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim() ?? ''
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ?? ''
@@ -27,6 +27,9 @@ export const supabase = createClient(
       detectSessionInUrl: true,
       persistSession: true,
       autoRefreshToken: true,
+      // O padrão (navigator.locks) prende o login por até 5 s no celular logo
+      // após sair da conta; o lock em memória não tem essa espera
+      lock: processLock,
     },
   }
 )

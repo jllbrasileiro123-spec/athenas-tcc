@@ -1,15 +1,15 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { InstructorRoute } from './components/InstructorRoute'
 import { AdminRoute } from './components/AdminRoute'
 import { BrandSplash } from './components/BrandSplash'
 import { InstallAppBanner } from './components/InstallAppBanner'
-import { Login } from './pages/Login'
 import { Landing } from './pages/Landing'
 import { AuthCallback } from './pages/AuthCallback'
 
+const Layout = lazy(() => import('./components/Layout').then((m) => ({ default: m.Layout })))
+const Login = lazy(() => import('./pages/Login').then((m) => ({ default: m.Login })))
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })))
 const CourseDetail = lazy(() => import('./pages/CourseDetail').then((m) => ({ default: m.CourseDetail })))
 const MyCourses = lazy(() => import('./pages/MyCourses').then((m) => ({ default: m.MyCourses })))

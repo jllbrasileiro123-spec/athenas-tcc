@@ -4,10 +4,10 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { BrandSplash } from './BrandSplash'
 
 export function InstructorRoute({ children }: { children: React.ReactNode }) {
-  const { profile, initializing } = useAuth()
+  const { user, profile, initializing, profileLoading } = useAuth()
   const { t } = useLanguage()
 
-  if (initializing) {
+  if (initializing || (user && !profile && profileLoading)) {
     return <BrandSplash />
   }
 

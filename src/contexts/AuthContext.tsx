@@ -22,6 +22,8 @@ interface AuthContextValue {
   profile: Profile | null
   /** true até saber se há sessão (não espera o perfil) */
   initializing: boolean
+  /** true enquanto o perfil (role) está sendo buscado */
+  profileLoading: boolean
   signUp: (email: string, password: string, fullName: string, role?: string) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signInWithOAuth: (provider: 'google') => Promise<{ error: string | null }>
@@ -45,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [initializing, setInitializing] = useState(true)
+  const [profileLoading, setProfileLoading] = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const profileUserRef = useRef<string | null>(null)
 
@@ -61,11 +64,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const fetchProfile = useCallback(async (userId: string) => {
+    setProfileLoading(true)
     const { data, error } = await supabase
       .from('profiles')
       .select(PROFILE_SELECT)
       .eq('id', userId)
       .single()
+    setProfileLoading(false)
 
     if (!error && data) {
       const p = { ...(data as object), phone: null } as Profile
@@ -96,13 +101,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void supabase.auth.getSession().then(({ data: { session: s } }) => {
       if (cancelled) return
       applySession(s)
-      if (s?.user) {
-        void fetchProfile(s.user.id).finally(() => {
-          if (!cancelled) setInitializing(false)
-        })
-      } else {
-        setInitializing(false)
-      }
+      // Libera a tela assim que a sessão é conhecida; o perfil chega em seguida
+      // (só as rotas de instrutor/admin esperam por ele)
+      setInitializing(false)
+      if (s?.user) void fetchProfile(s.user.id)
     })
 
     const {
@@ -130,20 +132,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [applySession, fetchProfile])
 
-  // Recarrega o role quando a aba volta ao foco (ex.: após virar admin no SQL)
+  // Recarrega o role quando a aba volta ao foco (ex.: após virar admin no SQL).
+  // No celular isso dispara toda hora; no máximo uma vez a cada 5 min para não
+  // disputar o lock de auth com o login.
+  const lastProfileFocusFetch = useRef(0)
   useEffect(() => {
     function onVisible() {
-      if (document.visibilityState === 'visible' && user?.id) {
-        clearProfileCache()
-        void fetchProfile(user.id)
-      }
+      if (document.visibilityState !== 'visible' || !user?.id) return
+      const now = Date.now()
+      if (now - lastProfileFocusFetch.current < 5 * 60 * 1000) return
+      lastProfileFocusFetch.current = now
+      void fetchProfile(user.id)
     }
     document.addEventListener('visibilitychange', onVisible)
-    window.addEventListener('focus', onVisible)
-    return () => {
-      document.removeEventListener('visibilitychange', onVisible)
-      window.removeEventListener('focus', onVisible)
-    }
+    return () => document.removeEventListener('visibilitychange', onVisible)
   }, [user?.id, fetchProfile])
 
   const signUp = async (
@@ -311,6 +313,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       profile,
       initializing,
+      profileLoading,
       signUp,
       signIn,
       signInWithOAuth,
@@ -322,7 +325,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       uploadingAvatar,
       updateProfile,
     }),
-    [user, session, profile, initializing, refreshProfile, uploadingAvatar]
+    [user, session, profile, initializing, profileLoading, refreshProfile, uploadingAvatar]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -14,10 +14,14 @@
     <meta name="description" content="ATHENAS — capacitação em IA no cotidiano jurídico, com a assistente Athena." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonte carregada sem bloquear a primeira pintura (pesa no 4G) -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
+    <link rel="preload" as="image" href="%BASE_URL%brand/avatar-athena-header.png" />
     <title>ATHENAS — IA no Cotidiano Jurídico</title>
   </head>
   <body>

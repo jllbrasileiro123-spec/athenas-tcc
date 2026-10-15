@@ -206,8 +206,9 @@ export function UserAvatarMenu() {
                 danger
                 onClick={() => {
                   setOpen(false)
-                  void signOut()
-                  navigate('/', { replace: true })
+                  // Só sai da tela quando o Supabase terminou de limpar a sessão,
+                  // para o próximo login não ficar esperando por ele
+                  void signOut().finally(() => navigate('/', { replace: true }))
                 }}
               >
                 {t('menu.signOut')}

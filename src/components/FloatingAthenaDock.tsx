@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { AthenaAssistant } from './AthenaAssistant'
 import { AthenaMark } from './AthenaMark'
 import { useLanguage } from '../contexts/LanguageContext'
 import { OPEN_ATHENA_EVENT } from '../lib/athenaDock'
+
+// O chat (e as respostas prontas) só é baixado quando o aluno abre a Athena
+const AthenaAssistant = lazy(() => import('./AthenaAssistant').then((m) => ({ default: m.AthenaAssistant })))
 
 /**
  * Botão flutuante + chat de dúvidas em todas as páginas (exceto o hub demo).
@@ -32,7 +34,9 @@ export function FloatingAthenaDock() {
   if (open) {
     return (
       <div className="fixed z-[61] inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] md:inset-x-auto md:bottom-6 md:right-6">
-        <AthenaAssistant dock onClose={() => setOpen(false)} />
+        <Suspense fallback={null}>
+          <AthenaAssistant dock onClose={() => setOpen(false)} />
+        </Suspense>
       </div>
     )
   }

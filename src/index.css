@@ -285,6 +285,25 @@ html:has(.landing) {
   }
 }
 
+/* Celular: sem blur e sem animações infinitas — pesam na GPU e travam o scroll */
+@media (max-width: 639px) {
+  .landing-glow {
+    filter: none;
+  }
+  .landing-text-gold,
+  .landing-float,
+  .landing-float-slow {
+    animation: none;
+  }
+  .landing-fade-up {
+    animation-duration: 0.4s;
+  }
+  .landing-reveal {
+    transform: none;
+    transition-duration: 0.4s;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:has(.landing) {
     scroll-behavior: auto;
