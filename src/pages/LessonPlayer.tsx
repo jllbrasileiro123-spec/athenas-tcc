@@ -10,9 +10,9 @@ import { CelebrationModal } from '../components/CelebrationModal'
 import { QuizTaker } from '../components/QuizTaker'
 import { LessonDoubts } from '../components/LessonDoubts'
 import { MaterialLink } from '../components/MaterialLink'
+import { CourseContentSidebar } from '../components/CourseContentSidebar'
 import {
   fetchCourseModules,
-  moduleShortTitle,
   moduleTopics,
   type CourseModule,
   type ModuleMaterial,
@@ -160,7 +160,10 @@ export function LessonPlayer() {
         { isOwner }
       ))
   const isQuiz = current?.content_type === 'quiz' || current?.content_type === 'simulado'
-  const isPodcast = trailLessons.find((l) => l.id === lessonId)?.item_kind === 'podcast'
+  const currentKind = trailLessons.find((l) => l.id === lessonId)?.item_kind ?? current?.item_kind
+  const isPodcast = currentKind === 'podcast'
+  // Exercício prático: enunciado + vídeo de resolução (item_kind 'tutorial')
+  const isExercise = currentKind === 'tutorial' && !isQuiz
 
   // A lateral abre já rolada até o módulo da aula atual
   const currentModuleId = current?.module_id ?? null
@@ -202,7 +205,9 @@ export function LessonPlayer() {
   const topics = moduleTopics(currentModule?.description)
   const kindLabel = isQuiz
     ? t('module.kindShortQuiz')
-    : isPodcast
+    : isExercise
+      ? t('module.kindShortExercise')
+      : isPodcast
       ? t('module.kindShortPodcast')
       : t('module.kindShortLesson')
   const doneCount = trailLessons.filter((l) =>
@@ -239,7 +244,34 @@ export function LessonPlayer() {
                 noAudioLabel={t('module.noAudio')}
                 onNearComplete={completed ? undefined : () => void markComplete()}
               />
-            ) : isQuiz ? null : (
+            ) : isQuiz ? null : isExercise ? (
+              <div className="flex flex-col gap-4">
+                <section className="rounded-[20px] border border-brand-line bg-white p-5 sm:p-6">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                    {t('exercise.statement')}
+                  </p>
+                  <div className="mt-2 whitespace-pre-line leading-relaxed text-neutral-800">
+                    {current.description}
+                  </div>
+                  <p className="mt-4 rounded-xl bg-brand-cream px-3.5 py-2.5 text-sm font-semibold text-neutral-700">
+                    {t('exercise.tryFirst')}
+                  </p>
+                </section>
+                <div>
+                  <p className="mb-2 text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                    {t('exercise.solutionVideo')}
+                  </p>
+                  <div className="aspect-video overflow-hidden rounded-[20px] bg-neutral-900">
+                    <LessonVideoPlayer
+                      videoUrl={current.video_url}
+                      title={current.title}
+                      noVideoLabel={t('exercise.noVideo')}
+                      onNearComplete={completed ? undefined : () => void markComplete()}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
               <div className="aspect-video overflow-hidden rounded-[20px] bg-neutral-900">
                 <LessonVideoPlayer
                   videoUrl={current.video_url}
@@ -251,20 +283,21 @@ export function LessonPlayer() {
             )}
           </div>
 
-          <div className="mt-5 flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
+          <div className="mt-5 flex flex-col gap-4">
             <div className="flex min-w-0 flex-col gap-1.5">
               <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
                 {moduleIndex >= 0
                   ? `${t('module.label', { n: String(moduleIndex + 1) })} · ${kindLabel}`
                   : kindLabel}
               </p>
-              <h1 className="font-display text-3xl font-bold leading-[1.1] text-neutral-900 sm:text-4xl">
+              <h1 className="font-display text-[26px] font-bold leading-[1.15] text-neutral-900 sm:text-[32px]">
                 {current.title}
               </h1>
             </div>
-            <div className="flex shrink-0 flex-wrap items-center gap-2.5">
+            {(completed || !isQuiz || (next && nextUnlocked)) && (
+            <div className="flex flex-wrap items-center gap-2.5 border-y border-brand-line py-3 sm:justify-end">
               {completed && (
-                <span className="inline-flex items-center gap-1.5 text-sm font-bold text-emerald-800">
+                <span className="mr-auto inline-flex items-center gap-1.5 text-sm font-bold text-emerald-800">
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d="m5 12.5 4.5 4.5L19 7.5" />
                   </svg>
@@ -276,9 +309,9 @@ export function LessonPlayer() {
                   type="button"
                   disabled={completing}
                   onClick={() => void markComplete()}
-                  className="h-[46px] rounded-[14px] border border-[#d9cfb8] bg-white px-4 text-sm font-bold text-neutral-900 hover:border-neutral-900 disabled:opacity-60"
+                  className="mr-auto h-[46px] rounded-[14px] border border-[#d9cfb8] bg-white px-4 text-sm font-bold text-neutral-900 hover:border-neutral-900 disabled:opacity-60"
                 >
-                  {completing ? t('common.loading') : t('lesson.complete')}
+                  {completing ? t('common.loading') : isExercise ? t('exercise.complete') : t('lesson.complete')}
                 </button>
               )}
               {next && nextUnlocked && (
@@ -301,6 +334,7 @@ export function LessonPlayer() {
                 <span className="text-xs text-neutral-500">{t('trail.locked')}</span>
               )}
             </div>
+            )}
           </div>
 
           {isQuiz && (
@@ -336,7 +370,7 @@ export function LessonPlayer() {
           <div className="mt-4">
             {tab === 'about' && (
               <div className="flex flex-col gap-4">
-                {current.description && (
+                {current.description && !isExercise && (
                   <p className="leading-relaxed text-neutral-600">{current.description}</p>
                 )}
                 {topics.length > 0 && (
@@ -372,9 +406,12 @@ export function LessonPlayer() {
           </div>
         </main>
 
-        <aside className="flex w-full flex-col border-t border-brand-line bg-white lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:w-[380px] lg:shrink-0 lg:border-l lg:border-t-0">
-          <div className="flex flex-col gap-2.5 px-6 pb-3 pt-5">
-            <h2 className="font-display text-2xl font-bold text-neutral-900">{t('course.content')}</h2>
+        <aside className="flex w-full flex-col border-t border-brand-line bg-white lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:w-[400px] lg:shrink-0 lg:border-l lg:border-t-0">
+          <div className="flex flex-col gap-2.5 px-5 pb-4 pt-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 className="font-display text-2xl font-bold text-neutral-900">{t('course.content')}</h2>
+              <span className="text-sm font-extrabold text-brand-gold-ink">{donePct}%</span>
+            </div>
             <div className="h-2 overflow-hidden rounded-full bg-brand-line">
               <div className="h-full rounded-full bg-brand-gold transition-all duration-500" style={{ width: `${donePct}%` }} />
             </div>
@@ -383,154 +420,61 @@ export function LessonPlayer() {
             </p>
           </div>
 
-          <div ref={sidebarRef} className="flex flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-24 pt-1">
-            {sidebarModules.length > 0
-              ? sidebarModules.map((mod, mi) => {
-                  const modState = mod.completed ? 'done' : isOwner || mod.unlocked ? 'current' : 'locked'
-                  return (
-                    <section
-                      key={mod.id}
-                      data-current-module={mod.id === current.module_id ? 'true' : undefined}
-                      className={`flex flex-col gap-1.5 rounded-2xl px-3.5 py-3 ${
-                        mod.id === current.module_id
-                          ? 'border-2 border-brand-gold bg-white'
-                          : modState === 'locked'
-                            ? 'border border-brand-line bg-neutral-50'
-                            : 'border border-brand-line bg-white'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <p
-                          className={`text-[11px] font-extrabold uppercase tracking-[0.14em] ${
-                            modState === 'done'
-                              ? 'text-emerald-800'
-                              : modState === 'current'
-                                ? 'text-brand-gold-ink'
-                                : 'text-neutral-400'
-                          }`}
-                        >
-                          {t('module.label', { n: String(mi + 1) })}
-                        </p>
-                        <span
-                          className={`text-[11px] font-extrabold ${
-                            modState === 'done'
-                              ? 'text-emerald-800'
-                              : modState === 'current'
-                                ? 'text-brand-gold-ink'
-                                : 'text-neutral-400'
-                          }`}
-                        >
-                          {modState === 'done'
-                            ? t('module.completed')
-                            : modState === 'current'
-                              ? t('module.inProgress')
-                              : t('module.locked')}
-                        </span>
-                      </div>
-                      <p
-                        className={`text-sm font-extrabold leading-snug ${
-                          modState === 'locked' ? 'text-neutral-400' : 'text-neutral-900'
-                        }`}
-                      >
-                        {moduleShortTitle(mod.title)}
-                      </p>
-                      {mod.id === current.module_id && (
-                      <ul className="flex flex-col gap-0.5">
-                        {mod.items.map((item) => {
-                          const done = item.completed || (item.id === current.id && completed)
-                          const unlocked =
-                            isOwner ||
-                            mod.unlocked ||
-                            trailLessons.length === 0 ||
-                            isLessonSequentiallyUnlocked(trailLessons, item.id, { isOwner })
-                          const active = item.id === lessonId
-                          const inner = (
-                            <>
-                              <span
-                                className={`h-2 w-2 shrink-0 rounded-full ${
-                                  done ? 'bg-emerald-700' : active ? 'bg-brand-gold' : 'bg-neutral-300'
-                                }`}
-                              />
-                              <span className="min-w-0 flex-1">
-                                <span className="block text-[13px] font-bold">
-                                  {item.title.replace(/^M\d+ · /, '')}
-                                </span>
-                                {!unlocked && (
-                                  <span className="block text-[10px] font-semibold text-neutral-400">
-                                    {t('trail.locked')}
-                                  </span>
-                                )}
-                              </span>
-                            </>
-                          )
-                          return (
-                            <li key={item.id}>
-                              {unlocked ? (
-                                <Link
-                                  to={`/assistir/${courseId}/${item.id}`}
-                                  className={`flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 ${
-                                    active
-                                      ? 'bg-brand-gold-soft text-neutral-900'
-                                      : 'text-neutral-900 hover:bg-brand-cream'
-                                  }`}
-                                >
-                                  {inner}
-                                </Link>
-                              ) : (
-                                <span className="flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-neutral-400">
-                                  {inner}
-                                </span>
-                              )}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                      )}
-                    </section>
-                  )
-                })
-              : (
-                <ul className="flex flex-col gap-0.5 text-sm">
-                  {lessons.map((l, i) => {
-                    const trailNode = trailLessons.find((n) => n.id === l.id)
-                    const done = !!trailNode?.completed
-                    const unlocked =
-                      isOwner ||
-                      l.is_preview ||
-                      trailLessons.length === 0 ||
-                      isLessonSequentiallyUnlocked(trailLessons, l.id, { isOwner })
-                    const label = (
-                      <>
-                        {done ? '✓ ' : `${i + 1}. `}
-                        {l.title}
-                        {!unlocked ? (
-                          <span className="block text-[10px] text-neutral-400">
-                            {t('trail.locked')}
-                          </span>
-                        ) : null}
-                      </>
-                    )
-                    return (
-                      <li key={l.id}>
-                        {unlocked ? (
-                          <Link
-                            to={`/assistir/${courseId}/${l.id}`}
-                            className={`block rounded-[10px] px-2.5 py-2 hover:bg-brand-cream ${
-                              l.id === lessonId ? 'bg-brand-gold-soft font-bold' : 'text-neutral-800'
-                            }`}
-                          >
-                            {label}
-                          </Link>
-                        ) : (
-                          <span className="block rounded-[10px] px-2.5 py-2 text-neutral-400">
-                            {label}
-                          </span>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
+          <div ref={sidebarRef} className="scroll-thin flex-1 overflow-y-auto border-t border-brand-line pb-24 lg:pb-6">
+            {sidebarModules.length > 0 && courseId && lessonId ? (
+              <CourseContentSidebar
+                courseId={courseId}
+                modules={sidebarModules}
+                trailLessons={trailLessons}
+                currentLessonId={lessonId}
+                currentModuleId={current.module_id ?? null}
+                currentCompleted={completed}
+                isOwner={isOwner}
+              />
+            ) : (
+              <div className="px-4 pt-2">
+                  <ul className="flex flex-col gap-0.5 text-sm">
+                    {lessons.map((l, i) => {
+                      const trailNode = trailLessons.find((n) => n.id === l.id)
+                      const done = !!trailNode?.completed
+                      const unlocked =
+                        isOwner ||
+                        l.is_preview ||
+                        trailLessons.length === 0 ||
+                        isLessonSequentiallyUnlocked(trailLessons, l.id, { isOwner })
+                      const label = (
+                        <>
+                          {done ? '✓ ' : `${i + 1}. `}
+                          {l.title}
+                          {!unlocked ? (
+                            <span className="block text-[10px] text-neutral-400">
+                              {t('trail.locked')}
+                            </span>
+                          ) : null}
+                        </>
+                      )
+                      return (
+                        <li key={l.id}>
+                          {unlocked ? (
+                            <Link
+                              to={`/assistir/${courseId}/${l.id}`}
+                              className={`block rounded-[10px] px-2.5 py-2 hover:bg-brand-cream ${
+                                l.id === lessonId ? 'bg-brand-gold-soft font-bold' : 'text-neutral-800'
+                              }`}
+                            >
+                              {label}
+                            </Link>
+                          ) : (
+                            <span className="block rounded-[10px] px-2.5 py-2 text-neutral-400">
+                              {label}
+                            </span>
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ul>
+              </div>
+            )}
           </div>
 
         </aside>

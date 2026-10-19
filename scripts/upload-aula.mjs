@@ -156,7 +156,7 @@ async function main() {
     description: args.descricao ?? `Aula ${n} com vídeo e material de apoio.`,
     video_url: isYoutube ? videoUrl : `${videoUrl}?t=${Date.now()}`,
     duration_minutes: Number(args.duracao) || 15,
-    // Ordem global na trilha: Módulo N ocupa a faixa (N-1)*10 (quiz = +1)
+    // Ordem global na trilha: Módulo N ocupa a faixa (N-1)*10 (exercício = +1, quiz = +2)
     sort_order: sortOrder * 10,
     is_preview: true,
     content_type: 'lesson',

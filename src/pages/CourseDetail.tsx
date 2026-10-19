@@ -280,8 +280,8 @@ export function CourseDetail() {
   return (
     <div className="page-shell">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 lg:py-10">
-        <section className="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:gap-8">
-          <div className="flex flex-1 flex-col justify-center gap-3.5">
+        <section className="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:gap-10">
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-3.5">
             <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
               {hasModules
                 ? t('trail.eyebrow', { n: String(modules.length) })
@@ -298,12 +298,12 @@ export function CourseDetail() {
               )}
             </div>
             {course.description && (
-              <p className="hidden max-w-[560px] text-base leading-relaxed text-neutral-600 sm:block">
+              <p className="hidden max-w-[640px] text-base leading-relaxed text-neutral-600 sm:block">
                 {course.description}
               </p>
             )}
             {(enrolled || isOwner) && progressTotal > 0 && (
-              <div className="mt-1 flex max-w-[560px] flex-col gap-2">
+              <div className="mt-2 flex w-full flex-col gap-2">
                 <div className="flex justify-between text-[13px] font-bold">
                   <span>{t('trail.yourProgress')}</span>
                   <span className="text-brand-gold-ink">
@@ -326,7 +326,7 @@ export function CourseDetail() {
             )}
           </div>
 
-          <aside className="flex w-full flex-col gap-4 rounded-3xl bg-neutral-950 p-6 text-brand-cream sm:p-7 lg:w-[440px] lg:shrink-0">
+          <aside className="flex w-full flex-col gap-4 rounded-3xl bg-neutral-950 p-6 text-brand-cream sm:p-7 lg:w-[380px] lg:shrink-0">
             {isOwner ? (
               <>
                 <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
@@ -492,7 +492,7 @@ export function CourseDetail() {
           </div>
         )}
 
-        <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-start">
+        <div className="mt-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
           <section className="min-w-0 flex-1">
             <h2 className="mb-4 font-display text-3xl font-bold text-neutral-900">
               {hasModules ? t('course.modulesTitle') : t('course.content')}
@@ -501,8 +501,8 @@ export function CourseDetail() {
             {/* Etapa 1 da trilha: verificar conhecimento antes das aulas */}
             {needsPlacement && (enrolled || isOwner) && (
               <div className="mb-6 rounded-2xl border-2 border-brand-gold/50 bg-brand-gold-soft/25 p-5">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="flex items-start gap-3">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 items-start gap-3">
                     <span className="h-9 w-9 shrink-0 rounded-full bg-neutral-950 text-brand-gold font-bold flex items-center justify-center text-sm">
                       1
                     </span>
@@ -513,7 +513,7 @@ export function CourseDetail() {
                       </p>
                     </div>
                   </div>
-                  <Link to={`/nivelamento/${id}`} className="btn-primary !px-4 !py-2.5 text-sm">
+                  <Link to={`/nivelamento/${id}`} className="btn-primary shrink-0 self-start !px-4 !py-2.5 text-sm sm:self-center">
                     {t('placement.stepCta')}
                   </Link>
                 </div>
@@ -618,7 +618,7 @@ export function CourseDetail() {
           </section>
 
           {(enrolled || isOwner) && (
-            <aside className="flex w-full flex-col gap-4 lg:w-[360px] lg:shrink-0 lg:pt-14">
+            <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-24 lg:w-[380px] lg:shrink-0 lg:pt-[60px]">
               <AssistantCard />
 
               <div className="flex items-center gap-3.5 rounded-[20px] bg-brand-gold-soft p-5">

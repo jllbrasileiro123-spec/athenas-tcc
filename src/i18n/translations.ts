@@ -614,7 +614,7 @@ export const translations = {
   'module.materials': { pt: 'Materiais do módulo', en: 'Module materials' },
   'module.optional': { pt: 'opcional', en: 'optional' },
   'module.kindExplicacao': { pt: 'Vídeo de explicação', en: 'Explanation video' },
-  'module.kindTutorial': { pt: 'Vídeo de tutorial', en: 'Tutorial video' },
+  'module.kindTutorial': { pt: 'Exercício prático', en: 'Hands-on exercise' },
   'module.kindPodcast': { pt: 'Podcast (áudio)', en: 'Podcast (audio)' },
   'module.kindExercicio': { pt: 'Exercício de avaliação', en: 'Assessment exercise' },
   'module.noAudio': {
@@ -1560,6 +1560,17 @@ export const translations = {
   'module.kindShortLesson': { pt: 'Aula em vídeo', en: 'Video lesson' },
   'module.kindShortPodcast': { pt: 'Podcast', en: 'Podcast' },
   'module.kindShortQuiz': { pt: 'Quiz', en: 'Quiz' },
+  'module.kindShortExercise': { pt: 'Exercício prático', en: 'Hands-on exercise' },
+  'sidebar.moduleMeta': { pt: '{done}/{total} concluídos · {min} min', en: '{done}/{total} done · {min} min' },
+  'sidebar.material': { pt: 'Material de apoio', en: 'Support material' },
+  'exercise.statement': { pt: 'Enunciado', en: 'Assignment' },
+  'exercise.tryFirst': {
+    pt: 'Tente resolver sozinho antes de assistir. Depois compare sua resposta com a resolução em vídeo.',
+    en: 'Try to solve it on your own first, then compare your answer with the video walkthrough.',
+  },
+  'exercise.solutionVideo': { pt: 'Vídeo de resolução', en: 'Solution video' },
+  'exercise.noVideo': { pt: 'O vídeo de resolução será publicado em breve.', en: 'The solution video will be published soon.' },
+  'exercise.complete': { pt: 'Concluir exercício', en: 'Complete exercise' },
   'assistant.cardTitle': {
     pt: 'Tire suas dúvidas com nosso assistente',
     en: 'Ask our assistant your questions',

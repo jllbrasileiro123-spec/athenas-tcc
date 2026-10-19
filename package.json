@@ -10,6 +10,7 @@
     "start": "node scripts/start.mjs",
     "apple:secret": "node scripts/generate-apple-secret.mjs",
     "upload:aula": "node scripts/upload-aula.mjs",
+    "upload:exercicio": "node scripts/upload-exercicio.mjs",
     "criar:alunos": "node scripts/criar-alunos.mjs"
   },
   "engines": {

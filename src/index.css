@@ -321,3 +321,19 @@ html:has(.landing) {
     transition: none;
   }
 }
+
+/* Rolagem discreta (lateral do conteúdo do curso) */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d9cfb8 transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #d9cfb8;
+  border-radius: 999px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
