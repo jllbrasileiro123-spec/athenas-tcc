@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import { BrandSelect } from '../components/BrandSelect'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
+import { PrePostReport } from '../components/PrePostReport'
+import { useAuth } from '../contexts/AuthContext'
 import {
   downloadCsv,
   fetchCourseReport,
@@ -15,7 +17,7 @@ import {
   type StudentQuizResult,
 } from '../lib/adminReports'
 
-type Tab = 'desempenho' | 'feedback'
+type Tab = 'desempenho' | 'feedback' | 'antes-depois'
 
 function scoreClass(pct: number | null | undefined) {
   if (pct === null || pct === undefined) return 'text-neutral-400'
@@ -31,7 +33,9 @@ function shortQuizTitle(title: string) {
 export function AdminReports() {
   const { t, language } = useLanguage()
   const [params, setParams] = useSearchParams()
-  const tab: Tab = params.get('aba') === 'feedback' ? 'feedback' : 'desempenho'
+  const { user } = useAuth()
+  const aba = params.get('aba')
+  const tab: Tab = aba === 'feedback' || aba === 'antes-depois' ? aba : 'desempenho'
 
   const [courses, setCourses] = useState<ReportCourse[]>([])
   const [courseId, setCourseId] = useState('')
@@ -84,8 +88,8 @@ export function AdminReports() {
 
   function setTab(next: Tab) {
     const p = new URLSearchParams(params)
-    if (next === 'feedback') p.set('aba', 'feedback')
-    else p.delete('aba')
+    if (next === 'desempenho') p.delete('aba')
+    else p.set('aba', next)
     setParams(p, { replace: true })
   }
 
@@ -206,6 +210,9 @@ export function AdminReports() {
             <TabBtn active={tab === 'feedback'} onClick={() => setTab('feedback')}>
               {t('reports.tabFeedback')} ({feedback?.summary.count ?? 0})
             </TabBtn>
+            <TabBtn active={tab === 'antes-depois'} onClick={() => setTab('antes-depois')}>
+              {t('reports.tabPrePost')}
+            </TabBtn>
           </div>
         </div>
 
@@ -221,6 +228,8 @@ export function AdminReports() {
               <EmptyState icon={<FolderIcon />} title={t('reports.noCourses')} />
             </div>
           )
+        ) : tab === 'antes-depois' ? (
+          user && <PrePostReport courseId={courseId} courseTitle={courseTitle} userId={user.id} />
         ) : tab === 'desempenho' ? (
           report && (
             <>

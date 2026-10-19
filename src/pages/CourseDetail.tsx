@@ -246,6 +246,9 @@ export function CourseDetail() {
   const progressPct = progressTotal > 0 ? Math.round((progressDone / progressTotal) * 100) : 0
   const courseDone =
     !!trail && trail.total_lessons > 0 && trail.completed_count >= trail.total_lessons
+  // Pós-teste da pesquisa: libera ao chegar no último módulo (Avaliação Final)
+  const postTestOpen =
+    isOwner || (enrolled && (courseDone || (hasModules && !!modules[modules.length - 1]?.unlocked)))
 
   /** Próximo item da trilha para o cartão "Continue de onde parou" */
   const nextRef = hasModules ? nextOpenItem(modules) : null
@@ -620,6 +623,21 @@ export function CourseDetail() {
           {(enrolled || isOwner) && (
             <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-24 lg:w-[380px] lg:shrink-0 lg:pt-[60px]">
               <AssistantCard />
+
+              {postTestOpen && (
+                <div className="flex flex-col gap-3 rounded-[20px] border-2 border-brand-gold/50 bg-white p-5">
+                  <div>
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                      {t('postTest.kicker')}
+                    </p>
+                    <p className="mt-1 text-[15px] font-extrabold">{t('postTest.cardTitle')}</p>
+                    <p className="mt-1 text-[13px] leading-snug text-neutral-600">{t('postTest.cardBody')}</p>
+                  </div>
+                  <Link to={`/pos-teste/${id}`} className="btn-primary !py-2.5 text-center text-sm">
+                    {t('postTest.cardCta')}
+                  </Link>
+                </div>
+              )}
 
               <div className="flex items-center gap-3.5 rounded-[20px] bg-brand-gold-soft p-5">
                 <svg className="h-9 w-9 shrink-0 text-brand-gold-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
