@@ -91,6 +91,18 @@ Vamos limpar: o nome vira "Empregado A", o CPF sai, e "depressão" vira "tratame
 
 > Aja como assistente jurídico trabalhista. O Empregado A foi dispensado logo após apresentar atestado de tratamento de saúde. Monte a estrutura de uma petição inicial (fatos, direito, pedidos). Indique a fonte de cada artigo citado. Não cite jurisprudência; marque [PESQUISAR PRECEDENTE]. Se não tiver certeza, diga.
 
+[TELA: role a resposta devagar até a parte "DO DIREITO"]
+
+Olha o resultado: fatos, direito e pedidos, com a lei de cada artigo. E onde precisava de precedente, ele marcou [PESQUISAR PRECEDENTE] em vez de inventar. (pausa)
+
+[TELA: aponte o espaço "descrever condição de saúde" na parte dos fatos]
+
+Repare que ele deixou um espaço para descrever a condição de saúde. Na peça final isso entra com cuidado. Na conversa com a IA, nunca.
+
+[TELA: role até "Ressalvas/Incertezas" e aponte a menção à Súmula 443 do TST]
+
+No fim, ele listou as fontes e avisou o que não tem certeza. Mas olha: mesmo pedindo para não citar jurisprudência, ele mencionou uma súmula do TST. Por isso a revisão é sempre sua.
+
 O resultado é tão útil quanto antes, e nenhum dado do cliente saiu do escritório. E lembra: quem assina e responde pela peça é o advogado, não a ferramenta.
 
 **Sua vez:** pegue um caso seu, reescreva o pedido trocando tudo que identifica o cliente e só então mande para a IA. Até o último módulo!
