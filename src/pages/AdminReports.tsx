@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { BrandSelect } from '../components/BrandSelect'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
 import { PrePostReport } from '../components/PrePostReport'
+import { PlacementReport } from '../components/PlacementReport'
 import { useAuth } from '../contexts/AuthContext'
 import {
   downloadCsv,
@@ -17,7 +18,7 @@ import {
   type StudentQuizResult,
 } from '../lib/adminReports'
 
-type Tab = 'desempenho' | 'feedback' | 'antes-depois'
+type Tab = 'desempenho' | 'feedback' | 'antes-depois' | 'nivelamento'
 
 function scoreClass(pct: number | null | undefined) {
   if (pct === null || pct === undefined) return 'text-neutral-400'
@@ -35,7 +36,8 @@ export function AdminReports() {
   const [params, setParams] = useSearchParams()
   const { user } = useAuth()
   const aba = params.get('aba')
-  const tab: Tab = aba === 'feedback' || aba === 'antes-depois' ? aba : 'desempenho'
+  const tab: Tab =
+    aba === 'feedback' || aba === 'antes-depois' || aba === 'nivelamento' ? aba : 'desempenho'
 
   const [courses, setCourses] = useState<ReportCourse[]>([])
   const [courseId, setCourseId] = useState('')
@@ -203,7 +205,7 @@ export function AdminReports() {
               />
             </div>
           )}
-          <div className="flex gap-2 p-1 bg-white border border-brand-gold/20 rounded-full w-full sm:w-fit shadow-sm">
+          <div className="flex gap-2 p-1 bg-white border border-brand-gold/20 rounded-full w-full sm:w-fit shadow-sm overflow-x-auto">
             <TabBtn active={tab === 'desempenho'} onClick={() => setTab('desempenho')}>
               {t('reports.tabPerformance')}
             </TabBtn>
@@ -212,6 +214,9 @@ export function AdminReports() {
             </TabBtn>
             <TabBtn active={tab === 'antes-depois'} onClick={() => setTab('antes-depois')}>
               {t('reports.tabPrePost')}
+            </TabBtn>
+            <TabBtn active={tab === 'nivelamento'} onClick={() => setTab('nivelamento')}>
+              {t('reports.tabPlacement')}
             </TabBtn>
           </div>
         </div>
@@ -228,6 +233,8 @@ export function AdminReports() {
               <EmptyState icon={<FolderIcon />} title={t('reports.noCourses')} />
             </div>
           )
+        ) : tab === 'nivelamento' ? (
+          <PlacementReport courseId={courseId} courseTitle={courseTitle} />
         ) : tab === 'antes-depois' ? (
           user && <PrePostReport courseId={courseId} courseTitle={courseTitle} userId={user.id} />
         ) : tab === 'desempenho' ? (
@@ -511,7 +518,7 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
     <button
       type="button"
       onClick={onClick}
-      className={`flex-1 sm:flex-none px-5 py-2 rounded-full text-sm font-bold transition-colors ${
+      className={`flex-1 sm:flex-none whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-colors ${
         active ? 'bg-neutral-950 text-brand-gold' : 'bg-transparent text-neutral-700 hover:bg-brand-gold-soft/40'
       }`}
     >
