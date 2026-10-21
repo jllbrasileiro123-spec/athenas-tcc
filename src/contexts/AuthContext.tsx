@@ -10,11 +10,27 @@ import {
 } from 'react'
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 import { resizeAvatarImage } from '../lib/imageResize'
-import { clearProfileCache, writeProfileCache } from '../lib/profileCache'
+import { clearProfileCache, readProfileCache, writeProfileCache } from '../lib/profileCache'
 import { supabase } from '../lib/supabase'
 import type { Profile } from '../types/database'
 
 const PROFILE_SELECT = 'id, full_name, avatar_url, role, created_at'
+
+/**
+ * Sessão que o Supabase já guardou no navegador (sb-<projeto>-auth-token).
+ * Permite abrir o app na hora, sem esperar a confirmação do servidor;
+ * o getSession logo depois confirma (ou renova) e corrige se precisar.
+ */
+function readStoredSession(): Session | null {
+  try {
+    const key = Object.keys(localStorage).find((k) => k.startsWith('sb-') && k.endsWith('-auth-token'))
+    if (!key) return null
+    const parsed = JSON.parse(localStorage.getItem(key) ?? 'null') as Session | null
+    return parsed?.user?.id ? parsed : null
+  } catch {
+    return null
+  }
+}
 
 interface AuthContextValue {
   user: User | null
@@ -43,13 +59,19 @@ function shouldRefetchProfile(event: AuthChangeEvent) {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null)
-  const [user, setUser] = useState<User | null>(null)
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [initializing, setInitializing] = useState(true)
-  const [profileLoading, setProfileLoading] = useState(false)
+  const [stored] = useState(readStoredSession)
+  const [session, setSession] = useState<Session | null>(stored)
+  const [user, setUser] = useState<User | null>(stored?.user ?? null)
+  const [profile, setProfile] = useState<Profile | null>(() =>
+    stored ? readProfileCache(stored.user.id) : null
+  )
+  // Com ou sem sessão salva, já dá para desenhar a tela: não há splash de espera
+  const [initializing, setInitializing] = useState(false)
+  // Logado sem perfil em cache: o perfil vai ser buscado já, então admin/instrutor esperam
+  const [profileLoading, setProfileLoading] = useState(() => Boolean(stored && !readProfileCache(stored.user.id)))
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const profileUserRef = useRef<string | null>(null)
+  const profileRequestRef = useRef<{ userId: string; promise: Promise<Profile | null> } | null>(null)
 
   const applySession = useCallback((s: Session | null) => {
     setSession(s)
@@ -63,7 +85,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // antigo escondia "Meus cursos" / "Moderação" na barra.
   }, [])
 
-  const fetchProfile = useCallback(async (userId: string) => {
+  const fetchProfile = useCallback((userId: string) => {
+    // Evita buscar o mesmo perfil duas vezes ao abrir (getSession + INITIAL_SESSION)
+    const inFlight = profileRequestRef.current
+    if (inFlight && inFlight.userId === userId) return inFlight.promise
+    const promise = loadProfile(userId).finally(() => {
+      if (profileRequestRef.current?.promise === promise) profileRequestRef.current = null
+    })
+    profileRequestRef.current = { userId, promise }
+    return promise
+  }, [])
+
+  async function loadProfile(userId: string): Promise<Profile | null> {
     setProfileLoading(true)
     const { data, error } = await supabase
       .from('profiles')
@@ -85,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(null)
     clearProfileCache()
     return null
-  }, [])
+  }
 
   const refreshProfile = useCallback(async () => {
     if (user) await fetchProfile(user.id)
@@ -93,9 +126,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let cancelled = false
-    const safety = window.setTimeout(() => {
-      if (!cancelled) setInitializing(false)
-    }, 4000)
 
     // getSession fora do callback evita deadlock do lock de auth do Supabase
     void supabase.auth.getSession().then(({ data: { session: s } }) => {
@@ -113,7 +143,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       applySession(s)
 
       // Nunca chamar .from() síncrono dentro deste callback — deadlock do client
-      if (s?.user && (shouldRefetchProfile(event) || event === 'TOKEN_REFRESHED')) {
+      // Renovar o token não muda o perfil: só busca ao entrar, ao abrir ou ao editar a conta
+      if (s?.user && shouldRefetchProfile(event)) {
         const uid = s.user.id
         window.setTimeout(() => {
           if (!cancelled) void fetchProfile(uid)
@@ -127,7 +158,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       cancelled = true
-      window.clearTimeout(safety)
       subscription.unsubscribe()
     }
   }, [applySession, fetchProfile])
