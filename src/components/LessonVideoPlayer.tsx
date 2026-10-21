@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useId, useRef } from 'react'
-import { isYouTubeUrl, parseYouTubeUrl, youtubeEmbedUrl } from '../lib/videoStorage'
+import {
+  googleDriveEmbedUrl,
+  isGoogleDriveUrl,
+  isYouTubeUrl,
+  parseYouTubeUrl,
+  youtubeEmbedUrl,
+} from '../lib/videoStorage'
 import { VIDEO_COMPLETE_RATIO } from '../lib/gamification'
 
 interface LessonVideoPlayerProps {
@@ -89,6 +95,21 @@ export function LessonVideoPlayer({
 
   if (isYouTubeUrl(videoUrl)) {
     return <YouTubeTrackedPlayer key={videoUrl} videoUrl={videoUrl} title={title} onNearComplete={notify} />
+  }
+
+  // Drive não informa o progresso: a aula é concluída pelo botão da página
+  if (isGoogleDriveUrl(videoUrl)) {
+    const embed = googleDriveEmbedUrl(videoUrl)
+    if (!embed) return null
+    return (
+      <iframe
+        src={embed}
+        title={title}
+        className="w-full h-full"
+        allow="autoplay; fullscreen"
+        allowFullScreen
+      />
+    )
   }
 
   return <HostedTrackedPlayer key={videoUrl} videoUrl={videoUrl} onNearComplete={notify} />

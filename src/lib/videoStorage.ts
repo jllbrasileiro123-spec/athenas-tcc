@@ -68,6 +68,17 @@ export function youtubeEmbedUrl(url: string): string | null {
   return null
 }
 
+export function isGoogleDriveUrl(url: string | null | undefined): boolean {
+  if (!url) return false
+  return /drive\.google\.com/i.test(url)
+}
+
+/** Link de compartilhamento do Drive → player embutido (/preview) */
+export function googleDriveEmbedUrl(url: string): string | null {
+  const id = url.match(/\/file\/d\/([\w-]+)/)?.[1] ?? url.match(/[?&]id=([\w-]+)/)?.[1]
+  return id ? `https://drive.google.com/file/d/${id}/preview` : null
+}
+
 export function isHostedVideoUrl(url: string | null | undefined): boolean {
   if (!url) return false
   return url.includes(`/${VIDEO_BUCKET}/`) || url.includes(`object/public/${VIDEO_BUCKET}`)
