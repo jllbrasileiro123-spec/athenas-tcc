@@ -3,13 +3,37 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useGamification } from '../contexts/GamificationContext'
+import type { TranslationKey } from '../i18n/translations'
 import {
+  DONT_KNOW_CHOICE,
   fetchPlacementTest,
   isMissingPlacement,
   submitPlacementTest,
+  type PlacementModuleResult,
   type PlacementQuestion,
   type PlacementResult,
 } from '../lib/placementTest'
+
+/** Perfil geral pela proporção de acertos (18–20, 13–17, 7–12, 0–6 em 20) */
+function profileKey(correct: number, total: number): TranslationKey {
+  const ratio = total > 0 ? correct / total : 0
+  if (ratio >= 0.9) return 'placement.profileAdvanced'
+  if (ratio >= 0.65) return 'placement.profileIntermediate'
+  if (ratio >= 0.35) return 'placement.profileBasic'
+  return 'placement.profileBeginner'
+}
+
+function recommendation(m: PlacementModuleResult): { key: TranslationKey; topics: string } {
+  const topics = m.review_topics.join('; ')
+  if (m.skipped && m.partial) return { key: 'placement.recSkipPartial', topics }
+  if (m.skipped) {
+    return { key: topics ? 'placement.recSkipReview' : 'placement.recSkip', topics }
+  }
+  if (m.total > 0 && m.hits / m.total >= 0.6) {
+    return { key: topics ? 'placement.recFocus' : 'placement.recBase', topics }
+  }
+  return { key: 'placement.recFull', topics }
+}
 
 export function PlacementTest() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -117,6 +141,16 @@ export function PlacementTest() {
                   total: String(result.total_count),
                 })}
               </p>
+              {result.modules.length > 0 && (
+                <p className="mt-1 text-sm font-semibold text-neutral-800">
+                  {t(profileKey(result.correct_count, result.total_count))}
+                </p>
+              )}
+              {result.dont_know_count > 0 && (
+                <p className="mt-1 text-xs text-neutral-500">
+                  {t('placement.dontKnowCount', { count: String(result.dont_know_count) })}
+                </p>
+              )}
               {result.next_module_title && (
                 <p className="mt-3 text-sm font-semibold text-brand-gold">
                   {t('placement.startAtModule', { module: result.next_module_title })}
@@ -132,6 +166,32 @@ export function PlacementTest() {
                 </p>
               )}
             </div>
+
+            {result.modules.length > 0 && (
+              <ul className="space-y-2">
+                {result.modules.map((m) => {
+                  const rec = recommendation(m)
+                  return (
+                    <li
+                      key={m.module_id}
+                      className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm"
+                    >
+                      <div className="flex items-baseline justify-between gap-3">
+                        <span className="font-bold text-neutral-900">{m.module_title}</span>
+                        <span
+                          className={`shrink-0 text-xs font-semibold ${
+                            m.skipped ? 'text-brand-gold' : 'text-neutral-500'
+                          }`}
+                        >
+                          {t('placement.moduleScore', { hits: String(m.hits), total: String(m.total) })}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-neutral-700">{t(rec.key, { topics: rec.topics })}</p>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
 
             <div className="flex flex-wrap gap-2">
               {result.next_lesson_id && (
@@ -158,6 +218,9 @@ export function PlacementTest() {
         ) : (
           <div className="mt-8 space-y-5">
             {alreadyTaken && <p className="alert-brand text-sm">{t('placement.retake')}</p>}
+            {questions.some((q) => q.choices.includes(DONT_KNOW_CHOICE)) && (
+              <p className="text-sm text-neutral-600 leading-relaxed">{t('placement.dontKnowHint')}</p>
+            )}
 
             <div className="rounded-2xl border border-brand-gold/20 bg-white p-5 sm:p-6 space-y-6">
               {questions.map((q, i) => (

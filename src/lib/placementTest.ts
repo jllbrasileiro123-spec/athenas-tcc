@@ -3,6 +3,9 @@ import { supabase } from './supabase'
 /** Limiar de acerto por aula para liberar (pular) a aula. */
 export const PLACEMENT_THRESHOLD = 0.7
 
+/** Alternativa que o aluno marca quando não sabe (vale 0, mas não é chute) */
+export const DONT_KNOW_CHOICE = 'Não sei'
+
 export type PlacementQuestion = {
   id: string
   lesson_id: string | null
@@ -22,6 +25,21 @@ export type PlacementTest = {
   questions: PlacementQuestion[]
 }
 
+/** Resultado de um módulo no nivelamento */
+export type PlacementModuleResult = {
+  module_id: string
+  module_title: string
+  total: number
+  hits: number
+  dont_know: number
+  /** Módulo dispensado pelo teste */
+  skipped: boolean
+  /** Dispensado, mas com itens que continuam obrigatórios (ex.: quiz final) */
+  partial: boolean
+  /** Tópicos das questões erradas, para revisar */
+  review_topics: string[]
+}
+
 export type PlacementResult = {
   ok: boolean
   error?: string
@@ -35,6 +53,9 @@ export type PlacementResult = {
   next_lesson_id: string | null
   next_lesson_title: string | null
   next_module_title: string | null
+  /** Quantas vezes o aluno marcou "Não sei" */
+  dont_know_count: number
+  modules: PlacementModuleResult[]
 }
 
 export function isMissingPlacement(message: string | undefined | null): boolean {
@@ -100,6 +121,17 @@ export async function submitPlacementTest(
       next_lesson_id: raw.next_lesson_id ? String(raw.next_lesson_id) : null,
       next_lesson_title: raw.next_lesson_title ? String(raw.next_lesson_title) : null,
       next_module_title: raw.next_module_title ? String(raw.next_module_title) : null,
+      dont_know_count: Number(raw.dont_know_count ?? 0),
+      modules: (Array.isArray(raw.modules) ? raw.modules : []).map((m) => ({
+        module_id: String(m.module_id),
+        module_title: String(m.module_title ?? ''),
+        total: Number(m.total ?? 0),
+        hits: Number(m.hits ?? 0),
+        dont_know: Number(m.dont_know ?? 0),
+        skipped: Boolean(m.skipped),
+        partial: Boolean(m.partial),
+        review_topics: Array.isArray(m.review_topics) ? m.review_topics.map(String) : [],
+      })),
     },
     error: null,
   }
