@@ -913,6 +913,26 @@ export const translations = {
   'reports.tabPerformance': { pt: 'Desempenho', en: 'Performance' },
   'reports.tabFeedback': { pt: 'Feedback', en: 'Feedback' },
   'reports.tabPrePost': { pt: 'Antes × depois', en: 'Before × after' },
+  'reports.tabPlacement': { pt: 'Nivelamento', en: 'Placement' },
+  'placementReport.missingSql': {
+    pt: 'Rode supabase/relatorio-nivelamento.sql no SQL Editor do Supabase para ativar o relatório de nivelamento.',
+    en: 'Run supabase/relatorio-nivelamento.sql in the Supabase SQL Editor to enable the placement report.',
+  },
+  'placementReport.none': { pt: 'Ninguém fez o teste de nivelamento ainda.', en: 'No one has taken the placement test yet.' },
+  'placementReport.statTaken': { pt: 'Fizeram o teste', en: 'Took the test' },
+  'placementReport.statAvg': { pt: 'Média de acertos', en: 'Average score' },
+  'placementReport.statDontKnow': { pt: 'Média de "Não sei"', en: 'Average "I don’t know"' },
+  'placementReport.statSkipped': { pt: 'Dispensaram {module}', en: 'Skipped {module}' },
+  'placementReport.colTotal': { pt: 'Total', en: 'Total' },
+  'placementReport.colDontKnow': { pt: 'Não sei', en: 'I don’t know' },
+  'placementReport.skipped': { pt: 'Dispensado', en: 'Skipped' },
+  'placementReport.partial': { pt: 'Só o quiz', en: 'Quiz only' },
+  'placementReport.toDo': { pt: 'Faz o módulo', en: 'Takes module' },
+  'placementReport.csvTopics': { pt: 'revisar', en: 'review' },
+  'placementReport.legend': {
+    pt: 'Acertos por módulo no teste diagnóstico. "Dispensado" = o módulo entrou como concluído; "Só o quiz" = dispensou aula e exercício, mas faz o quiz final. Passe o mouse na célula para ver os tópicos a revisar.',
+    en: 'Correct answers per module in the diagnostic test. "Skipped" = the module was marked complete; "Quiz only" = lesson and exercise skipped, final quiz still required. Hover a cell to see topics to review.',
+  },
   'prepost.missingSql': {
     pt: 'Rode supabase/pre-pos-teste.sql no SQL Editor do Supabase para ativar o relatório de antes × depois.',
     en: 'Run supabase/pre-pos-teste.sql in the Supabase SQL Editor to enable the before × after report.',
@@ -1239,8 +1259,8 @@ export const translations = {
   'placement.shortCta': { pt: 'Teste de conhecimento', en: 'Knowledge test' },
   'placement.title': { pt: 'O que você já sabe?', en: 'What do you already know?' },
   'placement.desc': {
-    pt: 'Responda o teste rápido para pular o que você já domina. Acertando 70% ou mais das perguntas de uma aula, ela entra como concluída na sua trilha.',
-    en: 'Take the quick test to skip what you already know. Scoring 70% or more on a lesson marks it complete on your trail.',
+    pt: 'Responda o teste rápido para pular o que você já domina. O que você já sabe entra como concluído na sua trilha.',
+    en: 'Take the quick test to skip what you already know. What you already master is marked complete on your trail.',
   },
   'placement.cta': { pt: 'Verificar meu conhecimento', en: 'Check my knowledge' },
   'placement.retakeCta': { pt: 'Refazer o teste de conhecimento', en: 'Retake the knowledge test' },
@@ -1255,8 +1275,8 @@ export const translations = {
     en: 'Step 1 — Find your level',
   },
   'placement.stepBody': {
-    pt: 'Antes de liberar as aulas, o teste mostra se você precisa começar do início ou pode pular módulos. Acertando 70% ou mais de um módulo, ele já entra como concluído.',
-    en: 'Before unlocking lessons, the test shows if you need to start from the beginning or can skip modules. Scoring 70% or more on a module marks it complete.',
+    pt: 'Antes de liberar as aulas, o teste mostra se você precisa começar do início ou pode pular módulos. O módulo que você já domina entra como concluído.',
+    en: 'Before unlocking lessons, the test shows if you need to start from the beginning or can skip modules. Modules you already master are marked complete.',
   },
   'placement.stepCta': { pt: 'Começar o teste', en: 'Start the test' },
   'placement.popupKicker': { pt: 'Obrigatório · Nivelamento', en: 'Required · Placement' },
@@ -1273,8 +1293,8 @@ export const translations = {
     en: 'Take the test now to see if you need to start from the beginning or can skip what you already know.',
   },
   'placement.popupRule1': {
-    pt: 'Acertar 70% ou mais das perguntas de um módulo conclui o módulo.',
-    en: 'Scoring 70% or more on a module’s questions completes that module.',
+    pt: 'Mostrar que domina um módulo no teste conclui o módulo.',
+    en: 'Showing you master a module in the test completes that module.',
   },
   'placement.popupRule2': {
     pt: 'Concluir um módulo desbloqueia o seguinte automaticamente.',
@@ -1339,6 +1359,52 @@ export const translations = {
   },
   'placement.goToLesson': { pt: 'Ir para a aula indicada', en: 'Go to the suggested lesson' },
   'placement.openTrail': { pt: 'Ver minha trilha', en: 'View my trail' },
+  'placement.dontKnowHint': {
+    pt: 'Não vale nota. Responda sem consultar material. Se não souber, marque "Não sei": isso não prejudica você e ajuda a indicar onde focar. Evite chutar.',
+    en: 'This is not graded. Answer without looking anything up. If you don’t know, pick "Não sei" (I don’t know): it won’t count against you and shows where to focus. Avoid guessing.',
+  },
+  'placement.dontKnowCount': {
+    pt: 'Você marcou "Não sei" em {count} questão(ões).',
+    en: 'You picked "I don’t know" on {count} question(s).',
+  },
+  'placement.moduleScore': { pt: '{hits} de {total}', en: '{hits} of {total}' },
+  'placement.profileAdvanced': {
+    pt: 'Perfil: avançado. Você domina os temas e tende a precisar só da avaliação final e de pontos específicos.',
+    en: 'Profile: advanced. You master the topics and mostly need the final assessment and specific points.',
+  },
+  'placement.profileIntermediate': {
+    pt: 'Perfil: intermediário. Boa base, com lacunas pontuais a cobrir.',
+    en: 'Profile: intermediate. A good base, with a few gaps to cover.',
+  },
+  'placement.profileBasic': {
+    pt: 'Perfil: básico. Você conhece parte dos temas e aproveita mais fazendo a maioria dos módulos.',
+    en: 'Profile: basic. You know some of the topics and will benefit from most modules.',
+  },
+  'placement.profileBeginner': {
+    pt: 'Perfil: iniciante. Faça todos os módulos, na ordem.',
+    en: 'Profile: beginner. Take every module, in order.',
+  },
+  'placement.recSkip': { pt: 'Dispensado.', en: 'Skipped.' },
+  'placement.recSkipReview': {
+    pt: 'Dispensado. Leia o material de apoio e revise: {topics}.',
+    en: 'Skipped. Read the support material and review: {topics}.',
+  },
+  'placement.recSkipPartial': {
+    pt: 'Aula e exercício prático dispensados. O quiz final continua obrigatório.',
+    en: 'Lesson and practical exercise skipped. The final quiz is still required.',
+  },
+  'placement.recFocus': {
+    pt: 'Faça o módulo, com atenção a: {topics}.',
+    en: 'Take the module, focusing on: {topics}.',
+  },
+  'placement.recBase': {
+    pt: 'Faça o módulo: ele depende da base dos outros módulos, que ainda precisa ser reforçada.',
+    en: 'Take the module: it builds on the other modules, which still need work.',
+  },
+  'placement.recFull': {
+    pt: 'Faça o módulo completo.',
+    en: 'Take the full module.',
+  },
 
   'legal.termsTitle': { pt: 'Termos de uso', en: 'Terms of use' },
   'legal.terms1': {

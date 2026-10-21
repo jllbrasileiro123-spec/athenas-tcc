@@ -85,6 +85,38 @@ export async function fetchFeedbackReport(courseId: string) {
   return { report: (data as FeedbackReport | null) ?? null, error: error?.message ?? null }
 }
 
+export type PlacementReportModule = {
+  module_id: string
+  module_title: string
+  total: number
+  hits: number
+  dont_know: number
+  skipped: boolean
+  partial: boolean
+  review_topics: string[]
+}
+
+export type PlacementReportStudent = {
+  user_id: string
+  full_name: string | null
+  email: string | null
+  taken_at: string
+  correct_count: number
+  total_count: number
+  dont_know_count: number
+  modules: PlacementReportModule[]
+}
+
+export type PlacementReport = {
+  modules: { id: string; title: string }[]
+  students: PlacementReportStudent[]
+}
+
+export async function fetchPlacementReport(courseId: string) {
+  const { data, error } = await supabase.rpc('admin_placement_report', { p_course_id: courseId })
+  return { report: (data as PlacementReport | null) ?? null, error: error?.message ?? null }
+}
+
 /** CSV com ";" e BOM para abrir certo no Excel em português. */
 export function downloadCsv(fileName: string, rows: (string | number | null)[][]) {
   const escape = (v: string | number | null) => {

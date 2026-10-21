@@ -77,21 +77,23 @@ Viu? Agora a lacuna aparece em vez de ser preenchida com algo falso.
 
 [TELA: bloco de notas com o pedido errado abaixo — não cole no chatbot]
 
-Olá! Neste módulo o risco não é só a IA errar, é você expor o cliente. Olha esse pedido:
+Olá! Neste módulo o risco é expor o cliente. Olha esse pedido:
 
 > Meu cliente João Pereira da Silva, CPF 123.456.789-00, tem depressão e foi demitido. Escreva a petição.
 
-Nome, CPF e um dado de saúde, que pela LGPD é dado sensível, colados numa ferramenta gratuita que pode reaproveitar a conversa. Isso eu não vou nem enviar. (pausa)
+Nome, CPF e um dado de saúde, que pela LGPD é dado sensível. Esse pedido não deve ir para a IA. (pausa)
 
 [TELA: apague nome, CPF e diagnóstico, e reescreva ao vivo]
 
-Vamos limpar: o nome vira "Empregado A", o CPF sai, e "depressão" vira "tratamento de saúde". A IA não precisa de mais que isso para entender o caso.
+Vamos limpar: o nome vira "Empregado A", o CPF sai, e "depressão" vira "tratamento de saúde".
 
 [TELA: cole no chatbot]
 
 > Aja como assistente jurídico trabalhista. O Empregado A foi dispensado logo após apresentar atestado de tratamento de saúde. Monte a estrutura de uma petição inicial (fatos, direito, pedidos). Indique a fonte de cada artigo citado. Não cite jurisprudência; marque [PESQUISAR PRECEDENTE]. Se não tiver certeza, diga.
 
-O resultado é tão útil quanto antes, e nenhum dado do cliente saiu do escritório. E lembra: quem assina e responde pela peça é o advogado, não a ferramenta.
+[TELA: role a resposta devagar e aponte a marcação PESQUISAR PRECEDENTE]
+
+O resultado continua útil: fatos, direito e pedidos, com a fonte de cada artigo, e a marcação onde falta precedente. Nenhum dado do cliente foi exposto, e a revisão continua sendo do advogado.
 
 **Sua vez:** pegue um caso seu, reescreva o pedido trocando tudo que identifica o cliente e só então mande para a IA. Até o último módulo!
 

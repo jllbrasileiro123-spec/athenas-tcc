@@ -5,7 +5,7 @@
  * Uso:
  *   npm run upload:exercicio -- --modulo 2 --video "C:/caminho/resolucao2.mp4" [--duracao 8]
  *
- *   --video aceita arquivo local (sobe para o Storage) ou link do YouTube.
+ *   --video aceita arquivo local (sobe para o Storage) ou link do YouTube ou do Google Drive.
  *
  * Precisa no .env (NÃO commitar): SUPABASE_SERVICE_ROLE_KEY=eyJ...
  * Plano Free do Supabase: cada arquivo até 50 MB. Vídeo maior → comprima ou use YouTube.
@@ -65,11 +65,11 @@ async function main() {
   const args = parseArgs(process.argv.slice(2))
   const n = Number(args.modulo)
   if (!n || !args.video) {
-    console.error('Uso: npm run upload:exercicio -- --modulo 2 --video <arquivo|youtube> [--duracao 8]')
+    console.error('Uso: npm run upload:exercicio -- --modulo 2 --video <arquivo|youtube|drive> [--duracao 8]')
     process.exit(1)
   }
-  const isYoutube = /youtu\.?be/i.test(args.video)
-  if (!isYoutube && !existsSync(args.video)) throw new Error(`Vídeo não encontrado: ${args.video}`)
+  const isLink = /youtu\.?be|drive\.google\.com/i.test(args.video)
+  if (!isLink && !existsSync(args.video)) throw new Error(`Vídeo não encontrado: ${args.video}`)
 
   const { data: mod, error: mErr } = await supabase
     .from('course_modules')
@@ -90,7 +90,7 @@ async function main() {
   if (!lesson) throw new Error(`O Módulo ${n} ainda não tem exercício prático. Rode supabase/exercicios-praticos.sql antes.`)
 
   let videoUrl = args.video
-  if (!isYoutube) {
+  if (!isLink) {
     const mb = statSync(args.video).size / (1024 * 1024)
     if (mb > MAX_FREE_MB) {
       console.warn(`Aviso: ${basename(args.video)} tem ${mb.toFixed(1)} MB (limite do plano Free: ${MAX_FREE_MB} MB).`)
