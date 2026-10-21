@@ -902,8 +902,8 @@ export const translations = {
   'reports.kicker': { pt: 'Área do administrador', en: 'Admin area' },
   'reports.title': { pt: 'Relatórios do curso', en: 'Course reports' },
   'reports.desc': {
-    pt: 'Desempenho de cada advogado nos quizzes e o feedback da turma. Visível só para contas admin.',
-    en: 'Each lawyer’s quiz performance and class feedback. Visible to admin accounts only.',
+    pt: 'Desempenho nos quizzes, percepção dos alunos sobre o curso, pré × pós-teste e nivelamento. Visível só para contas admin.',
+    en: 'Quiz performance, student perception of the course, pre × post-test and placement. Visible to admin accounts only.',
   },
   'reports.missingSql': {
     pt: 'Faltam as funções de relatório no Supabase. No SQL Editor, rode o arquivo supabase/feedback-relatorios.sql inteiro e clique em Run.',
