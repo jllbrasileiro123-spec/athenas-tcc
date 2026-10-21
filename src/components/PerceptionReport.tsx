@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { downloadCsv } from '../lib/adminReports'
-import { PERCEPTION_ITEMS, type Perception } from '../lib/courseFeedback'
+import { PERCEPTION_GROUPS, PERCEPTION_ITEMS, type Perception } from '../lib/courseFeedback'
 import { supabase } from '../lib/supabase'
 import { GOLD, Ring, decFmt, pctFmt, type Slice } from './PrePostReport'
 import { PowerBiConnect } from './PowerBiConnect'
@@ -120,9 +120,9 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
     <div className="mt-5 space-y-4">
       {error && <p className="alert-error text-sm">{error}</p>}
 
-      <div className="grid gap-4 lg:grid-cols-4">
+      <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
         {/* Satisfação */}
-        <section className="flex flex-col justify-between gap-6 rounded-3xl bg-neutral-950 p-6 text-white lg:row-span-2">
+        <section className="flex flex-col justify-between gap-6 rounded-3xl bg-neutral-950 p-6 text-white">
           <div>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
               {t('perception.heroKicker')}
@@ -174,71 +174,57 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
           </div>
         </section>
 
-        {/* Uma rosca de concordância por afirmação */}
-        {PERCEPTION_ITEMS.map((p) => {
-          const a = agreement(items, p.id)
-          const slices: Slice[] = a
-            ? [
-                { label: t('perception.agree'), pct: a.agree, color: AGREE },
-                { label: t('perception.neutral'), pct: a.neutral, color: NEUTRAL },
-                { label: t('perception.disagree'), pct: a.disagree, color: DISAGREE },
-              ]
-            : []
-          return (
-            <article key={p.id} className="flex flex-col rounded-3xl border border-brand-line bg-white p-5">
-              <p className="line-clamp-2 min-h-[2.5rem] text-sm font-bold leading-snug text-neutral-800">{t(p.key)}</p>
-              <div className="mt-3 flex items-center gap-4">
-                <div className="relative shrink-0" style={{ width: 96, height: 96 }}>
-                  <svg width={96} height={96} viewBox="0 0 96 96" className="-rotate-90" role="img" aria-label={t(p.key)}>
-                    <Ring size={96} r={41} stroke={12} slices={slices} />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-                    <span className="text-xl font-bold tabular-nums text-neutral-900">{a ? pctFmt(a.agree) : '—'}</span>
-                    <span className="mt-1 text-[10px] font-semibold text-neutral-500">{t('perception.agreeShort')}</span>
+        {/* Dois grupos: avaliação do curso e percepção do próprio aprendizado */}
+        <div className="flex min-w-0 flex-col gap-4">
+          {PERCEPTION_GROUPS.map((g) => (
+            <section key={g.id} className="rounded-3xl border border-brand-line bg-white p-5">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">{t(g.key)}</h3>
+                {g.id === 'course' && (
+                  <div className="flex gap-3 text-[11px] font-semibold text-neutral-500">
+                    {[
+                      [AGREE, t('perception.agree')],
+                      [NEUTRAL, t('perception.neutral')],
+                      [DISAGREE, t('perception.disagree')],
+                    ].map(([color, label]) => (
+                      <span key={label} className="inline-flex items-center gap-1">
+                        <span className="h-2 w-2 rounded-full" style={{ background: color }} />
+                        {label}
+                      </span>
+                    ))}
                   </div>
-                </div>
-                <ul className="min-w-0 space-y-1 text-xs text-neutral-500">
-                  {slices.map((s) => (
-                    <li key={s.label} className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: s.color }} />
-                      {s.label}
-                      <span className="font-bold tabular-nums text-neutral-800">{pctFmt(s.pct)}</span>
-                    </li>
-                  ))}
-                  {a && (
-                    <li className="pt-0.5 text-[11px]">
-                      {t('prepost.mean')} <span className="font-bold text-neutral-800">{decFmt(a.mean)}</span>/5
-                    </li>
-                  )}
-                </ul>
+                )}
               </div>
-            </article>
-          )
-        })}
-
-        {/* Comentários */}
-        <article className="flex flex-col justify-between rounded-3xl border border-brand-line bg-white p-5">
-          <div>
-            <p className="text-sm font-bold text-neutral-800">
-              {t('perception.comments')} <span className="text-neutral-400">({comments.length})</span>
-            </p>
-            {comments[0] ? (
-              <p className="mt-3 line-clamp-4 border-l-2 border-brand-gold pl-3 text-sm italic leading-relaxed text-neutral-600">
-                “{comments[0].comment}”
-              </p>
-            ) : (
-              <p className="mt-3 text-sm italic text-neutral-400">{t('prepost.noComments')}</p>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() => setDrawer(true)}
-            disabled={!n}
-            className="mt-4 self-start rounded-full bg-neutral-950 px-4 py-2 text-xs font-bold text-brand-gold-light hover:bg-black disabled:opacity-40"
-          >
-            {t('perception.seeAll')} →
-          </button>
-        </article>
+              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+                {PERCEPTION_ITEMS.filter((p) => p.group === g.id).map((p) => (
+                  <AgreeDonut key={p.id} label={t(p.key)} a={agreement(items, p.id)} t={t} />
+                ))}
+                {g.id === 'course' && (
+                  <div className="flex flex-col justify-between rounded-2xl bg-brand-cream p-3.5">
+                    <div>
+                      <p className="text-xs font-bold text-neutral-800">
+                        {t('perception.comments')} <span className="text-neutral-400">({comments.length})</span>
+                      </p>
+                      {comments[0] ? (
+                        <p className="mt-2 line-clamp-3 text-xs italic leading-relaxed text-neutral-600">“{comments[0].comment}”</p>
+                      ) : (
+                        <p className="mt-2 text-xs italic text-neutral-400">{t('prepost.noComments')}</p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setDrawer(true)}
+                      disabled={!n}
+                      className="mt-3 self-start rounded-full bg-neutral-950 px-3 py-1.5 text-[11px] font-bold text-brand-gold-light hover:bg-black disabled:opacity-40"
+                    >
+                      {t('perception.seeAllShort')} →
+                    </button>
+                  </div>
+                )}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
 
       {powerBi && <PowerBiConnect onClose={() => setPowerBi(false)} />}
@@ -319,6 +305,36 @@ function AnswersDrawer({ items, onClose, t }: { items: PerceptionItem[]; onClose
           {t('perception.legend')}
         </div>
       </aside>
+    </div>
+  )
+}
+
+/** Rosca de concordância de uma frase: % que concorda no centro, frase embaixo */
+function AgreeDonut({ label, a, t }: { label: string; a: ReturnType<typeof agreement>; t: TFn }) {
+  const slices: Slice[] = a
+    ? [
+        { label: t('perception.agree'), pct: a.agree, color: AGREE },
+        { label: t('perception.neutral'), pct: a.neutral, color: NEUTRAL },
+        { label: t('perception.disagree'), pct: a.disagree, color: DISAGREE },
+      ]
+    : []
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="relative" style={{ width: 84, height: 84 }}>
+        <svg width={84} height={84} viewBox="0 0 84 84" className="-rotate-90" role="img" aria-label={label}>
+          <Ring size={84} r={36} stroke={11} slices={slices} />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
+          <span className="text-lg font-bold tabular-nums text-neutral-900">{a ? pctFmt(a.agree) : '—'}</span>
+          <span className="mt-0.5 text-[9px] font-semibold text-neutral-500">{t('perception.agreeShort')}</span>
+        </div>
+      </div>
+      <p className="mt-2 line-clamp-3 text-xs font-semibold leading-snug text-neutral-800">{label}</p>
+      {a && (
+        <p className="mt-1 text-[11px] text-neutral-500">
+          {t('prepost.mean')} <span className="font-bold text-neutral-800">{decFmt(a.mean)}</span>/5
+        </p>
+      )}
     </div>
   )
 }

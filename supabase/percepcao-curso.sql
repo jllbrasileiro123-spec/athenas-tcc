@@ -1,11 +1,15 @@
 -- ============================================================
 -- ATHENAS — Percepção dos alunos sobre o curso
--- O pop-up de avaliação (fim da trilha) passa a perguntar, de 1 a 5:
---   P1 Avancei nos meus conhecimentos sobre IA no Direito
---   P2 Aprendi coisas que eu nem imaginava que poderia aprender
---   P3 Consigo aplicar o que aprendi na minha rotina de trabalho
---   P4 O conteúdo foi claro e bem explicado
---   P5 O tempo de dedicação foi adequado à minha rotina
+-- O pop-up de avaliação (fim da trilha) pergunta, de 1 a 5, em dois grupos:
+--   Avaliação do curso
+--     P4 O conteúdo foi claro e bem explicado
+--     P5 O tempo de dedicação foi adequado à minha rotina
+--     P6 Os vídeos, exercícios e materiais ajudaram no meu aprendizado
+--   Percepção do próprio aprendizado
+--     P1 Avancei nos meus conhecimentos sobre IA no Direito
+--     P2 Aprendi coisas que eu nem imaginava que poderia aprender
+--     P3 Consigo aplicar o que aprendi na minha rotina de trabalho
+--     P7 Hoje me sinto mais seguro(a) para usar IA no trabalho com responsabilidade
 -- além da nota (estrelas), da recomendação e do comentário.
 -- O tempo para concluir é calculado sozinho (matrícula → última aula).
 -- Cole no SQL Editor do Supabase e rode. Pode rodar mais de uma vez.
@@ -106,6 +110,7 @@ grant execute on function public.admin_course_perception(uuid) to authenticated;
 
 -- API para o Power BI: uma linha por avaliação (anônima)
 -- Usa a mesma chave de api-powerbi.sql (rode os dois arquivos).
+drop function if exists public.api_percepcao(text);
 create or replace function public.api_percepcao(p_key text)
 returns table (
   avaliacao_id uuid,
@@ -118,6 +123,8 @@ returns table (
   p3_aplico_rotina int,
   p4_conteudo_claro int,
   p5_tempo_adequado int,
+  p6_materiais_ajudaram int,
+  p7_mais_seguro int,
   dias_para_concluir numeric,
   progresso_pct numeric,
   comentario text
@@ -145,6 +152,8 @@ begin
     (f.perception ->> 'P3')::int,
     (f.perception ->> 'P4')::int,
     (f.perception ->> 'P5')::int,
+    (f.perception ->> 'P6')::int,
+    (f.perception ->> 'P7')::int,
     c.days_to_complete,
     case when c.total > 0 then round(100.0 * c.done / c.total) end,
     f.comment

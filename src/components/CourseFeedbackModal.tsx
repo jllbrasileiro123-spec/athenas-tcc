@@ -127,83 +127,84 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
             </h2>
             <p className="mt-1 text-sm text-neutral-600 text-center">{courseTitle}</p>
 
-            <fieldset className="mt-6">
-              <legend className="text-sm font-semibold text-neutral-900">{t('feedback.ratingQ')}</legend>
-              <div className="mt-2 flex justify-center gap-1" onMouseLeave={() => setHover(0)}>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setRating(n)}
-                    onMouseEnter={() => setHover(n)}
-                    aria-label={t('feedback.starN', { n: String(n) })}
-                    aria-pressed={rating === n}
-                    className={`text-4xl leading-none px-1 transition-transform hover:scale-110 ${
-                      n <= shown ? 'text-brand-gold' : 'text-neutral-300'
-                    }`}
-                  >
-                    ★
-                  </button>
-                ))}
-              </div>
-              <p className="mt-1 h-4 text-center text-xs text-neutral-500">
-                {shown > 0 ? t(`feedback.rating${shown}` as 'feedback.rating1') : ''}
-              </p>
-            </fieldset>
-
-            <fieldset className="mt-5">
-              <legend className="text-sm font-semibold text-neutral-900">{t('feedback.perceptionQ')}</legend>
-              <div className="mt-1 flex justify-between text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
-                <span>{t('feedback.disagree')}</span>
-                <span>{t('feedback.agree')}</span>
-              </div>
+            {/* 1 · Avaliação do curso */}
+            <section className="mt-6 rounded-2xl border border-brand-line bg-white p-4">
+              <h3 className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                1 · {t('feedback.groupCourse')}
+              </h3>
+              <fieldset className="mt-3">
+                <legend className="text-sm font-semibold text-neutral-900">{t('feedback.ratingQ')}</legend>
+                <div className="mt-2 flex justify-center gap-1" onMouseLeave={() => setHover(0)}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => setRating(n)}
+                      onMouseEnter={() => setHover(n)}
+                      aria-label={t('feedback.starN', { n: String(n) })}
+                      aria-pressed={rating === n}
+                      className={`text-4xl leading-none px-1 transition-transform hover:scale-110 ${
+                        n <= shown ? 'text-brand-gold' : 'text-neutral-300'
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-1 h-4 text-center text-xs text-neutral-500">
+                  {shown > 0 ? t(`feedback.rating${shown}` as 'feedback.rating1') : ''}
+                </p>
+              </fieldset>
+              <ScaleHint t={t} />
               <div className="mt-1 space-y-3">
-                {PERCEPTION_ITEMS.map((item) => (
-                  <div key={item.id}>
-                    <p className="text-[13px] leading-snug text-neutral-800">{t(item.key)}</p>
-                    <div className="mt-1.5 grid grid-cols-5 gap-1.5" role="radiogroup" aria-label={t(item.key)}>
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <button
-                          key={n}
-                          type="button"
-                          role="radio"
-                          aria-checked={perception[item.id] === n}
-                          onClick={() => setPerception((prev) => ({ ...prev, [item.id]: n }))}
-                          className={`rounded-lg border py-1.5 text-sm font-bold transition-colors ${
-                            perception[item.id] === n
-                              ? 'border-neutral-900 bg-brand-gold-soft/70 text-neutral-900'
-                              : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-gold/60'
-                          }`}
-                        >
-                          {n}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                {PERCEPTION_ITEMS.filter((item) => item.group === 'course').map((item) => (
+                  <LikertRow
+                    key={item.id}
+                    label={t(item.key)}
+                    value={perception[item.id]}
+                    onChange={(n) => setPerception((prev) => ({ ...prev, [item.id]: n }))}
+                  />
                 ))}
               </div>
-            </fieldset>
+              <fieldset className="mt-4">
+                <legend className="text-sm font-semibold text-neutral-900">{t('feedback.recommendQ')}</legend>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {[true, false].map((value) => (
+                    <button
+                      key={String(value)}
+                      type="button"
+                      onClick={() => setRecommend(value)}
+                      aria-pressed={recommend === value}
+                      className={`rounded-xl border px-3 py-2.5 text-sm font-semibold transition-colors ${
+                        recommend === value
+                          ? 'border-neutral-900 bg-brand-gold-soft/60 text-neutral-900'
+                          : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-gold/60'
+                      }`}
+                    >
+                      {value ? t('feedback.yes') : t('feedback.no')}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            </section>
 
-            <fieldset className="mt-5">
-              <legend className="text-sm font-semibold text-neutral-900">{t('feedback.recommendQ')}</legend>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                {[true, false].map((value) => (
-                  <button
-                    key={String(value)}
-                    type="button"
-                    onClick={() => setRecommend(value)}
-                    aria-pressed={recommend === value}
-                    className={`rounded-xl border px-3 py-2.5 text-sm font-semibold transition-colors ${
-                      recommend === value
-                        ? 'border-neutral-900 bg-brand-gold-soft/60 text-neutral-900'
-                        : 'border-neutral-200 bg-white text-neutral-600 hover:border-brand-gold/60'
-                    }`}
-                  >
-                    {value ? t('feedback.yes') : t('feedback.no')}
-                  </button>
+            {/* 2 · Percepção do próprio aprendizado */}
+            <section className="mt-4 rounded-2xl border border-brand-line bg-white p-4">
+              <h3 className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                2 · {t('feedback.groupLearning')}
+              </h3>
+              <ScaleHint t={t} />
+              <div className="mt-1 space-y-3">
+                {PERCEPTION_ITEMS.filter((item) => item.group === 'learning').map((item) => (
+                  <LikertRow
+                    key={item.id}
+                    label={t(item.key)}
+                    value={perception[item.id]}
+                    onChange={(n) => setPerception((prev) => ({ ...prev, [item.id]: n }))}
+                  />
                 ))}
               </div>
-            </fieldset>
+            </section>
 
             <label htmlFor="feedback-comment" className="mt-5 block text-sm font-semibold text-neutral-900">
               {t('feedback.commentQ')}
@@ -236,6 +237,43 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
             </button>
           </form>
         )}
+      </div>
+    </div>
+  )
+}
+
+type TFn = ReturnType<typeof useLanguage>['t']
+
+function ScaleHint({ t }: { t: TFn }) {
+  return (
+    <div className="mt-3 flex justify-between text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
+      <span>{t('feedback.disagree')}</span>
+      <span>{t('feedback.agree')}</span>
+    </div>
+  )
+}
+
+function LikertRow({ label, value, onChange }: { label: string; value: number | undefined; onChange: (n: number) => void }) {
+  return (
+    <div>
+      <p className="text-[13px] leading-snug text-neutral-800">{label}</p>
+      <div className="mt-1.5 grid grid-cols-5 gap-1.5" role="radiogroup" aria-label={label}>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={value === n}
+            onClick={() => onChange(n)}
+            className={`rounded-lg border py-1.5 text-sm font-bold transition-colors ${
+              value === n
+                ? 'border-neutral-900 bg-brand-gold-soft/70 text-neutral-900'
+                : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-gold/60'
+            }`}
+          >
+            {n}
+          </button>
+        ))}
       </div>
     </div>
   )

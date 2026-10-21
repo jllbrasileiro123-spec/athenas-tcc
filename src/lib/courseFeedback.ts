@@ -1,12 +1,22 @@
 import { supabase } from './supabase'
 
-/** Afirmações de percepção (1 = discordo totalmente … 5 = concordo totalmente) */
+/**
+ * Afirmações do pop-up (1 = discordo totalmente … 5 = concordo totalmente), em dois grupos:
+ * avaliação do curso e percepção do próprio aprendizado. Os ids não mudam (P1–P5 já têm respostas).
+ */
 export const PERCEPTION_ITEMS = [
-  { id: 'P1', key: 'feedback.p1' },
-  { id: 'P2', key: 'feedback.p2' },
-  { id: 'P3', key: 'feedback.p3' },
-  { id: 'P4', key: 'feedback.p4' },
-  { id: 'P5', key: 'feedback.p5' },
+  { id: 'P4', key: 'feedback.p4', group: 'course' },
+  { id: 'P5', key: 'feedback.p5', group: 'course' },
+  { id: 'P6', key: 'feedback.p6', group: 'course' },
+  { id: 'P1', key: 'feedback.p1', group: 'learning' },
+  { id: 'P2', key: 'feedback.p2', group: 'learning' },
+  { id: 'P3', key: 'feedback.p3', group: 'learning' },
+  { id: 'P7', key: 'feedback.p7', group: 'learning' },
+] as const
+
+export const PERCEPTION_GROUPS = [
+  { id: 'course', key: 'feedback.groupCourse' },
+  { id: 'learning', key: 'feedback.groupLearning' },
 ] as const
 
 export type PerceptionId = (typeof PERCEPTION_ITEMS)[number]['id']
