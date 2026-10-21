@@ -50,6 +50,7 @@ export function PowerBiConnect({ onClose }: { onClose: () => void }) {
 
   const links = key
     ? [
+        { id: 'percepcao', title: t('powerbi.perceptionTitle'), desc: t('powerbi.perceptionDesc'), url: endpoint('api_percepcao', key) },
         { id: 'comparativo', title: t('powerbi.comparativeTitle'), desc: t('powerbi.comparativeDesc'), url: endpoint('api_pre_pos_comparativo', key) },
         { id: 'respostas', title: t('powerbi.answersTitle'), desc: t('powerbi.answersDesc'), url: endpoint('api_pre_pos_respostas', key) },
       ]

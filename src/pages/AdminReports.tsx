@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { BrandSelect } from '../components/BrandSelect'
 import { EmptyState, FolderIcon } from '../components/EmptyState'
 import { PrePostReport } from '../components/PrePostReport'
+import { PerceptionReport } from '../components/PerceptionReport'
 import { PlacementReport } from '../components/PlacementReport'
 import { useAuth } from '../contexts/AuthContext'
 import {
@@ -170,20 +171,6 @@ export function AdminReports() {
     downloadCsv(`relatorio-desempenho-${courseTitle.slice(0, 40) || 'curso'}.csv`, [header, ...rows])
   }
 
-  function exportFeedback() {
-    if (!feedback) return
-    downloadCsv(`feedback-${courseTitle.slice(0, 40) || 'curso'}.csv`, [
-      [t('reports.colStudent'), t('reports.colRating'), t('feedback.recommendQ'), t('reports.colComment'), t('reports.colDate')],
-      ...feedback.items.map((f) => [
-        f.full_name ?? '',
-        f.rating,
-        f.would_recommend === null ? '' : f.would_recommend ? t('feedback.yes') : t('feedback.no'),
-        f.comment ?? '',
-        fmtDate(f.updated_at),
-      ]),
-    ])
-  }
-
   return (
     <div className="page-shell">
       <div className="max-w-6xl mx-auto px-4 py-10">
@@ -210,7 +197,7 @@ export function AdminReports() {
               {t('reports.tabPerformance')}
             </TabBtn>
             <TabBtn active={tab === 'feedback'} onClick={() => setTab('feedback')}>
-              {t('reports.tabFeedback')} ({feedback?.summary.count ?? 0})
+              {t('reports.tabPerception')} ({feedback?.summary.count ?? 0})
             </TabBtn>
             <TabBtn active={tab === 'antes-depois'} onClick={() => setTab('antes-depois')}>
               {t('reports.tabPrePost')}
@@ -368,106 +355,7 @@ export function AdminReports() {
             </>
           )
         ) : (
-          feedback && (
-            <>
-              <div className="mt-6 grid md:grid-cols-3 gap-3">
-                <div className="card-athenas p-5">
-                  <p className="text-xs font-bold uppercase tracking-wide text-neutral-500">{t('reports.avgRating')}</p>
-                  <p className="mt-1 text-3xl font-bold text-neutral-900">
-                    {feedback.summary.avg_rating ?? '—'}
-                    <span className="ml-1 text-brand-gold text-2xl">★</span>
-                  </p>
-                  <p className="text-xs text-neutral-500">
-                    {t('reports.feedbackCount', { n: String(feedback.summary.count) })}
-                  </p>
-                </div>
-                <div className="card-athenas p-5">
-                  <p className="text-xs font-bold uppercase tracking-wide text-neutral-500">{t('reports.recommend')}</p>
-                  <p className="mt-1 text-3xl font-bold text-neutral-900">
-                    {feedback.summary.recommend_yes + feedback.summary.recommend_no > 0
-                      ? `${Math.round(
-                          (feedback.summary.recommend_yes * 100) /
-                            (feedback.summary.recommend_yes + feedback.summary.recommend_no)
-                        )}%`
-                      : '—'}
-                  </p>
-                  <p className="text-xs text-neutral-500">
-                    {t('reports.recommendSplit', {
-                      yes: String(feedback.summary.recommend_yes),
-                      no: String(feedback.summary.recommend_no),
-                    })}
-                  </p>
-                </div>
-                <div className="card-athenas p-5 space-y-1">
-                  {(['5', '4', '3', '2', '1'] as const).map((n) => {
-                    const count = feedback.summary.by_rating[n] ?? 0
-                    const pct = feedback.summary.count ? (count * 100) / feedback.summary.count : 0
-                    return (
-                      <div key={n} className="flex items-center gap-2 text-xs">
-                        <span className="w-6 text-neutral-600">{n}★</span>
-                        <div className="flex-1 h-2 rounded-full bg-brand-gold-soft overflow-hidden">
-                          <div className="h-full bg-brand-gold" style={{ width: `${pct}%` }} />
-                        </div>
-                        <span className="w-6 text-right text-neutral-600">{count}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="button"
-                  onClick={exportFeedback}
-                  disabled={feedback.items.length === 0}
-                  className="btn-secondary !px-4 !py-2 text-sm"
-                >
-                  {t('reports.exportCsv')}
-                </button>
-              </div>
-
-              {feedback.items.length === 0 ? (
-                <div className="mt-4">
-                  <EmptyState icon={<FolderIcon />} title={t('reports.noFeedback')} />
-                </div>
-              ) : (
-                <div className="mt-4 space-y-3">
-                  {feedback.items.map((f) => (
-                    <article key={f.id} className="card-athenas p-5">
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div>
-                          <p className="font-bold text-neutral-900">{f.full_name ?? t('admin.unnamed')}</p>
-                          <p className="text-brand-gold text-lg leading-none mt-1" aria-label={`${f.rating}/5`}>
-                            {'★'.repeat(f.rating)}
-                            <span className="text-neutral-300">{'★'.repeat(5 - f.rating)}</span>
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-neutral-500">{fmtDate(f.updated_at)}</p>
-                          {f.would_recommend !== null && (
-                            <span
-                              className={`mt-1 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                                f.would_recommend
-                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                                  : 'bg-red-50 text-red-800 border border-red-200'
-                              }`}
-                            >
-                              {f.would_recommend ? t('reports.recommends') : t('reports.notRecommends')}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      {f.comment ? (
-                        <p className="mt-3 text-sm text-neutral-700 whitespace-pre-line leading-relaxed">{f.comment}</p>
-                      ) : (
-                        <p className="mt-3 text-sm text-neutral-400 italic">{t('reports.noComment')}</p>
-                      )}
-                    </article>
-                  ))}
-                </div>
-              )}
-            </>
-          )
+          <PerceptionReport courseId={courseId} courseTitle={courseTitle} />
         )}
       </div>
     </div>

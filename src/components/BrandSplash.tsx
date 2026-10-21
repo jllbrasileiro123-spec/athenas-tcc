@@ -1,18 +1,17 @@
-import { AthenaMark } from './AthenaMark'
-
-/** Splash / loading com a ilustração da Athena e fade-in. */
+/**
+ * Carregamento discreto: só uma linha dourada correndo no topo da tela
+ * (sem a ilustração da Athena nem o spinner no meio da página).
+ */
 export function BrandSplash({ message, fullScreen = false }: { message?: string; fullScreen?: boolean }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center bg-brand-cream px-4 ${
-        fullScreen ? 'min-h-dvh' : 'min-h-[40vh]'
-      }`}
+      className={`flex items-center justify-center bg-brand-cream px-4 ${fullScreen ? 'min-h-dvh' : 'min-h-[40vh]'}`}
+      role="status"
+      aria-live="polite"
+      aria-label={message ?? 'Carregando'}
     >
-      <div className="animate-[athenas-fade-in_0.7s_ease-out_both] text-center">
-        <AthenaMark framed variant="header" className="mx-auto h-36 w-36 sm:h-40 sm:w-40" alt="" />
-        <div className="spinner-athenas mx-auto mt-6" />
-        {message ? <p className="mt-4 text-sm text-neutral-600">{message}</p> : null}
-      </div>
+      <div className="loading-bar fixed inset-x-0 top-0 z-[100] h-[3px] overflow-hidden" aria-hidden />
+      {message ? <p className="text-sm text-neutral-500">{message}</p> : null}
     </div>
   )
 }

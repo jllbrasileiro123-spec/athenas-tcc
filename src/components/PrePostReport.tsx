@@ -19,18 +19,18 @@ import {
 
 type TFn = ReturnType<typeof useLanguage>['t']
 type Pair = { pre: QuestionStats | null; post: QuestionStats }
-type Slice = { label: string; pct: number; color: string }
+export type Slice = { label: string; pct: number; color: string }
 
 const question = (id: string) => SURVEY_QUESTIONS.find((x) => x.id === id)!
-const pctFmt = (v: number) => `${Math.round(v)}%`
-const decFmt = (v: number) => v.toFixed(1).replace('.', ',')
+export const pctFmt = (v: number) => `${Math.round(v)}%`
+export const decFmt = (v: number) => v.toFixed(1).replace('.', ',')
 
 /* Escalas ordenadas: tons de dourado (claro → escuro). Categorias sem ordem:
    paleta categórica validada para daltonismo, sempre na mesma ordem. */
-const GOLD = '#c9a227'
-const GRAY = '#a3a3a3'
+export const GOLD = '#c9a227'
+export const GRAY = '#a3a3a3'
 const TRACK = '#efe9da'
-const GOLD_RAMP = ['#f4e7bf', '#e8cf7a', '#c9a227', '#93740f', '#5c4808']
+export const GOLD_RAMP = ['#f4e7bf', '#e8cf7a', '#c9a227', '#93740f', '#5c4808']
 const CATEGORICAL = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#6250d6', '#e34948']
 
 function rampFor(n: number) {
@@ -59,7 +59,7 @@ function share(s: QuestionStats | null | undefined, options: string[]) {
 /* ---------------- Gráficos (SVG) ---------------- */
 
 /** Anel de pizza: fatias desenhadas como arcos de um círculo */
-function Ring({ slices, size, r, stroke }: { slices: Slice[]; size: number; r: number; stroke: number }) {
+export function Ring({ slices, size, r, stroke }: { slices: Slice[]; size: number; r: number; stroke: number }) {
   const c = 2 * Math.PI * r
   const visible = slices.filter((s) => s.pct > 0)
   const gap = visible.length > 1 ? 1.5 : 0
@@ -114,7 +114,7 @@ function BeforeAfterRing({ before, after, size = 104, label }: { before: number 
   )
 }
 
-function Pie({ slices, size }: { slices: Slice[]; size: number }) {
+export function Pie({ slices, size }: { slices: Slice[]; size: number }) {
   const stroke = Math.round(size * 0.18)
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0 -rotate-90">

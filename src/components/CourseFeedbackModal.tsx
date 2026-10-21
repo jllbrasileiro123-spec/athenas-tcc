@@ -3,10 +3,12 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { BrandMark } from './BrandMark'
 import {
+  PERCEPTION_ITEMS,
   dismissFeedback,
   fetchMyFeedback,
   saveFeedback,
   wasFeedbackDismissed,
+  type Perception,
 } from '../lib/courseFeedback'
 
 type Props = {
@@ -28,6 +30,7 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(0)
   const [recommend, setRecommend] = useState<boolean | null>(null)
+  const [perception, setPerception] = useState<Perception>({})
   const [comment, setComment] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -46,6 +49,7 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
         setRating(feedback.rating)
         setRecommend(feedback.would_recommend)
         setComment(feedback.comment ?? '')
+        setPerception(feedback.perception ?? {})
       }
       // Sem a tabela no Supabase não abre sozinho (evita popup quebrado)
       if (auto && !err && !feedback && !wasFeedbackDismissed(courseId)) setAutoOpen(true)
@@ -69,12 +73,17 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
       setError(t('feedback.needRating'))
       return
     }
+    if (PERCEPTION_ITEMS.some((p) => !perception[p.id])) {
+      setError(t('feedback.needPerception'))
+      return
+    }
     setError(null)
     setSaving(true)
     const err = await saveFeedback(user.id, courseId, {
       rating,
       would_recommend: recommend,
       comment,
+      perception,
     })
     setSaving(false)
     if (err) {
@@ -140,6 +149,39 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
               <p className="mt-1 h-4 text-center text-xs text-neutral-500">
                 {shown > 0 ? t(`feedback.rating${shown}` as 'feedback.rating1') : ''}
               </p>
+            </fieldset>
+
+            <fieldset className="mt-5">
+              <legend className="text-sm font-semibold text-neutral-900">{t('feedback.perceptionQ')}</legend>
+              <div className="mt-1 flex justify-between text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
+                <span>{t('feedback.disagree')}</span>
+                <span>{t('feedback.agree')}</span>
+              </div>
+              <div className="mt-1 space-y-3">
+                {PERCEPTION_ITEMS.map((item) => (
+                  <div key={item.id}>
+                    <p className="text-[13px] leading-snug text-neutral-800">{t(item.key)}</p>
+                    <div className="mt-1.5 grid grid-cols-5 gap-1.5" role="radiogroup" aria-label={t(item.key)}>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          role="radio"
+                          aria-checked={perception[item.id] === n}
+                          onClick={() => setPerception((prev) => ({ ...prev, [item.id]: n }))}
+                          className={`rounded-lg border py-1.5 text-sm font-bold transition-colors ${
+                            perception[item.id] === n
+                              ? 'border-neutral-900 bg-brand-gold-soft/70 text-neutral-900'
+                              : 'border-neutral-200 bg-white text-neutral-500 hover:border-brand-gold/60'
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </fieldset>
 
             <fieldset className="mt-5">
