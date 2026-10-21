@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type ReactNode } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { downloadCsv } from '../lib/adminReports'
+import { PowerBiConnect } from './PowerBiConnect'
 import {
   OTHER,
   SURVEY_QUESTIONS,
@@ -147,6 +148,7 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
   const [importing, setImporting] = useState(false)
   const [importMsg, setImportMsg] = useState<string | null>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [powerBiOpen, setPowerBiOpen] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -257,6 +259,13 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
         className="rounded-full border border-white/20 px-3.5 py-1.5 text-xs font-bold text-white/90 transition-colors hover:border-brand-gold hover:text-brand-gold-light disabled:opacity-40"
       >
         {t('prepost.exportComparison')}
+      </button>
+      <button
+        type="button"
+        onClick={() => setPowerBiOpen(true)}
+        className="rounded-full bg-brand-gold px-3.5 py-1.5 text-xs font-extrabold text-neutral-950 transition hover:brightness-105"
+      >
+        {t('powerbi.cta')}
       </button>
     </div>
   )
@@ -372,6 +381,8 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
           {t('prepost.allQuestions')} →
         </button>
       </section>
+
+      {powerBiOpen && <PowerBiConnect onClose={() => setPowerBiOpen(false)} />}
 
       {detailsOpen && (
         <DetailsDrawer
