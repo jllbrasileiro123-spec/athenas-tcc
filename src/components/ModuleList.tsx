@@ -199,7 +199,9 @@ function ModuleItemRow({
     ? t('module.kindShortQuiz')
     : item.item_kind === 'podcast'
       ? t('module.kindShortPodcast')
-      : t('module.kindShortLesson')
+      : item.item_kind === 'tutorial'
+        ? t('module.kindShortExercise')
+        : t('module.kindShortLesson')
   const meta = [
     kind,
     !isQuiz && item.duration_minutes > 0 ? `${item.duration_minutes} min` : null,

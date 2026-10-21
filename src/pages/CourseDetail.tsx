@@ -266,7 +266,9 @@ export function CourseDetail() {
           ? t('module.kindShortQuiz')
           : nextItem.item_kind === 'podcast'
             ? t('module.kindShortPodcast')
-            : t('module.kindShortLesson'),
+            : nextItem.item_kind === 'tutorial'
+              ? t('module.kindShortExercise')
+              : t('module.kindShortLesson'),
         nextItem.content_type === 'lesson' && nextItem.duration_minutes > 0
           ? `${nextItem.duration_minutes} min`
           : null,
