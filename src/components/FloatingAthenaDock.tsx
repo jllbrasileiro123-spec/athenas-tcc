@@ -17,7 +17,7 @@ export function FloatingAthenaDock() {
   const location = useLocation()
   const [open, setOpen] = useState(false)
 
-  const hideOn = location.pathname.startsWith('/demo-video')
+  const hideOn = location.pathname.startsWith('/demo-video') || location.pathname.startsWith('/curso/')
 
   useEffect(() => {
     setOpen(false)

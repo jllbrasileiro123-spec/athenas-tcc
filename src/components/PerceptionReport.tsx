@@ -124,7 +124,7 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
         {/* Satisfação */}
         <section className="flex flex-col justify-between gap-6 rounded-3xl bg-neutral-950 p-6 text-white">
           <div>
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
               {t('perception.heroKicker')}
             </p>
             <p className="mt-4 flex items-baseline gap-2 font-display text-6xl font-bold leading-none text-brand-gold-light">
@@ -143,17 +143,17 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
           <div className="space-y-4">
             <dl className="grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
               <div>
-                <dt className="text-[11px] font-semibold text-neutral-400">{t('perception.recommend')}</dt>
+                <dt className="text-xs font-semibold text-neutral-400">{t('perception.recommend')}</dt>
                 <dd className="mt-0.5 text-2xl font-bold tabular-nums">{recommendPct === null ? '—' : pctFmt(recommendPct)}</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-semibold text-neutral-400">{t('perception.completed')}</dt>
+                <dt className="text-xs font-semibold text-neutral-400">{t('perception.completed')}</dt>
                 <dd className="mt-0.5 text-2xl font-bold tabular-nums">
                   {data ? `${data.completed}/${data.enrolled}` : '—'}
                 </dd>
               </div>
               <div className="col-span-2">
-                <dt className="text-[11px] font-semibold text-neutral-400">{t('perception.medianDays')}</dt>
+                <dt className="text-xs font-semibold text-neutral-400">{t('perception.medianDays')}</dt>
                 <dd className="mt-0.5 text-2xl font-bold tabular-nums">
                   {data?.median_days == null ? '—' : t('perception.days', { n: decFmt(Number(data.median_days)) })}
                 </dd>
@@ -179,9 +179,9 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
           {PERCEPTION_GROUPS.map((g) => (
             <section key={g.id} className="rounded-3xl border border-brand-line bg-white p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">{t(g.key)}</h3>
+                <h3 className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">{t(g.key)}</h3>
                 {g.id === 'course' && (
-                  <div className="flex gap-3 text-[11px] font-semibold text-neutral-500">
+                  <div className="flex gap-3 text-xs font-semibold text-neutral-500">
                     {[
                       [AGREE, t('perception.agree')],
                       [NEUTRAL, t('perception.neutral')],
@@ -215,7 +215,7 @@ export function PerceptionReport({ courseId, courseTitle }: { courseId: string; 
                       type="button"
                       onClick={() => setDrawer(true)}
                       disabled={!n}
-                      className="mt-3 self-start rounded-full bg-neutral-950 px-3 py-1.5 text-[11px] font-bold text-brand-gold-light hover:bg-black disabled:opacity-40"
+                      className="mt-3 self-start rounded-full bg-neutral-950 px-3 py-1.5 text-xs font-bold text-brand-gold-light hover:bg-black disabled:opacity-40"
                     >
                       {t('perception.seeAllShort')} →
                     </button>
@@ -288,7 +288,7 @@ function AnswersDrawer({ items, onClose, t }: { items: PerceptionItem[]; onClose
                     <span
                       key={p.id}
                       title={t(p.key)}
-                      className={`rounded-md px-2 py-0.5 text-[11px] font-bold tabular-nums ${
+                      className={`rounded-md px-2 py-0.5 text-xs font-bold tabular-nums ${
                         v === undefined ? 'bg-neutral-100 text-neutral-400' : v >= 4 ? 'bg-brand-gold-soft text-neutral-900' : v === 3 ? 'bg-neutral-100 text-neutral-700' : 'bg-neutral-200 text-neutral-800'
                       }`}
                     >
@@ -301,7 +301,7 @@ function AnswersDrawer({ items, onClose, t }: { items: PerceptionItem[]; onClose
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-2 border-t border-brand-line bg-white px-6 py-3 text-[11px] text-neutral-500">
+        <div className="flex items-center gap-2 border-t border-brand-line bg-white px-6 py-3 text-xs text-neutral-500">
           {t('perception.legend')}
         </div>
       </aside>
@@ -326,12 +326,12 @@ function AgreeDonut({ label, a, t }: { label: string; a: ReturnType<typeof agree
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
           <span className="text-lg font-bold tabular-nums text-neutral-900">{a ? pctFmt(a.agree) : '—'}</span>
-          <span className="mt-0.5 text-[9px] font-semibold text-neutral-500">{t('perception.agreeShort')}</span>
+          <span className="mt-0.5 text-xs font-semibold text-neutral-500">{t('perception.agreeShort')}</span>
         </div>
       </div>
       <p className="mt-2 line-clamp-3 text-xs font-semibold leading-snug text-neutral-800">{label}</p>
       {a && (
-        <p className="mt-1 text-[11px] text-neutral-500">
+        <p className="mt-1 text-xs text-neutral-500">
           {t('prepost.mean')} <span className="font-bold text-neutral-800">{decFmt(a.mean)}</span>/5
         </p>
       )}

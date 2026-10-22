@@ -129,7 +129,7 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
 
             {/* 1 · Avaliação do curso */}
             <section className="mt-6 rounded-2xl border border-brand-line bg-white p-4">
-              <h3 className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+              <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
                 1 · {t('feedback.groupCourse')}
               </h3>
               <fieldset className="mt-3">
@@ -190,7 +190,7 @@ export function CourseFeedbackModal({ courseId, courseTitle, auto, open, onClose
 
             {/* 2 · Percepção do próprio aprendizado */}
             <section className="mt-4 rounded-2xl border border-brand-line bg-white p-4">
-              <h3 className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+              <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
                 2 · {t('feedback.groupLearning')}
               </h3>
               <ScaleHint t={t} />
@@ -246,7 +246,7 @@ type TFn = ReturnType<typeof useLanguage>['t']
 
 function ScaleHint({ t }: { t: TFn }) {
   return (
-    <div className="mt-3 flex justify-between text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
+    <div className="mt-3 flex justify-between text-xs font-semibold uppercase tracking-wide text-neutral-500">
       <span>{t('feedback.disagree')}</span>
       <span>{t('feedback.agree')}</span>
     </div>

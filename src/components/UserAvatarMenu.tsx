@@ -139,7 +139,7 @@ export function UserAvatarMenu() {
             <p className="font-bold text-sm truncate text-brand-gold flex items-center gap-2 flex-wrap">
               <span className="truncate">{displayName}</span>
               {(profile?.role === 'instructor' || profile?.role === 'admin') && (
-                <span className="shrink-0 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-brand-gold/50 text-brand-gold/90 bg-transparent">
+                <span className="shrink-0 text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-brand-gold/50 text-brand-gold/90 bg-transparent">
                   {profile.role === 'admin' ? 'Admin' : t('badge.instructor')}
                 </span>
               )}
@@ -299,7 +299,7 @@ export function UserAvatarMenu() {
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="px-4 pt-2 pb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">
+    <p className="px-4 pt-2 pb-1 text-xs font-bold uppercase tracking-[0.14em] text-neutral-400">
       {children}
     </p>
   )

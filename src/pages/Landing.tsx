@@ -28,22 +28,22 @@ const NORMS = [
 
 const STEPS = [
   {
-    n: '01',
+    n: '1',
     title: 'Nivelamento',
     body: 'Um teste rápido mede o que você já sabe e libera os módulos que você já domina. Ninguém perde tempo com o básico.',
   },
   {
-    n: '02',
+    n: '2',
     title: 'Trilha em módulos',
     body: 'Vídeo, podcast e material de apoio em cada módulo. O próximo só abre quando o anterior está concluído.',
   },
   {
-    n: '03',
+    n: '3',
     title: 'Quiz com gabarito comentado',
     body: 'Um quiz no fim de cada módulo e 70% de acerto para avançar. Ao passar, cada resposta vem explicada.',
   },
   {
-    n: '04',
+    n: '4',
     title: 'Certificado verificável',
     body: 'Certificado em imagem com seu nome completo e código único que qualquer pessoa confere online.',
   },
@@ -127,7 +127,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-[1920px] items-center gap-3 px-4 sm:gap-6 sm:px-6 lg:px-10">
           <Link to="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setMenuOpen(false)}>
             <BrandMark framed className="h-9 w-9" alt="" />
             <span className="font-display text-xl font-bold tracking-[0.08em]">ATHENAS</span>
@@ -201,22 +201,12 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Hero ---------------- */}
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 lg:pb-28">
-        <div className="landing-grid absolute inset-0" aria-hidden />
-        <div className="landing-glow absolute left-1/2 top-24 -translate-x-1/2" aria-hidden />
-
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr]">
+        <div className="relative mx-auto grid max-w-[1920px] items-center gap-14 px-4 sm:px-6 lg:px-10 lg:grid-cols-[1.05fr_1fr]">
           <div className="landing-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand-gold/30 bg-brand-gold-soft/50 px-3 py-1 text-xs font-semibold text-[#8a6a12]">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-gold" />
-              </span>
-              IA no cotidiano jurídico
-            </span>
 
-            <h1 className="mt-6 font-display text-5xl font-bold leading-[1] sm:text-6xl lg:text-7xl xl:text-[84px]">
+            <h1 className="font-display text-5xl font-bold leading-[1] tracking-[-0.01em] text-balance sm:text-6xl lg:text-7xl">
               A advocacia que usa IA{' '}
-              <span className="landing-text-gold">com responsabilidade</span> começa aqui.
+              <span className="text-brand-gold-ink">com responsabilidade</span> começa aqui.
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600">
@@ -234,7 +224,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               </a>
             </div>
 
-            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-500">
+            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-600">
               {['Cadastro gratuito', 'Sem precisar programar', 'Certificado verificável'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Check />
@@ -250,8 +240,8 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Faixa de normas ---------------- */}
       <section className="border-y border-brand-gold/20 bg-white/60 py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500">
+        <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-10">
+          <p className="text-center text-xs font-semibold text-neutral-500">
             Conteúdo alinhado às normas que regem a IA no Direito brasileiro
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
@@ -270,9 +260,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
       {/* ---------------- Problema ---------------- */}
       <Section>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <Reveal>
-            <Eyebrow>O desafio</Eyebrow>
-            <h2 className="landing-h2">
+          <Reveal>            <h2 className="landing-h2">
               A IA já chegou ao escritório. <span className="text-neutral-500">O preparo, ainda não.</span>
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-neutral-600">
@@ -304,16 +292,14 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Como funciona ---------------- */}
       <Section id="como-funciona" className="bg-white/60 border-y border-brand-gold/20">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow>Como funciona</Eyebrow>
-          <h2 className="landing-h2">Do primeiro conceito ao certificado, em uma trilha guiada.</h2>
+        <Reveal className="mx-auto max-w-2xl text-center">          <h2 className="landing-h2">Do primeiro conceito ao certificado, em uma trilha guiada.</h2>
         </Reveal>
         <div className="mt-14 grid overflow-hidden rounded-3xl border border-brand-gold/20 md:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 90} className="group relative border-brand-gold/20 bg-white p-7 transition-colors hover:bg-brand-cream max-lg:border-b max-lg:last:border-b-0 md:max-lg:odd:border-r md:max-lg:[&:nth-child(3)]:border-b-0 lg:border-r lg:last:border-r-0">
-              <span className="font-mono text-sm text-[#8a6a12]">{step.n}</span>
+              <span className="font-display text-4xl font-bold leading-none text-brand-gold-ink">{step.n}</span>
               <h3 className="mt-6 text-xl font-semibold">{step.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-neutral-600">{step.body}</p>
+              <p className="mt-3 text-base leading-relaxed text-neutral-700">{step.body}</p>
               <span className="absolute inset-x-7 bottom-0 h-px scale-x-0 bg-gradient-to-r from-transparent via-brand-gold to-transparent transition-transform duration-500 group-hover:scale-x-100" />
             </Reveal>
           ))}
@@ -322,9 +308,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Recursos (bento) ---------------- */}
       <Section id="recursos">
-        <Reveal className="max-w-2xl">
-          <Eyebrow>Recursos</Eyebrow>
-          <h2 className="landing-h2">Feito para quem aprende entre uma audiência e outra.</h2>
+        <Reveal className="max-w-2xl">          <h2 className="landing-h2">Feito para quem aprende entre uma audiência e outra.</h2>
         </Reveal>
 
         <div className="mt-14 grid gap-4 md:grid-cols-6">
@@ -354,7 +338,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               <img src={`${base}icons/coin-a.png`} alt="" className="h-8 w-8" />
             </div>
             <h3 className="mt-5 text-lg font-semibold">Gamificação</h3>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-2 text-base leading-relaxed text-neutral-700">
               XP por aula, sequência de dias estudando e moedas para proteger a sequência.
             </p>
           </Reveal>
@@ -366,7 +350,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               </svg>
             </IconBox>
             <h3 className="mt-5 text-lg font-semibold">Vídeo, podcast e material</h3>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-2 text-base leading-relaxed text-neutral-700">
               Assista no escritório, ouça no trânsito, revise pelo material de apoio.
             </p>
           </Reveal>
@@ -378,7 +362,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               </svg>
             </IconBox>
             <h3 className="mt-5 text-lg font-semibold">App no celular</h3>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-2 text-base leading-relaxed text-neutral-700">
               Instale direto do navegador, sem loja de aplicativos. Seu progresso acompanha você.
             </p>
           </Reveal>
@@ -390,7 +374,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               </svg>
             </IconBox>
             <h3 className="mt-5 text-lg font-semibold">Certificado com código</h3>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+            <p className="mt-2 text-base leading-relaxed text-neutral-700">
               Baixe em imagem, compartilhe no LinkedIn e deixe qualquer pessoa conferir a autenticidade.
             </p>
           </Reveal>
@@ -400,9 +384,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
       {/* ---------------- Conteúdo ---------------- */}
       <Section id="conteudo" className="bg-white/60 border-y border-brand-gold/20">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-          <Reveal>
-            <Eyebrow>Conteúdo</Eyebrow>
-            <h2 className="landing-h2">Quatro módulos, do conceito à prática supervisionada.</h2>
+          <Reveal>            <h2 className="landing-h2">Quatro módulos, do conceito à prática supervisionada.</h2>
             <p className="mt-5 text-lg leading-relaxed text-neutral-600">
               Começa pelo que a IA realmente é, passa pelas ferramentas do dia a dia forense e pela ética
               profissional, e termina com simulações de casos reais e uma avaliação final.
@@ -419,11 +401,11 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
               {MODULES.map((mod, i) => (
                 <li key={mod.title} className="flex gap-4 px-6 py-5">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-950 font-display text-base font-bold text-brand-gold-light">
-                    {String(i + 1).padStart(2, '0')}
+                    {i + 1}
                   </span>
                   <div>
                     <p className="font-semibold text-neutral-900">{mod.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-neutral-600">{mod.topics.join(' · ')}</p>
+                    <p className="mt-1 text-base leading-relaxed text-neutral-700">{mod.topics.join(' · ')}</p>
                   </div>
                 </li>
               ))}
@@ -434,12 +416,8 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Escritórios ---------------- */}
       <Section id="escritorios">
-        <div className="relative overflow-hidden rounded-[2rem] border border-brand-gold/20 bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-950 p-8 text-white shadow-xl shadow-black/10 sm:p-12 lg:p-16">
-          <div className="landing-glow-sm absolute -right-20 -top-20" aria-hidden />
-          <div className="relative grid gap-12 lg:grid-cols-2 lg:items-center">
-            <Reveal>
-              <Eyebrow dark>Para escritórios</Eyebrow>
-              <h2 className="landing-h2">Saiba quem da equipe está pronto para usar IA.</h2>
+        <div className="relative overflow-hidden rounded-[2rem] border border-brand-gold/20 bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-950 p-8 text-white shadow-xl shadow-black/10 sm:p-12 lg:p-16">          <div className="relative grid gap-12 lg:grid-cols-2 lg:items-center">
+            <Reveal>              <h2 className="landing-h2">Saiba quem da equipe está pronto para usar IA.</h2>
               <p className="mt-5 text-lg leading-relaxed text-neutral-400">
                 O painel do administrador mostra o desempenho de cada advogado em todos os quizzes, a
                 nota final, quem já tem certificado e o que a turma achou do curso. Exporta tudo para
@@ -469,9 +447,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
       {/* ---------------- FAQ ---------------- */}
       <Section id="faq" className="bg-white/60 border-y border-brand-gold/20">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <Reveal>
-            <Eyebrow>Perguntas frequentes</Eyebrow>
-            <h2 className="landing-h2">Ficou alguma dúvida?</h2>
+          <Reveal>            <h2 className="landing-h2">Ficou alguma dúvida?</h2>
             <p className="mt-5 text-neutral-600">
               Depois de entrar, a Athena e o instrutor respondem dentro de cada aula.
             </p>
@@ -493,13 +469,10 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
       </Section>
 
       {/* ---------------- CTA final ---------------- */}
-      <section className="relative overflow-hidden py-24 sm:py-32">
-        <div className="landing-grid absolute inset-0 opacity-60" aria-hidden />
-        <div className="landing-glow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden />
-        <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+      <section className="relative overflow-hidden py-24 sm:py-32">        <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
           <BrandMark framed className="mx-auto h-16 w-16" alt="" />
           <h2 className="mt-8 font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
-            Use a IA a seu favor, <span className="landing-text-gold">sem abrir mão da ética.</span>
+            Use a IA a seu favor, <span className="text-brand-gold-ink">sem abrir mão da ética.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg text-neutral-600">
             Crie sua conta gratuita e comece o Módulo 1 agora.
@@ -518,7 +491,7 @@ export function Landing({ alwaysShow = false }: { alwaysShow?: boolean }) {
 
       {/* ---------------- Footer ---------------- */}
       <footer className="border-t border-brand-gold/20 py-10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-neutral-500 sm:flex-row sm:px-6">
+        <div className="mx-auto flex max-w-[1920px] flex-col items-center justify-between gap-6 px-4 text-sm text-neutral-500 sm:flex-row sm:px-6 lg:px-10">
           <div className="flex items-center gap-2.5">
             <BrandMark framed className="h-7 w-7" alt="" />
             <span className="font-display text-lg font-bold tracking-[0.08em] text-neutral-800">ATHENAS</span>
@@ -562,7 +535,7 @@ function HeroMockup() {
 
         {/* módulo */}
         <div className="mt-5 rounded-2xl border border-brand-gold/20 bg-white p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-500">Módulo 1</p>
+          <p className="text-xs font-semibold text-neutral-500">Módulo 1</p>
           <p className="mt-1 font-semibold leading-snug">Fundamentos de IA e o Cenário Jurídico Brasileiro</p>
           <div className="mt-4 flex items-center justify-between text-xs text-neutral-600">
             <span>Progresso</span>
@@ -590,14 +563,14 @@ function HeroMockup() {
 
       {/* cartões flutuantes */}
       <div className="landing-float absolute left-[40%] -top-8 hidden rounded-2xl border border-brand-gold/20 bg-white px-4 py-3 shadow-xl backdrop-blur sm:block">
-        <p className="text-[10px] uppercase tracking-widest text-neutral-500">XP ganho</p>
+        <p className="text-xs text-neutral-500">XP ganho</p>
         <p className="text-lg font-bold text-[#8a6a12]">+15 XP</p>
       </div>
       <div className="landing-float-slow absolute -bottom-8 -right-3 hidden w-56 rounded-2xl border border-brand-gold/30 bg-brand-cream p-4 text-neutral-900 shadow-2xl sm:block">
-        <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#8a6a12]">Certificado</p>
+        <p className="text-xs font-bold text-[#8a6a12]">Certificado</p>
         <p className="mt-1 font-serif text-base font-bold leading-tight">Maria F. de Souza</p>
-        <p className="mt-1 text-[11px] text-neutral-500">IA no Cotidiano Jurídico</p>
-        <p className="mt-2 font-mono text-[11px] font-bold tracking-wider">ATH-7F3A-91C2</p>
+        <p className="mt-1 text-xs text-neutral-500">IA no Cotidiano Jurídico</p>
+        <p className="mt-2 tabular-nums text-xs font-bold tracking-wider">ATH-7F3A-91C2</p>
       </div>
     </div>
   )
@@ -616,7 +589,7 @@ function ReportMockup() {
     <div className="rounded-2xl border border-white/10 bg-neutral-950/80 p-5 shadow-2xl">
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold">Relatório da turma</p>
-        <span className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-neutral-400">
+        <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-neutral-400">
           Exportar CSV
         </span>
       </div>
@@ -627,7 +600,7 @@ function ReportMockup() {
       </div>
       <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
         <table className="w-full text-left text-xs">
-          <thead className="bg-white/5 text-[10px] uppercase tracking-wider text-neutral-500">
+          <thead className="bg-white/5 text-xs text-neutral-500">
             <tr>
               <th className="px-3 py-2 font-semibold">Advogado</th>
               <th className="px-3 py-2 font-semibold">Quiz 1</th>
@@ -650,7 +623,7 @@ function ReportMockup() {
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-[10px] text-neutral-600">Dados ilustrativos.</p>
+      <p className="mt-3 text-xs text-neutral-600">Dados ilustrativos.</p>
     </div>
   )
 }
@@ -706,25 +679,18 @@ function Reveal({
 function Section({ id, className = '', children }: { id?: string; className?: string; children: ReactNode }) {
   return (
     <section id={id} className={`scroll-mt-16 py-20 sm:py-28 ${className}`}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">{children}</div>
+      <div className="mx-auto max-w-[1920px] px-4 sm:px-6 lg:px-10">{children}</div>
     </section>
   )
 }
 
-function Eyebrow({ children, dark }: { children: ReactNode; dark?: boolean }) {
-  return (
-    <p className={`mb-4 font-mono text-xs font-semibold uppercase tracking-[0.25em] ${dark ? 'text-brand-gold' : 'text-[#8a6a12]'}`}>
-      {children}
-    </p>
-  )
-}
 
 function RiskCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="landing-card">
       <span className="inline-block h-1.5 w-8 rounded-full bg-brand-gold" />
       <h3 className="mt-4 font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-600">{body}</p>
+      <p className="mt-2 text-base leading-relaxed text-neutral-700">{body}</p>
     </div>
   )
 }
@@ -745,7 +711,7 @@ function MockItem({ done, children }: { done?: boolean; children: ReactNode }) {
   return (
     <li className="flex items-center gap-2.5">
       <span
-        className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${
+        className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${
           done ? 'bg-brand-gold text-neutral-950' : 'border border-neutral-300 text-neutral-500'
         }`}
       >
@@ -760,7 +726,7 @@ function MiniStat({ label, value, gold }: { label: string; value: string; gold?:
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3">
       <p className={`text-lg font-bold ${gold ? 'text-brand-gold' : 'text-white'}`}>{value}</p>
-      <p className="text-[10px] uppercase tracking-wider text-neutral-500">{label}</p>
+      <p className="text-xs text-neutral-500">{label}</p>
     </div>
   )
 }

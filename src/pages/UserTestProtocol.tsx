@@ -27,7 +27,7 @@ export function UserTestProtocol() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">{t('protocol.kicker')}</p>
         <h1 className="mt-2 text-3xl font-bold text-neutral-900">{t('protocol.title')}</h1>
         <p className="mt-3 text-neutral-600">{t('protocol.desc')}</p>

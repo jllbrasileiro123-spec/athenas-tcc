@@ -85,7 +85,7 @@ export function ModuleList({
                 {index + 1}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-neutral-500">
+                <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-neutral-500">
                   {t('module.label', { n: String(index + 1) })}
                 </p>
                 <h3 className="mt-0.5 text-base font-extrabold leading-snug text-neutral-900 sm:text-lg">
@@ -123,7 +123,7 @@ export function ModuleList({
 
             {open && topics.length > 0 && (
               <div className="flex flex-col gap-2 px-5 pb-4 sm:pl-[94px] sm:pr-6">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
                   {t('module.topics')}
                 </p>
                 <ul className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export function ModuleList({
 
               {unlocked && mod.materials.length > 0 && (
                 <div className="mb-2 mt-2 rounded-xl border border-brand-line bg-brand-cream/60 p-4">
-                  <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-neutral-700">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-neutral-700">
                     {t('module.materials')}
                   </p>
                   <ul className="mt-2 space-y-1.5 text-sm">

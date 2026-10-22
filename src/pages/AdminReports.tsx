@@ -173,7 +173,7 @@ export function AdminReports() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">{t('reports.kicker')}</p>
         <h1 className="mt-1 text-2xl md:text-3xl font-bold text-neutral-900">{t('reports.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('reports.desc')}</p>
@@ -263,7 +263,7 @@ export function AdminReports() {
               ) : (
                 <div className="mt-4 overflow-x-auto rounded-2xl border border-brand-gold/20 bg-white shadow-sm">
                   <table className="min-w-full text-sm">
-                    <thead className="bg-brand-gold-soft/40 text-left text-[11px] uppercase tracking-wide text-neutral-600">
+                    <thead className="bg-brand-gold-soft/40 text-left text-xs uppercase tracking-wide text-neutral-600">
                       <tr>
                         <th className="px-4 py-3 font-bold sticky left-0 bg-[#fbf3e3] z-10">{t('reports.colStudent')}</th>
                         <th className="px-3 py-3 font-bold">{t('reports.colProgress')}</th>
@@ -287,7 +287,7 @@ export function AdminReports() {
                           <td className="px-4 py-3 sticky left-0 bg-white z-10">
                             <p className="font-semibold text-neutral-900">{s.full_name ?? t('admin.unnamed')}</p>
                             {s.email && <p className="text-xs text-neutral-500">{s.email}</p>}
-                            <p className="text-[11px] text-neutral-400">
+                            <p className="text-xs text-neutral-400">
                               {t('reports.since', { date: fmtDate(s.enrolled_at) })}
                             </p>
                           </td>
@@ -315,7 +315,7 @@ export function AdminReports() {
                             {s.certificate_code ? (
                               <>
                                 <p className="font-mono text-xs font-bold text-neutral-900">{s.certificate_code}</p>
-                                <p className="text-[11px] text-neutral-500">{fmtDate(s.certificate_issued_at)}</p>
+                                <p className="text-xs text-neutral-500">{fmtDate(s.certificate_issued_at)}</p>
                               </>
                             ) : (
                               <span className="text-neutral-400">—</span>
@@ -380,7 +380,7 @@ function QuizCell({ result, t }: { result: StudentQuizResult | undefined; t: TFn
       <p className={`font-bold ${scoreClass(result.percent)}`}>
         {result.correct}/{result.total} · {result.percent}%
       </p>
-      <p className="text-[11px] text-neutral-500">
+      <p className="text-xs text-neutral-500">
         {result.attempts === 1
           ? t('reports.oneAttempt')
           : t('reports.attempts', { n: String(result.attempts) })}
@@ -395,7 +395,7 @@ function QuizCell({ result, t }: { result: StudentQuizResult | undefined; t: TFn
 function Stat({ label, value, tone }: { label: string; value: string; tone?: string }) {
   return (
     <div className="card-athenas p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-wide text-neutral-500">{label}</p>
       <p className={`mt-1 text-2xl font-bold ${tone ?? 'text-neutral-900'}`}>{value}</p>
     </div>
   )

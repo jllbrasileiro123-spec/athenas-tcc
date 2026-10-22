@@ -294,7 +294,7 @@ export function CreateCourse() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-3xl mx-auto px-4 py-6 lg:py-10">
+      <div className="container-athenas py-6 lg:py-10">
         <Link to="/meus-cursos?view=teaching" className="inline-flex items-center gap-1 text-sm link-athenas mb-5">
           ← {t('create.back')}
         </Link>
@@ -359,7 +359,7 @@ export function CreateCourse() {
                 <div>
                   <label className="block text-xs font-bold text-neutral-700 mb-2">{t('create.price')}</label>
                   <MoneyInput cents={priceCents} onCentsChange={setPriceCents} />
-                  <p className="mt-1.5 text-[11px] text-neutral-500">{t('create.priceHint')}</p>
+                  <p className="mt-1.5 text-xs text-neutral-500">{t('create.priceHint')}</p>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-neutral-700 mb-2">{t('create.level')}</label>
@@ -440,7 +440,7 @@ export function CreateCourse() {
                                     ? ` · ${t('create.videoTag')}`
                                     : ` · ${t('create.noVideoYet')}`}
                             {i === 0 && (
-                              <span className="ml-2 text-[10px] font-bold uppercase bg-brand-gold-soft text-neutral-700 px-1.5 py-0.5 rounded">
+                              <span className="ml-2 text-xs font-bold uppercase bg-brand-gold-soft text-neutral-700 px-1.5 py-0.5 rounded">
                                 {t('create.previewBadge')}
                               </span>
                             )}
@@ -687,7 +687,7 @@ function QuestionBuilder({
               />
             </label>
           ))}
-          <p className="text-[10px] text-neutral-500">{t('create.correctHint')}</p>
+          <p className="text-xs text-neutral-500">{t('create.correctHint')}</p>
         </div>
       ))}
       <button

@@ -67,7 +67,7 @@ export function PowerBiConnect({ onClose }: { onClose: () => void }) {
       >
         <header className="flex items-start justify-between gap-4 bg-neutral-950 px-6 py-5 text-white">
           <div>
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">API</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">API</p>
             <h2 className="mt-1 font-display text-2xl font-bold">{t('powerbi.title')}</h2>
             <p className="mt-1 text-sm text-neutral-300">{t('powerbi.desc')}</p>
           </div>

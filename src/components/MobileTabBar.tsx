@@ -29,7 +29,7 @@ function Tab({ to, label, icon }: { to: string; label: string; icon: ReactNode }
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide ${
+        `flex flex-col items-center justify-center gap-0.5 text-xs font-bold tracking-wide ${
           isActive ? 'text-brand-gold' : 'text-neutral-500'
         }`
       }

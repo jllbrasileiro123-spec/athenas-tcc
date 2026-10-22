@@ -83,16 +83,16 @@ export function TrilhaProgresso({
               <p className="mt-2 text-center text-sm font-bold text-neutral-900 leading-tight line-clamp-2">
                 {lesson.title}
               </p>
-              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-gold">
+              <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-brand-gold">
                 {typeLabel(lesson.content_type, t)} · +{lesson.xp_reward} XP
               </p>
               {lesson.via_placement_test && (
-                <p className="mt-1 text-[10px] font-semibold text-emerald-700">
+                <p className="mt-1 text-xs font-semibold text-emerald-700">
                   {t('trail.viaPlacement')}
                 </p>
               )}
               {!accessible && !lesson.completed && (
-                <p className="mt-1 text-[10px] font-semibold text-neutral-400">{t('trail.locked')}</p>
+                <p className="mt-1 text-xs font-semibold text-neutral-400">{t('trail.locked')}</p>
               )}
             </div>
           )

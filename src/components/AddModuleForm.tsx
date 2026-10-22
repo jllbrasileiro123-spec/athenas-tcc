@@ -219,7 +219,7 @@ function FileField({
           onChange(f)
         }}
       />
-      <span className="mt-1 block text-[11px] text-neutral-500">
+      <span className="mt-1 block text-xs text-neutral-500">
         {file ? file.name : hint}
       </span>
     </label>

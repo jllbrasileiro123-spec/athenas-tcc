@@ -77,7 +77,7 @@ export function InstallAppBanner() {
 
   return (
     <div
-      className={`fixed inset-x-0 z-[70] px-3 pointer-events-none md:bottom-4 ${
+      className={`fixed inset-x-0 z-[70] px-3 pointer-events-none md:hidden ${
         aboveTabBar
           ? 'bottom-[calc(3.5rem+env(safe-area-inset-bottom)+0.5rem)]'
           : 'bottom-[max(1rem,env(safe-area-inset-bottom))]'

@@ -111,7 +111,7 @@ export function PlacementTest() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold mb-2">
           {t('placement.kicker')}
         </p>

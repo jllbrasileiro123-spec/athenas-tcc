@@ -76,7 +76,7 @@ export function InstructorQuestions() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold mb-2">
           {t('doubts.queueKicker')}
         </p>
@@ -116,7 +116,7 @@ export function InstructorQuestions() {
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-bold text-neutral-900">{q.student_name}</span>
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+                          className={`text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
                             q.answer ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-900'
                           }`}
                         >

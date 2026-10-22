@@ -193,7 +193,7 @@ export function LessonDoubts({
                         {formatDate(q.created_at, language)}
                       </span>
                       <span
-                        className={`text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+                        className={`text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
                           q.answer
                             ? 'bg-green-100 text-green-800'
                             : 'bg-amber-100 text-amber-900'

@@ -86,7 +86,7 @@ export function PostTest() {
   if (done) {
     return (
       <div className="page-shell">
-        <div className="mx-auto max-w-xl px-4 py-12">
+        <div className="container-athenas py-12">
           <div className="card-athenas p-8 text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-gold-ink">{t('postTest.kicker')}</p>
             <h1 className="mt-3 font-display text-3xl font-bold text-neutral-900">{t('postTest.thanks')}</h1>
@@ -104,7 +104,7 @@ export function PostTest() {
 
   return (
     <div className="page-shell">
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="mb-2 text-xs font-bold uppercase tracking-widest text-brand-gold-ink">{t('postTest.kicker')}</p>
         <h1 className="font-display text-3xl font-bold text-neutral-900 md:text-4xl">{t('postTest.title')}</h1>
         <p className="mt-3 text-sm leading-relaxed text-neutral-600">{t('postTest.desc')}</p>
@@ -208,7 +208,7 @@ function QuestionInput({
             </label>
           ))}
         </div>
-        <div className="mt-1.5 flex justify-between text-[11px] font-semibold text-neutral-500">
+        <div className="mt-1.5 flex justify-between text-xs font-semibold text-neutral-500">
           <span>{q.kind === 'nps' ? t('postTest.npsLow') : q.scaleLabels?.[0]}</span>
           <span>{q.kind === 'nps' ? t('postTest.npsHigh') : q.scaleLabels?.[1]}</span>
         </div>

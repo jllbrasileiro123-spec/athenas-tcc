@@ -157,7 +157,7 @@ function StreakCalendar({ dates, today }: { dates: string[]; today: string }) {
       </p>
       <div className="grid grid-cols-7 gap-1 text-center">
         {weekdays.map((d, i) => (
-          <span key={`${d}-${i}`} className="text-[10px] font-bold text-neutral-400">
+          <span key={`${d}-${i}`} className="text-xs font-bold text-neutral-400">
             {d}
           </span>
         ))}
@@ -170,7 +170,7 @@ function StreakCalendar({ dates, today }: { dates: string[]; today: string }) {
             <span
               key={iso}
               title={active ? t('streak.dayDone') : undefined}
-              className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-semibold ${
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${
                 active
                   ? 'bg-neutral-950 text-brand-gold'
                   : isToday

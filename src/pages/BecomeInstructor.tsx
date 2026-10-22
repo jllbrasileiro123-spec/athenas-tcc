@@ -68,7 +68,7 @@ export function BecomeInstructor() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{t('instructorApply.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('instructorApply.desc')}</p>
 
@@ -80,7 +80,7 @@ export function BecomeInstructor() {
           <div className="mt-8 alert-brand space-y-2">
             <p className="font-bold">{t('instructorApply.statusPending')}</p>
             <p className="text-sm text-neutral-700">{t('instructorApply.statusPendingHint')}</p>
-            <span className="inline-flex text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">
+            <span className="inline-flex text-xs font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">
               {t('instructorApply.badgePending')}
             </span>
           </div>

@@ -135,7 +135,7 @@ export function PlacementReport({ courseId, courseTitle }: { courseId: string; c
 
       <div className="mt-4 overflow-x-auto rounded-2xl border border-brand-gold/20 bg-white shadow-sm">
         <table className="min-w-full text-sm">
-          <thead className="bg-brand-gold-soft/40 text-left text-[11px] uppercase tracking-wide text-neutral-600">
+          <thead className="bg-brand-gold-soft/40 text-left text-xs uppercase tracking-wide text-neutral-600">
             <tr>
               <th className="px-4 py-3 font-bold sticky left-0 bg-[#fbf3e3] z-10">{t('reports.colStudent')}</th>
               <th className="px-3 py-3 font-bold">{t('placementReport.colTotal')}</th>
@@ -156,7 +156,7 @@ export function PlacementReport({ courseId, courseTitle }: { courseId: string; c
                 <td className="px-4 py-3 sticky left-0 bg-white z-10">
                   <p className="font-semibold text-neutral-900">{s.full_name ?? t('admin.unnamed')}</p>
                   {s.email && <p className="text-xs text-neutral-500">{s.email}</p>}
-                  <p className="text-[11px] text-neutral-400">{fmtDate(s.taken_at)}</p>
+                  <p className="text-xs text-neutral-400">{fmtDate(s.taken_at)}</p>
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap font-semibold text-neutral-900">
                   {s.correct_count}/{s.total_count}
@@ -171,7 +171,7 @@ export function PlacementReport({ courseId, courseTitle }: { courseId: string; c
                           <p className={`font-bold ${r.skipped ? 'text-emerald-700' : 'text-neutral-900'}`}>
                             {r.hits}/{r.total}
                           </p>
-                          <p className="text-[11px] text-neutral-500">{statusLabel(r)}</p>
+                          <p className="text-xs text-neutral-500">{statusLabel(r)}</p>
                         </>
                       ) : (
                         <span className="text-neutral-400">—</span>
@@ -192,7 +192,7 @@ export function PlacementReport({ courseId, courseTitle }: { courseId: string; c
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="card-athenas p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-wide text-neutral-500">{label}</p>
       <p className="mt-1 text-2xl font-bold text-neutral-900">{value}</p>
     </div>
   )

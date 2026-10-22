@@ -80,7 +80,7 @@ export function Home() {
   return (
     <div className="bg-brand-cream min-h-full">
       <section className="border-b border-neutral-200 bg-white">
-        <div className="max-w-[1400px] mx-auto px-4 py-6 md:py-10 lg:py-14">
+        <div className="container-athenas py-6 md:py-10 lg:py-14">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-8">
             <div className="max-w-2xl">
               <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-gold mb-3 md:mb-4">
@@ -122,7 +122,7 @@ export function Home() {
         </div>
       </section>
 
-      <div className="max-w-[1400px] mx-auto px-4 py-8 lg:py-10">
+      <div className="container-athenas py-8 lg:py-10">
             {loadError && (
               <p
                 className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3"
@@ -132,7 +132,7 @@ export function Home() {
               </p>
             )}
 
-            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
+            <p className="text-sm font-medium text-neutral-600 mb-3">
               {t('home.breadcrumb')}
               {activeFilter !== 'filter.all' ? ` / ${filterLabel}` : ''}
               {query ? ` / “${query}”` : ''}

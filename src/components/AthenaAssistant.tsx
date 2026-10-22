@@ -199,10 +199,10 @@ export function AthenaAssistant({
           >
             <AthenaMark framed variant="header" className={dock ? 'h-12 w-12' : 'h-14 w-14 lg:h-[72px] lg:w-[72px]'} alt="Athena" />
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-brand-gold">Athena</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-brand-gold">Athena</p>
               <h3 className="font-display text-2xl font-bold leading-tight">{t('assistant.title')}</h3>
               {!forceExpanded && !dock && (
-                <p className="lg:hidden text-[11px] text-neutral-400 mt-0.5">
+                <p className="lg:hidden text-xs text-neutral-400 mt-0.5">
                   {expanded ? t('assistant.close') : t('assistant.open')}
                 </p>
               )}
@@ -213,7 +213,7 @@ export function AthenaAssistant({
               <button
                 type="button"
                 onClick={clearChat}
-                className="text-[10px] font-bold uppercase tracking-wide text-neutral-500 hover:text-brand-gold"
+                className="text-xs font-bold uppercase tracking-wide text-neutral-500 hover:text-brand-gold"
               >
                 {t('assistant.clear')}
               </button>
@@ -283,7 +283,7 @@ export function AthenaAssistant({
               {m.role === 'assistant' && m.id !== 'welcome' && (
                 <div className="flex items-center gap-3 ml-12">
                   {m.feedback ? (
-                    <span className="text-[10px] uppercase tracking-wider text-brand-gold/80">
+                    <span className="text-xs uppercase tracking-wider text-brand-gold/80">
                       {language === 'pt' ? 'Obrigado pelo retorno' : 'Thanks for the feedback'}
                     </span>
                   ) : (
@@ -291,14 +291,14 @@ export function AthenaAssistant({
                       <button
                         type="button"
                         onClick={() => vote(m.id, 'up', m.text)}
-                        className="text-[10px] uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
+                        className="text-xs uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
                       >
                         {language === 'pt' ? 'Ajudou' : 'Helpful'}
                       </button>
                       <button
                         type="button"
                         onClick={() => vote(m.id, 'down', m.text)}
-                        className="text-[10px] uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
+                        className="text-xs uppercase tracking-wider text-neutral-500 hover:text-brand-gold transition-colors"
                       >
                         {language === 'pt' ? 'Não ajudou' : 'Not helpful'}
                       </button>
@@ -324,7 +324,7 @@ export function AthenaAssistant({
 
         {showStarterChips && (
           <div className="mb-3 shrink-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-gold mb-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-gold mb-2">
               {t('assistant.suggestions')}
             </p>
             <ul className="space-y-2">
@@ -341,7 +341,7 @@ export function AthenaAssistant({
 
         {!showStarterChips && !typing && lastAssistant?.followups && lastAssistant.followups.length > 0 && (
           <div className="mb-3 shrink-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-gold/80 mb-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-gold/80 mb-2">
               {language === 'pt' ? 'Continuar' : 'Follow up'}
             </p>
             <ul className="flex flex-wrap gap-2">
@@ -350,7 +350,7 @@ export function AthenaAssistant({
                   <button
                     type="button"
                     onClick={() => void sendMessage(label)}
-                    className="text-[11px] text-neutral-100 border border-brand-gold/40 rounded-full px-3 py-1.5 hover:bg-brand-gold/10 transition-colors"
+                    className="text-xs text-neutral-100 border border-brand-gold/40 rounded-full px-3 py-1.5 hover:bg-brand-gold/10 transition-colors"
                   >
                     {label}
                   </button>
@@ -439,7 +439,7 @@ function ActionBlock({
             className="block rounded-xl border border-brand-gold/35 bg-neutral-900/80 px-3 py-2 hover:border-brand-gold transition-colors"
           >
             <p className="text-xs font-bold text-neutral-50">{c.title}</p>
-            <p className="text-[11px] text-brand-gold mt-0.5">
+            <p className="text-xs text-brand-gold mt-0.5">
               {c.price > 0 ? `R$ ${c.price.toFixed(2)}` : lang === 'pt' ? 'Grátis' : 'Free'}
               {' · '}
               {lang === 'pt' ? 'Ver / matricular' : 'View / enroll'}
@@ -465,7 +465,7 @@ function ActionBlock({
   if (action.kind === 'password_form') {
     return (
       <form onSubmit={onPasswordReset} className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
-        <label className="block text-[11px] text-neutral-400">
+        <label className="block text-xs text-neutral-400">
           {lang === 'pt' ? 'E-mail da conta' : 'Account email'}
         </label>
         <input
@@ -484,7 +484,7 @@ function ActionBlock({
               ? 'Enviar link de recuperação'
               : 'Send reset link'}
         </button>
-        {resetStatus && <p className="text-[11px] text-brand-gold">{resetStatus}</p>}
+        {resetStatus && <p className="text-xs text-brand-gold">{resetStatus}</p>}
       </form>
     )
   }
@@ -539,8 +539,8 @@ function AskInstructorForm({
   if (done) {
     return (
       <div className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
-        <p className="text-[11px] text-brand-gold">{status}</p>
-        <Link to={`/curso/${courseId}`} className="inline-flex btn-secondary !py-1.5 !text-[11px]">
+        <p className="text-xs text-brand-gold">{status}</p>
+        <Link to={`/curso/${courseId}`} className="inline-flex btn-secondary !py-1.5 !text-xs">
           {lang === 'pt' ? 'Abrir a formação' : 'Open the program'}
         </Link>
       </div>
@@ -549,7 +549,7 @@ function AskInstructorForm({
 
   return (
     <form onSubmit={submit} className="rounded-xl border border-brand-gold/35 bg-neutral-900/80 p-3 space-y-2">
-      <p className="text-[11px] font-bold text-neutral-200">
+      <p className="text-xs font-bold text-neutral-200">
         {lang === 'pt' ? 'Perguntar ao instrutor do curso' : 'Ask the course instructor'}
       </p>
       <textarea
@@ -573,7 +573,7 @@ function AskInstructorForm({
             ? 'Enviar dúvida'
             : 'Send question'}
       </button>
-      {status && <p className="text-[11px] text-brand-gold">{status}</p>}
+      {status && <p className="text-xs text-brand-gold">{status}</p>}
     </form>
   )
 }

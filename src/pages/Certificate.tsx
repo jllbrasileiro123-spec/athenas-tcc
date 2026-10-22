@@ -166,7 +166,7 @@ export function Certificate() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-4xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         {missing ? (
           <p className="alert-brand text-sm">{t('certificate.missingTable')}</p>
         ) : incomplete ? (

@@ -16,13 +16,6 @@ export function CourseCard({ course, variant = 'grid' }: CourseCardProps) {
   }
   const instructor = course.profiles?.full_name ?? t('common.instructor')
   const lessonCount = course.lesson_count ?? course.lessons?.length ?? 0
-  const titleLower = course.title.toLowerCase() + (course.description?.toLowerCase() ?? '')
-  const hasAiTag =
-    titleLower.includes('ia') ||
-    titleLower.includes('ai') ||
-    titleLower.includes('inteligência') ||
-    titleLower.includes('machine') ||
-    titleLower.includes('prompt')
 
   if (variant === 'horizontal') {
     return (
@@ -30,23 +23,18 @@ export function CourseCard({ course, variant = 'grid' }: CourseCardProps) {
         to={`/curso/${course.id}`}
         className="group flex gap-4 card-athenas p-4"
       >
-        <div className="w-28 sm:w-36 shrink-0 aspect-[4/3] rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-950 overflow-hidden relative">
+        <div className="w-28 sm:w-36 shrink-0 self-start aspect-[4/3] rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-950 overflow-hidden relative">
           {course.thumbnail_url ? (
             <img src={course.thumbnail_url} alt="" className="w-full h-full object-cover" />
           ) : (
-            <span className="absolute inset-0 flex items-center justify-center text-brand-gold/70 text-2xl font-bold">
+            <span className="absolute inset-0 flex items-center justify-center font-display text-brand-gold text-4xl font-bold">
               {course.title.charAt(0)}
             </span>
           )}
         </div>
         <div className="flex flex-col flex-1 min-w-0 py-0.5">
           <div className="flex flex-wrap items-center gap-2 mb-1">
-            {hasAiTag && (
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-neutral-950 text-brand-gold px-2 py-0.5 rounded">
-                IA
-              </span>
-            )}
-            <span className="text-[10px] font-medium text-neutral-500 uppercase">
+            <span className="text-xs font-medium text-neutral-600">
               {levelLabels[course.level] ?? course.level}
             </span>
           </div>
@@ -77,14 +65,9 @@ export function CourseCard({ course, variant = 'grid' }: CourseCardProps) {
         {course.thumbnail_url ? (
           <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-cover" />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-brand-gold/80 text-4xl font-bold">
+          <div className="absolute inset-0 flex items-center justify-center font-display text-brand-gold text-6xl font-bold">
             {course.title.charAt(0)}
           </div>
-        )}
-        {hasAiTag && (
-          <span className="absolute top-3 left-3 text-[10px] font-bold uppercase bg-neutral-950 text-brand-gold px-2 py-1 rounded">
-            IA
-          </span>
         )}
       </div>
       <div className="p-4 flex flex-col flex-1">

@@ -101,7 +101,7 @@ export function AdminModeration() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">{t('admin.title')}</h1>
         <p className="mt-2 text-sm text-neutral-600">{t('admin.desc')}</p>
 
@@ -133,7 +133,7 @@ export function AdminModeration() {
                         {app.profiles?.full_name ?? t('admin.unnamed')}
                       </p>
                       <p className="mt-1 text-sm text-neutral-700">
-                        <span className="text-[11px] font-bold uppercase tracking-wide text-neutral-500">
+                        <span className="text-xs font-bold uppercase tracking-wide text-neutral-500">
                           {t('admin.expertise')} ·{' '}
                         </span>
                         {app.expertise}

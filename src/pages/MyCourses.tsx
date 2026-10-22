@@ -160,7 +160,7 @@ export function MyCourses() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-4xl mx-auto px-4 py-10 lg:py-12">
+      <div className="container-athenas py-10 lg:py-12">
         <header className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-neutral-900">{pageTitle}</h1>
@@ -302,7 +302,7 @@ function LearningCard({ course, t }: { course: Course; t: TFn }) {
         <BrandMark framed className="h-20 w-20 sm:h-24 sm:w-24" alt="" />
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
-        <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
           {t('myCourses.learningBadge')}
         </p>
         <h3 className="font-display text-3xl font-bold leading-tight text-neutral-900">{course.title}</h3>
@@ -407,7 +407,7 @@ function TeachingSection({
         >
           <div className="px-5 py-4 border-b border-brand-gold/15 bg-brand-cream/60 flex flex-wrap items-start justify-between gap-3">
             <div>
-              <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-neutral-950 text-brand-gold px-2 py-0.5 rounded">
+              <span className="inline-block text-xs font-bold uppercase tracking-wider bg-neutral-950 text-brand-gold px-2 py-0.5 rounded">
                 {t('myCourses.teachingBadge')}
               </span>
               <h2 className="text-lg font-bold text-neutral-900 mt-2">{course.title}</h2>

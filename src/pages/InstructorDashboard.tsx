@@ -50,7 +50,7 @@ export function InstructorDashboard() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
           <div>
             <h1 className="text-2xl font-bold text-neutral-900">{t('instructor.title')}</h1>

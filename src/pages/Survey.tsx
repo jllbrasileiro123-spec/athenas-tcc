@@ -78,7 +78,7 @@ export function Survey() {
   if (score !== null) {
     return (
       <div className="page-shell">
-        <div className="max-w-xl mx-auto px-4 py-10">
+        <div className="container-athenas py-10">
           <div className="card-athenas p-8 text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">
               {t('survey.kicker')}
@@ -101,7 +101,7 @@ export function Survey() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <p className="text-xs font-bold uppercase tracking-widest text-brand-gold mb-2">
           {t('survey.kicker')}
         </p>
@@ -128,7 +128,7 @@ export function Survey() {
                 {i + 1}. {t(key)}
               </legend>
               <div className="mt-3 flex items-center justify-between gap-1.5">
-                <span className="text-[10px] text-neutral-500 shrink-0 max-w-[72px] leading-tight">
+                <span className="text-xs text-neutral-500 shrink-0 max-w-[72px] leading-tight">
                   {t('survey.disagree')}
                 </span>
                 {[1, 2, 3, 4, 5].map((value) => (
@@ -156,7 +156,7 @@ export function Survey() {
                     {value}
                   </label>
                 ))}
-                <span className="text-[10px] text-neutral-500 shrink-0 max-w-[72px] leading-tight text-right">
+                <span className="text-xs text-neutral-500 shrink-0 max-w-[72px] leading-tight text-right">
                   {t('survey.agree')}
                 </span>
               </div>

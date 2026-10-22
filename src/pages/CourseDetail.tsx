@@ -284,7 +284,7 @@ export function CourseDetail() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 lg:py-10">
+      <div className="container-athenas py-8 lg:py-10">
         <section className="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:gap-10">
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-3.5">
             <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink">
@@ -353,7 +353,7 @@ export function CourseDetail() {
                     <button
                       type="button"
                       onClick={startLearning}
-                      className="h-12 rounded-[14px] bg-brand-gold text-[15px] font-extrabold text-neutral-950 hover:brightness-105"
+                      className="h-12 rounded-[14px] border border-brand-gold text-[15px] font-bold text-brand-gold hover:bg-brand-gold/10"
                     >
                       {t('course.previewCourse')}
                     </button>
@@ -629,7 +629,7 @@ export function CourseDetail() {
               {postTestOpen && (
                 <div className="flex flex-col gap-3 rounded-[20px] border-2 border-brand-gold/50 bg-white p-5">
                   <div>
-                    <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
+                    <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand-gold-ink">
                       {t('postTest.kicker')}
                     </p>
                     <p className="mt-1 text-[15px] font-extrabold">{t('postTest.cardTitle')}</p>

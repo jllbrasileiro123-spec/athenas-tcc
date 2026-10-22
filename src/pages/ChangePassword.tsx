@@ -37,7 +37,7 @@ export function ChangePassword() {
 
   return (
     <div className="page-shell">
-      <div className="max-w-md mx-auto px-4 py-10">
+      <div className="container-athenas py-10">
         <h1 className="text-2xl font-bold mb-2">{t('password.changeTitle')}</h1>
         <p className="text-neutral-600 text-sm mb-6">
           {t('password.account')} <strong>{user?.email}</strong>
@@ -46,7 +46,7 @@ export function ChangePassword() {
         {success ? (
           <p className="alert-brand">{t('password.success')}</p>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4 bg-white border border-brand-gold/20 p-6 rounded-2xl">
+          <form onSubmit={handleSubmit} className="max-w-xl space-y-4 bg-white border border-brand-gold/20 p-6 rounded-2xl">
             {error && <p className="alert-error">{error}</p>}
             <div>
               <label className="block text-sm font-bold mb-1">{t('password.new')}</label>

@@ -156,7 +156,7 @@ export function CourseContentSidebar({
             >
               <span className="min-w-0 flex-1">
                 <span
-                  className={`block text-[11px] font-extrabold uppercase tracking-[0.14em] ${
+                  className={`block text-xs font-extrabold uppercase tracking-[0.14em] ${
                     mod.completed ? 'text-emerald-800' : locked ? 'text-neutral-400' : 'text-brand-gold-ink'
                   }`}
                 >
@@ -209,7 +209,7 @@ export function CourseContentSidebar({
                         <span className="block text-[13px] font-bold leading-snug">
                           {item.title.replace(/^M\d+ · /, '')}
                         </span>
-                        <span className="mt-1 flex items-center gap-1.5 text-[11px] font-semibold text-neutral-500">
+                        <span className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-neutral-500">
                           <TypeIcon type={type} />
                           {typeLabel[type]}
                           {item.duration_minutes > 0 && ` · ${item.duration_minutes} min`}
@@ -257,7 +257,7 @@ export function CourseContentSidebar({
                           className="block text-[13px] font-bold leading-snug text-neutral-900 underline decoration-brand-gold/50 underline-offset-2 hover:decoration-brand-gold"
                         />
                       )}
-                      <span className="mt-1 block text-[11px] font-semibold text-neutral-500">
+                      <span className="mt-1 block text-xs font-semibold text-neutral-500">
                         {t('sidebar.material')}
                       </span>
                     </span>

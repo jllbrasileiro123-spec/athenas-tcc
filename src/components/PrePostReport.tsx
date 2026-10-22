@@ -305,7 +305,7 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
         {/* Cartão principal */}
         <section className="flex flex-col justify-between gap-6 rounded-3xl bg-neutral-950 p-6 text-white lg:row-span-2">
           <div>
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-light">
               {t('prepost.heroKicker')}
             </p>
             <p className="mt-4 font-display text-6xl font-bold leading-none text-brand-gold-light">
@@ -320,15 +320,15 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
           <div className="space-y-4">
             <dl className="grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
               <div>
-                <dt className="text-[11px] font-semibold text-neutral-400">{t('prepost.preTest')}</dt>
+                <dt className="text-xs font-semibold text-neutral-400">{t('prepost.preTest')}</dt>
                 <dd className="mt-0.5 text-2xl font-bold tabular-nums">{pre.length}</dd>
               </div>
               <div>
-                <dt className="text-[11px] font-semibold text-neutral-400">{t('prepost.postTest')}</dt>
+                <dt className="text-xs font-semibold text-neutral-400">{t('prepost.postTest')}</dt>
                 <dd className="mt-0.5 text-2xl font-bold tabular-nums">{post.length}</dd>
               </div>
             </dl>
-            <p className="text-[11px] leading-snug text-neutral-500">{t('prepost.anonNote')}</p>
+            <p className="text-xs leading-snug text-neutral-500">{t('prepost.anonNote')}</p>
             {actions}
           </div>
         </section>
@@ -359,7 +359,7 @@ export function PrePostReport({ courseId, courseTitle, userId }: { courseId: str
 
       {/* Faixa do pós-teste */}
       <section className="flex flex-col gap-4 rounded-3xl border border-brand-line bg-white p-5 lg:flex-row lg:items-center">
-        <p className="shrink-0 whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink lg:pr-2">
+        <p className="shrink-0 whitespace-nowrap text-xs font-extrabold uppercase tracking-[0.16em] text-brand-gold-ink lg:pr-2">
           {t('prepost.postOnly')}
         </p>
         <dl className="grid flex-1 grid-cols-2 gap-4 md:grid-cols-4">
@@ -456,7 +456,7 @@ function DetailsDrawer({
         <div className="scroll-thin flex-1 space-y-6 overflow-y-auto px-6 py-5">
           {groups.map((g) => (
             <section key={g.title}>
-              <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-neutral-500">{g.title}</p>
+              <p className="mb-2 text-xs font-extrabold uppercase tracking-[0.16em] text-neutral-500">{g.title}</p>
               <div className="divide-y divide-brand-line overflow-hidden rounded-2xl border border-brand-line bg-white">
                 {g.ids.map((id) => (
                   <QuestionRow key={id} q={question(id)} pair={stats[id]} t={t} />
@@ -465,7 +465,7 @@ function DetailsDrawer({
             </section>
           ))}
           <section>
-            <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-neutral-500">
+            <p className="mb-2 text-xs font-extrabold uppercase tracking-[0.16em] text-neutral-500">
               {t('prepost.comments')} ({comments.length})
             </p>
             {comments.length === 0 ? (
@@ -550,12 +550,12 @@ function PieCompare({ q, pre, post, t }: { q: SurveyQuestion; pre: QuestionStats
         {preSlices && (
           <figure className="flex flex-col items-center gap-1">
             <Pie size={84} slices={preSlices} />
-            <figcaption className="text-[11px] font-semibold text-neutral-500">{t('prepost.before')}</figcaption>
+            <figcaption className="text-xs font-semibold text-neutral-500">{t('prepost.before')}</figcaption>
           </figure>
         )}
         <figure className="flex flex-col items-center gap-1">
           <Pie size={104} slices={postSlices} />
-          <figcaption className="text-[11px] font-semibold text-neutral-500">{t('prepost.after')}</figcaption>
+          <figcaption className="text-xs font-semibold text-neutral-500">{t('prepost.after')}</figcaption>
         </figure>
       </div>
       <ul className="min-w-0 flex-1 space-y-1.5 text-xs">

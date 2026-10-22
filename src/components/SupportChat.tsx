@@ -136,7 +136,7 @@ export function SupportChat() {
             >
               {t(key)}
               {key === 'support.topicOther' && directOtherUrl ? (
-                <span className="block text-[10px] font-normal text-green-700 mt-0.5">
+                <span className="block text-xs font-normal text-green-700 mt-0.5">
                   {t('support.directOther')}
                 </span>
               ) : null}

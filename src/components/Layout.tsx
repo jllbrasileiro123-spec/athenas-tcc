@@ -33,7 +33,7 @@ export function Layout() {
   return (
     <div className="min-h-dvh flex flex-col bg-brand-cream">
       <header className="fixed inset-x-0 top-0 z-50 bg-neutral-950 border-b border-brand-gold/20 shadow-sm pt-[env(safe-area-inset-top)]">
-        <div className="max-w-7xl mx-auto h-14 md:h-16 px-3 sm:px-4 flex items-center gap-2 sm:gap-3">
+        <div className="container-athenas h-14 md:h-16 flex items-center gap-2 sm:gap-3">
           <Link
             to="/explorar"
             className="inline-flex items-center gap-2.5 shrink-0"
@@ -95,7 +95,7 @@ export function Layout() {
       </main>
 
       <footer className="hidden md:block bg-neutral-950 text-neutral-400 mt-auto border-t border-brand-gold/20">
-        <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="container-athenas py-10">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
             <div className="max-w-sm">
               <p className="inline-flex items-center gap-2.5 font-semibold text-brand-gold tracking-widest uppercase">

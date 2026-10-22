@@ -98,6 +98,11 @@ a,
 }
 
 @layer components {
+  /* Mesma largura e mesmas margens em todas as telas: o conteúdo ocupa a tela e alinha com o logo do cabeçalho */
+  .container-athenas {
+    @apply mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-10;
+  }
+
   .page-shell {
     @apply min-h-full bg-brand-cream;
   }
