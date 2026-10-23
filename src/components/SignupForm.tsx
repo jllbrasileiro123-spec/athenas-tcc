@@ -10,6 +10,7 @@ export function SignupForm({ onDone }: { onDone: () => void }) {
 
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState<'student' | 'instructor'>('student')
   const [error, setError] = useState<string | null>(null)
@@ -22,6 +23,11 @@ export function SignupForm({ onDone }: { onDone: () => void }) {
       setError(t('login.emailInvalid'))
       return
     }
+    const digits = phone.replace(/\D/g, '')
+    if (digits.length < 10 || digits.length > 13) {
+      setError(t('signup.phoneInvalid'))
+      return
+    }
     if (password.length < 6) {
       setError(t('signup.passwordShort'))
       return
@@ -29,7 +35,7 @@ export function SignupForm({ onDone }: { onDone: () => void }) {
     setError(null)
     setLoading(true)
 
-    const { error: err } = await signUp(email.trim(), password, fullName.trim(), role)
+    const { error: err } = await signUp(email.trim(), password, fullName.trim(), role, phone)
     setLoading(false)
 
     if (err) {
@@ -73,6 +79,17 @@ export function SignupForm({ onDone }: { onDone: () => void }) {
         placeholder="seu@email.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        className="input-athenas"
+      />
+      <input
+        type="tel"
+        required
+        autoComplete="tel"
+        inputMode="tel"
+        aria-label={t('signup.phone')}
+        placeholder={t('signup.phonePh')}
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
         className="input-athenas"
       />
       <input

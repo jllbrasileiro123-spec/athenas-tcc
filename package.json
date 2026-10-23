@@ -11,7 +11,8 @@
     "apple:secret": "node scripts/generate-apple-secret.mjs",
     "upload:aula": "node scripts/upload-aula.mjs",
     "upload:exercicio": "node scripts/upload-exercicio.mjs",
-    "criar:alunos": "node scripts/criar-alunos.mjs"
+    "criar:alunos": "node scripts/criar-alunos.mjs",
+    "apagar:alunos": "node scripts/apagar-alunos.mjs"
   },
   "engines": {
     "node": ">=20"

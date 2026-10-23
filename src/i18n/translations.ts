@@ -87,6 +87,12 @@ export const translations = {
   'signup.instructor': { pt: 'Instrutor', en: 'Instructor' },
   'signup.submit': { pt: 'Criar conta', en: 'Create account' },
   'signup.submitting': { pt: 'Cadastrando...', en: 'Signing up...' },
+  'signup.phone': { pt: 'Telefone (WhatsApp)', en: 'Phone (WhatsApp)' },
+  'signup.phonePh': { pt: 'Telefone com DDD · (83) 99999-9999', en: 'Phone with area code' },
+  'signup.phoneInvalid': {
+    pt: 'Digite o telefone com DDD, por exemplo (83) 99999-9999.',
+    en: 'Enter your phone with area code, e.g. (83) 99999-9999.',
+  },
   'signup.passwordShort': { pt: 'A senha deve ter pelo menos 6 caracteres.', en: 'Password must be at least 6 characters.' },
 
   'home.badge': { pt: 'Direito + Inteligência Artificial', en: 'Law + Artificial Intelligence' },

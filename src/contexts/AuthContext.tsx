@@ -14,7 +14,9 @@ import { clearProfileCache, readProfileCache, writeProfileCache } from '../lib/p
 import { supabase } from '../lib/supabase'
 import type { Profile } from '../types/database'
 
-const PROFILE_SELECT = 'id, full_name, avatar_url, role, created_at'
+const PROFILE_SELECT = 'id, full_name, avatar_url, role, created_at, phone'
+/** Sem a coluna phone (supabase/telefone.sql ainda não rodou) */
+const PROFILE_SELECT_NO_PHONE = 'id, full_name, avatar_url, role, created_at'
 
 /**
  * Sessão que o Supabase já guardou no navegador (sb-<projeto>-auth-token).
@@ -40,7 +42,7 @@ interface AuthContextValue {
   initializing: boolean
   /** true enquanto o perfil (role) está sendo buscado */
   profileLoading: boolean
-  signUp: (email: string, password: string, fullName: string, role?: string) => Promise<{ error: string | null }>
+  signUp: (email: string, password: string, fullName: string, role?: string, phone?: string) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signInWithOAuth: (provider: 'google') => Promise<{ error: string | null }>
   resetPassword: (email: string) => Promise<{ error: string | null }>
@@ -98,15 +100,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function loadProfile(userId: string): Promise<Profile | null> {
     setProfileLoading(true)
-    const { data, error } = await supabase
-      .from('profiles')
-      .select(PROFILE_SELECT)
-      .eq('id', userId)
-      .single()
+    const query = (cols: string) => supabase.from('profiles').select(cols).eq('id', userId).single()
+    let { data, error } = await query(PROFILE_SELECT)
+    if (error && error.message.includes('phone')) ({ data, error } = await query(PROFILE_SELECT_NO_PHONE))
     setProfileLoading(false)
 
     if (!error && data) {
-      const p = { ...(data as object), phone: null } as Profile
+      const p = { phone: null, ...(data as object) } as Profile
       profileUserRef.current = userId
       setProfile(p)
       writeProfileCache(userId, p)
@@ -182,13 +182,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     email: string,
     password: string,
     fullName: string,
-    role = 'student'
+    role = 'student',
+    phone = ''
   ) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName, role },
+        data: { full_name: fullName, role, phone: phone.trim() },
         emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`,
       },
     })
@@ -329,7 +330,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       void fetchProfile(user.id)
       if (error.message.includes('phone') || error.code === 'PGRST204') {
         return {
-          error: 'Coluna phone não existe. Rode supabase/add-phone.sql no SQL Editor.',
+          error: 'Coluna phone não existe. Rode supabase/telefone.sql no SQL Editor.',
         }
       }
       return { error: error.message }
