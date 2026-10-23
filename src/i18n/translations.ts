@@ -859,15 +859,15 @@ export const translations = {
     en: 'Confirm your full name',
   },
   'certificate.nameDesc': {
-    pt: 'Este é o nome que vai aparecer no certificado. Escreva nome e sobrenome, como em um documento oficial.',
+    pt: 'Este é o nome que vai aparecer no certificado. Escreva nome e sobrenome, como em um documento oficial (sem Dr. ou Dra.).',
     en: 'This is the name printed on the certificate. Use your first and last name, as on an official document.',
   },
   'certificate.nameLabel': { pt: 'Nome completo', en: 'Full name' },
   'certificate.namePh': { pt: 'Ex.: Maria Fernanda de Souza', en: 'e.g. Maria Fernanda de Souza' },
   'certificate.nameSave': { pt: 'Gerar certificado', en: 'Generate certificate' },
   'certificate.nameInvalid': {
-    pt: 'Digite o nome completo (nome e sobrenome).',
-    en: 'Enter your full name (first and last name).',
+    pt: 'Digite o nome completo (nome e sobrenome), sem títulos como Dr. ou Dra.',
+    en: 'Enter your full name (first and last name), without titles such as Dr.',
   },
   'certificate.nameShown': { pt: 'Nome no certificado: {name}.', en: 'Name on the certificate: {name}.' },
   'certificate.nameFix': { pt: 'Corrigir nome', en: 'Fix name' },

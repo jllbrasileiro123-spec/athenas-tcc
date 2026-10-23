@@ -32,9 +32,15 @@ const SERIF = 'Georgia, "Times New Roman", serif'
 const SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 
 /** Nome completo = pelo menos duas palavras (nome + sobrenome). */
+/** Títulos que não contam como nome ("Dra. Rayanne" não é nome completo) */
+const TITLES = /^(dr|dra|doutor|doutora|prof|profa|professor|professora|sr|sra|srta|adv|me|mestre)\.?$/i
+
 export function looksLikeFullName(name: string | null | undefined): boolean {
   if (!name) return false
-  const parts = name.trim().split(/\s+/).filter((p) => p.length >= 2)
+  const parts = name
+    .trim()
+    .split(/\s+/)
+    .filter((p) => p.length >= 2 && !TITLES.test(p))
   return parts.length >= 2 && !name.includes('@')
 }
 
