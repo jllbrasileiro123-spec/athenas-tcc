@@ -43,7 +43,13 @@ export function AuthCallback() {
             } = await supabase.auth.getSession()
             if (!existing) {
               if (!cancelled) {
-                navigate(`/login?oauth_error=${encodeURIComponent(error.message)}`, { replace: true })
+                // Link aberto em outro navegador/aparelho: o Supabase já confirmou o e-mail,
+                // só falta o código guardado no navegador onde a conta foi criada
+                const confirmedElsewhere = /code verifier|code challenge/i.test(error.message)
+                navigate(
+                  confirmedElsewhere ? '/login?confirmado=1' : `/login?oauth_error=${encodeURIComponent(error.message)}`,
+                  { replace: true }
+                )
               }
               return
             }

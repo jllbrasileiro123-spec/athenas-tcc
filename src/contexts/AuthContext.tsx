@@ -189,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       options: {
         data: { full_name: fullName, role },
-        emailRedirectTo: `${window.location.origin}/login`,
+        emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`,
       },
     })
     return { error: error?.message ?? null }

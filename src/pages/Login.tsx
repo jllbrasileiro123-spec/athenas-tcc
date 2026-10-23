@@ -21,6 +21,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
   const [showPassword, setShowPassword] = useState(false)
   const [remember, setRemember] = useState(() => !!localStorage.getItem(STORAGE_EMAIL))
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   // Entrar e Cadastrar são a mesma tela: só troca o lado direito do cartão
   const signup = openSignup
@@ -31,6 +32,12 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
+    if (params.get('confirmado')) {
+      setNotice(t('login.emailConfirmed'))
+      params.delete('confirmado')
+      const next = params.toString()
+      window.history.replaceState({}, '', window.location.pathname + (next ? `?${next}` : ''))
+    }
     const oauthError = params.get('oauth_error')
     if (oauthError) {
       setError(decodeURIComponent(oauthError))
@@ -103,6 +110,7 @@ export function Login({ openSignup = false }: { openSignup?: boolean }) {
           ) : (
           <>
           <form onSubmit={handleLogin} className="space-y-4">
+            {notice && !error && <p className="alert-brand">{notice}</p>}
             {error && <p className="alert-error">{error}</p>}
 
             <div className="flex items-center gap-3 bg-white border border-neutral-300 rounded-full px-4 py-3 focus-within:border-brand-gold focus-within:ring-1 focus-within:ring-brand-gold transition-colors">

@@ -38,6 +38,10 @@ export const translations = {
     en: 'Training on the responsible use of artificial intelligence for legal professionals.',
   },
   'login.title': { pt: 'Entrar', en: 'Sign in' },
+  'login.emailConfirmed': {
+    pt: 'E-mail confirmado! Agora entre com seu e-mail e senha.',
+    en: 'Email confirmed! Now sign in with your email and password.',
+  },
   'login.subtitle': { pt: 'IA no cotidiano jurídico, com a assistente Athena', en: 'AI in everyday legal practice, with Athena assistant' },
   'login.emailInvalid': { pt: 'Digite um e-mail válido.', en: 'Enter a valid email.' },
   'login.password': { pt: 'Senha', en: 'Password' },
