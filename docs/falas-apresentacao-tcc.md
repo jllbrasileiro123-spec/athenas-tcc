@@ -4,7 +4,7 @@
 
 **Dicas:** não leiam os slides; ensaiem com cronômetro; apresentem pelo PowerPoint (as falas aparecem nas notas, só para vocês).
 
-## Slide 1 — ## Notes:
+## Slide 1 — ATHENAS (capa)
 
 **JOÃO LUCAS (≈ 40 s)**
 
@@ -14,7 +14,7 @@ Eu sou João Lucas, e este é o Gilverson. Vamos apresentar a ATHENAS, uma plata
 
 Eu começo pelo problema e pelos objetivos, o Gilverson apresenta o método e o curso, eu mostro a plataforma, e ele fecha com os resultados.
 
-## Slide 2 — ## Notes:
+## Slide 2 — O problema
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -24,7 +24,7 @@ E isso já tem consequência. Em março de 2026, o TST condenou uma empresa e o 
 
 A tecnologia chegou antes do preparo.
 
-## Slide 3 — ## Notes:
+## Slide 3 — O que as normas dizem
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -32,7 +32,7 @@ As normas não proíbem a IA, mas exigem cuidado. A OAB, na Recomendação 001 d
 
 Ou seja: o uso é permitido, mas pressupõe formação.
 
-## Slide 4 — ## Notes:
+## Slide 4 — Diagnóstico do público
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -42,7 +42,7 @@ Para confirmar isso, aplicamos um questionário com profissionais e estudantes d
 
 Por isso o curso focou em regulamentação e verificação, com conteúdo curto.
 
-## Slide 5 — ## Notes:
+## Slide 5 — Pergunta e objetivos
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -52,7 +52,7 @@ O objetivo geral foi desenvolver e disponibilizar a ATHENAS. Para isso: diagnost
 
 Agora o Gilverson apresenta o método.
 
-## Slide 6 — ## Notes:
+## Slide 6 — Metodologia
 
 **GILVERSON (≈ 1 min)**
 
@@ -60,7 +60,7 @@ Obrigado, João. É uma pesquisa aplicada, exploratória e descritiva, com abord
 
 Foram cinco etapas: diagnóstico do público; definição do conteúdo e das ferramentas; produção do material, com vídeos, exercícios e quizzes; desenvolvimento da plataforma, de abril a outubro de 2026, em ciclos curtos inspirados no Scrum; e, por fim, a aplicação com 17 participantes e a avaliação da percepção deles.
 
-## Slide 7 — ## Notes:
+## Slide 7 — Trabalhos relacionados
 
 **GILVERSON (≈ 45 s)**
 
@@ -68,7 +68,7 @@ Os trabalhos mais próximos, de Fernandes e Meira e de Queiroz e colegas, discut
 
 O nosso diferencial é esse: partir de um diagnóstico real, construir a solução, colocar no ar e avaliar com quem usou.
 
-## Slide 8 — ## Notes:
+## Slide 8 — O curso
 
 **GILVERSON (≈ 1 min)**
 
@@ -76,7 +76,7 @@ O curso tem três horas, em quatro módulos. O primeiro traz os fundamentos de I
 
 Os vídeos têm no máximo 15 minutos por módulo, por causa da falta de tempo apontada no diagnóstico.
 
-## Slide 9 — ## Notes:
+## Slide 9 — Como cada módulo funciona
 
 **GILVERSON (≈ 1 min)**
 
@@ -86,7 +86,7 @@ Antes de começar, um teste de nivelamento com a opção "Não sei" permite pula
 
 Agora o João mostra a plataforma.
 
-## Slide 10 — ## Notes:
+## Slide 10 — A plataforma
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -96,7 +96,7 @@ A assistente Athena, que aparece aqui, responde dúvidas usando o Gemini e encam
 
 Ela também tem gamificação, com pontos e sequência de dias, e certificado com código verificável.
 
-## Slide 11 — ## Notes:
+## Slide 11 — A ATHENAS no ar
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -104,7 +104,7 @@ Aqui está a plataforma no ar. À esquerda, a página inicial, com a proposta e 
 
 O acesso é gratuito, nesse endereço. Agora o Gilverson apresenta os resultados.
 
-## Slide 12 — ## Notes:
+## Slide 12 — Resultados
 
 **GILVERSON (≈ 1 min)**
 
@@ -120,7 +120,7 @@ Nas sete afirmações, a mais bem avaliada foi "consigo aplicar o que aprendi na
 
 Nos comentários, os participantes elogiaram os vídeos curtos, a linguagem simples e a gamificação. Pediram melhor áudio nos vídeos, revisão dos erros no quiz e material em PDF.
 
-## Slide 14 — ## Notes:
+## Slide 14 — Discussão
 
 **GILVERSON (≈ 1 min)**
 
@@ -128,7 +128,7 @@ Esses resultados batem com a literatura. Aplicar na rotina ter a maior nota conf
 
 Mas temos limitações: amostra pequena e por conveniência, avaliação de percepção e nenhuma medida objetiva de ganho de conhecimento.
 
-## Slide 15 — ## Notes:
+## Slide 15 — Conclusão
 
 **GILVERSON (≈ 1 min)**
 
@@ -136,13 +136,13 @@ Concluindo: o objetivo foi alcançado. A ATHENAS foi desenvolvida, publicada e b
 
 Como próximos passos: implementar as melhorias pedidas, medir o impacto com pré e pós-teste, ampliar a amostra e criar trilhas por área do Direito.
 
-## Slide 16 — ## Notes:
+## Slide 16 — Referências
 
 **(Slide de apoio, sem fala. Passar direto para o encerramento.)**
 
 
 
-## Slide 17 — ## Notes:
+## Slide 17 — Obrigado!
 
 **JOÃO LUCAS (≈ 15 s)**
 
