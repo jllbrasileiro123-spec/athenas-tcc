@@ -1,6 +1,6 @@
 # Falas da apresentação do TCC — ATHENAS
 
-**Duração: até 15 minutos.** 17 slides, 15 com fala; as falas somam cerca de 10 a 12 minutos, sobrando folga até os 15. João Lucas: slides 1–5, 10–11 e 17. Gilverson: slides 6–9 e 12–15.
+**Duração: até 15 minutos.** 19 slides. As falas somam cerca de 11 a 12 minutos, mais o vídeo de 1:57 no slide 13. Se o tempo apertar, parem o vídeo na metade. João Lucas: slides 1–5, 10–13 e 19. Gilverson: slides 6–9 e 14–17.
 
 **Dicas:** não leiam os slides; ensaiem com cronômetro; apresentem pelo PowerPoint (as falas aparecem nas notas, só para vocês).
 
@@ -102,9 +102,23 @@ Ela também tem gamificação, com pontos e sequência de dias, e certificado co
 
 Aqui está a plataforma no ar. À esquerda, a página inicial, com a proposta e as normas que guiam o curso. À direita, o painel do administrador, que mostra o desempenho de cada aluno nos quizzes e permite exportar a planilha. Foi daí que tiramos os dados desta pesquisa.
 
-O acesso é gratuito, nesse endereço. Agora o Gilverson apresenta os resultados.
+O acesso é gratuito, nesse endereço.
 
-## Slide 12 — Resultados
+## Slide 12 — Por dentro da ATHENAS
+
+**JOÃO LUCAS (≈ 1 min)**
+
+Agora por dentro, com o aluno logado. Primeiro, a página do curso: a trilha com os quatro módulos e o teste de nivelamento logo no início. Depois, o próprio nivelamento, com a opção "Não sei" em cada pergunta. Em seguida, a aula em vídeo, com o conteúdo do curso ao lado. E, por fim, a assistente Athena, que responde dúvidas sobre as aulas a qualquer hora.
+
+## Slide 13 — A ATHENAS em uso (vídeo)
+
+**JOÃO LUCAS (≈ 2 min com o vídeo)**
+
+Para fechar a parte da plataforma, um vídeo curto do sistema em uso. [DAR PLAY. Se o tempo estiver apertado, avançar o vídeo ou parar na metade.]
+
+Agora o Gilverson apresenta os resultados.
+
+## Slide 14 — Resultados
 
 **GILVERSON (≈ 1 min)**
 
@@ -112,7 +126,7 @@ Dezessete pessoas fizeram o curso em condições reais. Quinze concluíram, uma 
 
 A nota geral média foi 4,73 de 5. Todos os quinze recomendariam o curso. E nas sete afirmações do questionário não houve nenhuma resposta de discordância.
 
-## Slide 13 — Percepção dos participantes
+## Slide 15 — Percepção dos participantes
 
 **GILVERSON (≈ 1 min)**
 
@@ -120,7 +134,7 @@ Nas sete afirmações, a mais bem avaliada foi "consigo aplicar o que aprendi na
 
 Nos comentários, os participantes elogiaram os vídeos curtos, a linguagem simples e a gamificação. Pediram melhor áudio nos vídeos, revisão dos erros no quiz e material em PDF.
 
-## Slide 14 — Discussão
+## Slide 16 — Discussão
 
 **GILVERSON (≈ 1 min)**
 
@@ -128,7 +142,7 @@ Esses resultados batem com a literatura. Aplicar na rotina ter a maior nota conf
 
 Mas temos limitações: amostra pequena e por conveniência, avaliação de percepção e nenhuma medida objetiva de ganho de conhecimento.
 
-## Slide 15 — Conclusão
+## Slide 17 — Conclusão
 
 **GILVERSON (≈ 1 min)**
 
@@ -136,13 +150,13 @@ Concluindo: o objetivo foi alcançado. A ATHENAS foi desenvolvida, publicada e b
 
 Como próximos passos: implementar as melhorias pedidas, medir o impacto com pré e pós-teste, ampliar a amostra e criar trilhas por área do Direito.
 
-## Slide 16 — Referências
+## Slide 18 — Referências
 
 **(Slide de apoio, sem fala. Passar direto para o encerramento.)**
 
 
 
-## Slide 17 — Obrigado!
+## Slide 19 — Obrigado!
 
 **JOÃO LUCAS (≈ 15 s)**
 
