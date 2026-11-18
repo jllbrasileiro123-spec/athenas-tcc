@@ -708,6 +708,11 @@ export async function resolveAssistantTurn(text: string, ctx: TurnContext): Prom
   // Atividade 7 — resposta gerada por IA com o conteúdo das formações do aluno.
   // Só entra em dúvidas de conteúdo; o FAQ operacional continua instantâneo.
   const aiWorthy = intent === 'courseContent' || intent === 'doubt' || intent === 'default'
+
+  // Conceitos centrais do curso respondidos na hora, sem esperar a IA.
+  const concept = aiWorthy ? conceptAnswer(text, ctx.lang) : null
+  if (concept) return buildResult('courseContent', ctx.lang, { text: concept })
+
   if (ctx.userId && aiWorthy) {
     const answer = await askAthenaAi({
       question: text,
@@ -731,10 +736,6 @@ export async function resolveAssistantTurn(text: string, ctx: TurnContext): Prom
       return result
     }
   }
-
-  // Conceitos centrais do curso respondidos na hora, mesmo sem a IA.
-  const concept = aiWorthy ? conceptAnswer(text, ctx.lang) : null
-  if (concept) return buildResult('courseContent', ctx.lang, { text: concept })
 
   // Atividade 7: dentro de uma formação, responde com o conteúdo do curso e
   // oferece encaminhar a dúvida ao instrutor. Fora dela, cai no FAQ geral.
