@@ -142,11 +142,18 @@ async function callGemini(key: string, system: string, history: ChatTurn[], ques
   async function attempt(model: string, body: Record<string, unknown>) {
     // Chave vai no cabeçalho, nunca na URL: aceita os dois formatos de chave do
     // AI Studio e evita que a credencial apareça em log de proxy.
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-      method: 'POST',
-      headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+    // Cada chamada tem prazo: um modelo travado não pode prender o chat.
+    let res: Response
+    try {
+      res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(10000),
+      })
+    } catch (err) {
+      return { status: 504, error: `sem resposta em 10s: ${err}`, text: '', finishReason: '' }
+    }
 
     if (!res.ok) {
       return { status: res.status, error: await res.text(), text: '', finishReason: '' }
@@ -168,17 +175,20 @@ async function callGemini(key: string, system: string, history: ChatTurn[], ques
 
   // 429/500/503 são "tente de novo mais tarde", não erro de código: a fila do
   // Google costuma liberar em menos de um segundo, então vale insistir.
-  const isBusy = (status: number) => status === 429 || status === 500 || status === 503
+  const isBusy = (status: number) => status === 429 || status === 500 || status === 503 || status === 504
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+  // O site desiste em 20s; passar disso só gasta cota.
+  const deadline = Date.now() + 18000
 
   let result = { status: 0, error: 'gemini não chamado', text: '', finishReason: '' }
   let usedModel = models[0]
   let primeiraFalha = ''
 
   for (const model of models) {
+    if (Date.now() >= deadline) break
     usedModel = model
 
-    for (let tentativa = 0; tentativa < 3; tentativa++) {
+    for (let tentativa = 0; tentativa < 3 && Date.now() < deadline; tentativa++) {
       if (tentativa > 0) {
         const espera = 400 * 2 ** (tentativa - 1)
         console.warn(`gemini ${result.status} em ${model}; tentando de novo em ${espera}ms`)
