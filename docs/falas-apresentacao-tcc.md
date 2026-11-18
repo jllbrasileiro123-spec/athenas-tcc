@@ -1,8 +1,8 @@
 # Falas da apresentação do TCC — ATHENAS
 
-**Duração estimada: 12 a 13 minutos (limite: 15).** Falas: cerca de 9 minutos (João Lucas ≈ 5 min, Gilverson ≈ 4 min) + vídeo de 1:57 + trocas de slide. Folga de 2 a 3 minutos.
+**Duração estimada: 12 a 13 minutos (limite: 15).** Gilverson ≈ 5 min 00 s · João Lucas ≈ 3 min 50 s + vídeo de 1:57 · mais as trocas de slide.
 
-João Lucas: slides 1–5, 10–13 e 19. Gilverson: slides 6–9 e 14–17.
+**Gilverson:** slides 4–9 e 14–17. **João Lucas:** slides 1–3, 10–13 e 19.
 
 **Se precisar cortar tempo:** parem o vídeo do slide 13 na metade (economiza 1 minuto).
 
@@ -16,7 +16,7 @@ Bom dia. Agradecemos à banca e ao nosso orientador, professor José Raul.
 
 Eu sou João Lucas, e este é o Gilverson. Vamos apresentar a ATHENAS, uma plataforma de capacitação para advogados usarem inteligência artificial com responsabilidade.
 
-Eu começo pelo problema e pelos objetivos, o Gilverson apresenta o método e o curso, eu mostro a plataforma, e ele fecha com os resultados.
+Eu começo pelo problema, o Gilverson apresenta o diagnóstico, os objetivos, o método e o curso, eu mostro a plataforma, e ele fecha com os resultados.
 
 ## Slide 2 — O problema
 
@@ -34,13 +34,13 @@ A tecnologia chegou antes do preparo.
 
 As normas não proíbem a IA, mas exigem cuidado. A OAB, na Recomendação 001 de 2024, pede uso ético e sigilo. O CNJ, na Resolução 615 de 2025, exige supervisão humana no Judiciário. A LGPD protege os dados do cliente. E o CPC deixa claro que quem assina a peça responde por ela, mesmo que o erro venha da IA.
 
-Ou seja: o uso é permitido, mas pressupõe formação.
+Ou seja: o uso é permitido, mas pressupõe formação. Agora o Gilverson mostra o que o nosso diagnóstico revelou.
 
 ## Slide 4 — Diagnóstico do público
 
-**JOÃO LUCAS (≈ 35 s)**
+**GILVERSON (≈ 35 s)**
 
-Para confirmar isso, aplicamos um questionário com profissionais e estudantes de Direito da Paraíba, em maio de 2026, com 13 respostas.
+Obrigado, João. Para confirmar isso, aplicamos um questionário com profissionais e estudantes de Direito da Paraíba, em maio de 2026, com 13 respostas.
 
 84,6% usam o ChatGPT. 61,5% já receberam informação errada da IA. 38,5% não conheciam a Recomendação da OAB. E só 53,8% verificam sempre o que a IA gera. Também apareceu pouco tempo para estudar.
 
@@ -48,19 +48,19 @@ Por isso o curso focou em regulamentação e verificação, com conteúdo curto.
 
 ## Slide 5 — Pergunta e objetivos
 
-**JOÃO LUCAS (≈ 25 s)**
+**GILVERSON (≈ 25 s)**
 
 A nossa pergunta foi: como capacitar profissionais do Direito para usar IA com responsabilidade, mesmo com pouco tempo?
 
 O objetivo geral foi desenvolver e disponibilizar a ATHENAS. Para isso: diagnosticar o público, selecionar conteúdos, montar os módulos, desenvolver a plataforma e avaliar a percepção dos participantes.
 
-Agora o Gilverson apresenta o método.
+Agora vou explicar como a pesquisa foi feita.
 
 ## Slide 6 — Metodologia
 
 **GILVERSON (≈ 30 s)**
 
-Obrigado, João. É uma pesquisa aplicada, exploratória e descritiva, com abordagem quali-quantitativa.
+É uma pesquisa aplicada, exploratória e descritiva, com abordagem quali-quantitativa.
 
 Foram cinco etapas: diagnóstico do público; definição do conteúdo e das ferramentas; produção do material, com vídeos, exercícios e quizzes; desenvolvimento da plataforma, de abril a outubro de 2026, em ciclos curtos inspirados no Scrum; e, por fim, a aplicação com 17 participantes e a avaliação da percepção deles.
 
