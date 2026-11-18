@@ -20,6 +20,9 @@ const RETRY_CONFIG_MS = 45 * 1000
 /** Modelo lotado ou instável: a próxima pergunta já pode dar certo. */
 const RETRY_BUSY_MS = 5 * 1000
 
+/** Tempo máximo esperando a IA antes de responder pelo FAQ local. */
+const AI_TIMEOUT_MS = 20 * 1000
+
 /**
  * O fallback é silencioso para o aluno, mas o motivo tem que ficar visível no
  * console — sem isso não há como saber se faltou deploy, chave ou token.
@@ -66,13 +69,23 @@ export async function askAthenaAi(input: {
   if (!sessionData.session) return null
 
   try {
-    const { data, error } = await supabase.functions.invoke('chat-suporte', {
+    const call = supabase.functions.invoke('chat-suporte', {
       body: {
         pergunta: input.question,
         historico: input.history.slice(-6),
         curso_id: input.courseId,
       },
     })
+    // Sem limite, uma IA lenta deixa o chat "pensando" para sempre: depois do
+    // prazo o aluno recebe a resposta do FAQ local.
+    const timeout = new Promise<'timeout'>((resolve) => setTimeout(() => resolve('timeout'), AI_TIMEOUT_MS))
+    const outcome = await Promise.race([call, timeout])
+    if (outcome === 'timeout') {
+      console.warn(`[Athena IA] sem resposta em ${AI_TIMEOUT_MS / 1000}s; usando o FAQ local`)
+      unavailableUntil = Date.now() + RETRY_BUSY_MS
+      return null
+    }
+    const { data, error } = outcome
 
     if (error) {
       unavailableUntil = Date.now() + (await logFailure(error))
