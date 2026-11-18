@@ -680,6 +680,26 @@ function buildResult(
   }
 }
 
+/** Respostas locais para os conceitos-chave do curso (Módulo 1 e 3). */
+const CONCEPTS: { keys: string[]; pt: string; en: string }[] = [
+  {
+    keys: ['alucina', 'hallucinat'],
+    pt: 'Alucinação é quando a IA gera uma informação falsa com total aparência de verdade, como um julgado com número, relator e ementa que não existem. Isso acontece porque o modelo de linguagem prevê a palavra mais provável, em vez de consultar fatos verificados. Por isso, toda citação sugerida pela IA precisa ser conferida na fonte oficial antes de entrar numa peça (Módulo 1).',
+    en: 'A hallucination is when AI produces false information that looks completely true, such as a court decision with a number, judge and summary that do not exist. It happens because the language model predicts the most likely word instead of checking verified facts. Always check every citation in the official source (Module 1).',
+  },
+  {
+    keys: ['lgpd', 'dados pessoais', 'sigilo'],
+    pt: 'A LGPD (Lei nº 13.709/2018) protege os dados pessoais. Colar nome, CPF ou detalhes do caso de um cliente numa IA gratuita pode expor esses dados e ferir o sigilo profissional. O caminho é anonimizar antes de enviar, por exemplo trocando nomes por "Parte A" e "Parte B" (Módulo 3).',
+    en: 'Brazil’s LGPD (Law 13,709/2018) protects personal data. Pasting a client’s name or case details into a free AI tool can expose them. Anonymize first, e.g. "Party A" and "Party B" (Module 3).',
+  },
+]
+
+function conceptAnswer(text: string, lang: Language): string | null {
+  const q = normalize(text)
+  const hit = CONCEPTS.find((c) => c.keys.some((k) => q.includes(k)))
+  return hit ? (lang === 'pt' ? hit.pt : hit.en) : null
+}
+
 export async function resolveAssistantTurn(text: string, ctx: TurnContext): Promise<AssistantResult> {
   const intent = detectIntent(text, ctx.lastTopic)
   const focusedCourseId = courseIdFromPath(ctx.pathname)
@@ -711,6 +731,10 @@ export async function resolveAssistantTurn(text: string, ctx: TurnContext): Prom
       return result
     }
   }
+
+  // Conceitos centrais do curso respondidos na hora, mesmo sem a IA.
+  const concept = aiWorthy ? conceptAnswer(text, ctx.lang) : null
+  if (concept) return buildResult('courseContent', ctx.lang, { text: concept })
 
   // Atividade 7: dentro de uma formação, responde com o conteúdo do curso e
   // oferece encaminhar a dúvida ao instrutor. Fora dela, cai no FAQ geral.
