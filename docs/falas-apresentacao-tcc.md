@@ -112,7 +112,7 @@ Dezessete pessoas fizeram o curso em condições reais. Quinze concluíram, uma 
 
 A nota geral média foi 4,73 de 5. Todos os quinze recomendariam o curso. E nas sete afirmações do questionário não houve nenhuma resposta de discordância.
 
-## Slide 13 — ## Chart
+## Slide 13 — Percepção dos participantes
 
 **GILVERSON (≈ 1 min)**
 
