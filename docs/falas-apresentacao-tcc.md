@@ -1,8 +1,8 @@
 # Falas da apresentação do TCC — ATHENAS
 
-Defesa de 17 a 19 minutos, 18 slides (cerca de 9 minutos para cada um). **João Lucas** faz a abertura, o problema e a plataforma; **Gilverson** faz a metodologia, o curso, os resultados e a conclusão. Cada fala tem o tempo aproximado.
+Defesa de 17 a 19 minutos, 20 slides (18 com fala, cerca de 9 minutos para cada um). **João Lucas** faz a abertura, o problema e a plataforma; **Gilverson** faz a metodologia, o curso, os resultados e a conclusão.
 
-**Dicas:** falem olhando para a banca, não para o slide; o slide só mostra o essencial, a fala completa. Ensaiem com cronômetro pelo menos duas vezes. Ao passar a vez, usem a frase de transição já escrita no fim de cada bloco.
+**Dicas:** não leiam os slides: olhem para a banca, o slide só mostra o essencial. Ensaiem com cronômetro pelo menos duas vezes. Levem a apresentação em PDF no pendrive e na nuvem (plano B). Nas perguntas, ouçam até o fim, anotem e, se não souberem, digam com honestidade.
 
 ## Slide 1 — Capacitação no uso de Inteligência Artificial no cotidiano jurídico
 
@@ -50,7 +50,15 @@ Os números confirmaram o problema. 84,6% usam o ChatGPT. 61,5% já receberam in
 
 Também apareceu pouca disponibilidade de tempo para estudar. Então essas respostas orientaram duas decisões do curso: dar prioridade à regulamentação e à verificação dos resultados, e usar conteúdos curtos, que o aluno faz no próprio ritmo.
 
-## Slide 5 — O que o trabalho se propôs a fazer
+## Slide 5 — Problema de pesquisa e justificativa
+
+**JOÃO LUCAS (≈ 45 s)**
+
+Tudo isso nos levou à pergunta que guiou o trabalho: como capacitar profissionais do Direito para usar ferramentas de IA de forma responsável, considerando a pouca disponibilidade de tempo que eles têm?
+
+E o trabalho se justifica em três frentes. Na prática, porque peças com jurisprudência inventada já estão gerando multas e sanções. No plano social e profissional, porque a OAB e o CNJ permitem o uso da IA, mas exigem supervisão humana e cuidado com o sigilo, o que pressupõe formação. E no plano acadêmico, porque a literatura nacional é principalmente teórica e não propõe nem avalia intervenções de formação.
+
+## Slide 6 — O que o trabalho se propôs a fazer
 
 **JOÃO LUCAS (≈ 45 s)**
 
@@ -60,7 +68,7 @@ Para chegar lá, definimos cinco objetivos específicos: primeiro, diagnosticar 
 
 Cada um desses objetivos virou uma etapa da metodologia, que o Gilverson vai apresentar agora.
 
-## Slide 6 — Pesquisa aplicada, conduzida em cinco etapas
+## Slide 7 — Pesquisa aplicada, conduzida em cinco etapas
 
 **GILVERSON (≈ 1 min)**
 
@@ -68,7 +76,7 @@ Obrigado, João. A nossa pesquisa é aplicada, de caráter exploratório e descr
 
 Na etapa um, fizemos o diagnóstico que o João mostrou. Na etapa dois, definimos as tarefas prioritárias, que foram redação de peças, análise de contratos, pesquisa de jurisprudência e organização de documentos, e escolhemos as ferramentas por critérios de aderência jurídica, acesso, conformidade ética e possibilidade de teste. Na etapa três, produzimos o material didático. Na etapa quatro, desenvolvemos a plataforma entre abril e outubro de 2026, em ciclos curtos inspirados no Scrum. E na etapa cinco, aplicamos o curso com 17 participantes e avaliamos a percepção deles com um questionário integrado à própria plataforma.
 
-## Slide 7 — A literatura descreve o problema, mas não propõe formação
+## Slide 8 — A literatura descreve o problema, mas não propõe formação
 
 **GILVERSON (≈ 1 min)**
 
@@ -78,7 +86,7 @@ Essa é a lacuna que o nosso trabalho ocupa: partir de um diagnóstico real, con
 
 Para desenhar o curso, nos apoiamos em quatro referências: a andragogia, que diz que adultos aprendem melhor com conteúdo aplicado a problemas reais; a educação a distância, que dá flexibilidade a quem tem pouco tempo; a aprendizagem multimídia de Mayer, que recomenda conteúdos curtos e segmentados; e a gamificação, para estimular a regularidade do estudo.
 
-## Slide 8 — Do fundamento à aplicação supervisionada
+## Slide 9 — Do fundamento à aplicação supervisionada
 
 **GILVERSON (≈ 1 min)**
 
@@ -88,7 +96,7 @@ O Módulo 1 traz os fundamentos: o que é IA e LLM, por que a IA alucina, e o ma
 
 Cada módulo tem um exercício prático com nome próprio, como o "Encontre a alucinação", no Módulo 1.
 
-## Slide 9 — Uma trilha curta, prática e com regra para avançar
+## Slide 10 — Uma trilha curta, prática e com regra para avançar
 
 **GILVERSON (≈ 1 min)**
 
@@ -100,7 +108,7 @@ E nos exercícios, os julgados citados são fictícios de propósito. Assim o al
 
 Agora o João vai mostrar como isso tudo foi construído.
 
-## Slide 10 — React no front-end, Supabase no back-end
+## Slide 11 — React no front-end, Supabase no back-end
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -114,7 +122,7 @@ A assistente Athena roda numa função de servidor, uma Edge Function, que consu
 
 O desenvolvimento foi incremental, em ciclos curtos, de 4 de abril a 3 de outubro de 2026.
 
-## Slide 11 — O que a ATHENAS entrega
+## Slide 12 — O que a ATHENAS entrega
 
 **JOÃO LUCAS (≈ 1 min)**
 
@@ -126,7 +134,7 @@ A assistente Athena responde dúvidas sobre o conteúdo e, quando não sabe, enc
 
 E para a gestão, o instrutor e o administrador têm área própria, moderação de conteúdo e relatórios que podem ser exportados, inclusive os que usamos para analisar os resultados desta pesquisa.
 
-## Slide 12 — A trilha e uma atividade com a Athena
+## Slide 13 — A trilha e uma atividade com a Athena
 
 **JOÃO LUCAS (≈ 1 min, ou 2 a 3 min se fizer a demonstração ao vivo)**
 
@@ -140,7 +148,7 @@ A plataforma está no ar e é gratuita, nesse endereço.
 
 Agora o Gilverson apresenta os resultados.
 
-## Slide 13 — A avaliação dos participantes foi amplamente positiva
+## Slide 14 — A avaliação dos participantes foi amplamente positiva
 
 **GILVERSON (≈ 1 min)**
 
@@ -150,7 +158,7 @@ O curso foi feito por 17 participantes, em condições reais de uso. Desconsider
 
 Dos 17, 15 concluíram o curso inteiro, uma taxa de conclusão de 88,2%. A nota geral média foi 4,73, com onze notas 5 e quatro notas 4. Todos os 15 disseram que recomendariam o curso. E nas sete afirmações, não houve nenhuma resposta de discordância, nem 1 nem 2.
 
-## Slide 14 — Aplicar na rotina foi o aspecto mais bem avaliado
+## Slide 15 — Aplicar na rotina foi o aspecto mais bem avaliado
 
 **GILVERSON (≈ 1 min)**
 
@@ -162,7 +170,7 @@ As menores médias foram a P1, sobre ter avançado nos conhecimentos, com 4,27, 
 
 Agrupando, a dimensão de aprendizagem percebida teve média 4,50, e a de desenho do curso, 4,36.
 
-## Slide 15 — O que os participantes disseram
+## Slide 16 — O que os participantes disseram
 
 **GILVERSON (≈ 1 min)**
 
@@ -172,7 +180,7 @@ Do lado das melhorias, as sugestões foram: melhorar o áudio dos vídeos de res
 
 Esses comentários são importantes porque explicam as notas que vimos no gráfico.
 
-## Slide 16 — Os resultados conversam com a fundamentação
+## Slide 17 — Os resultados conversam com a fundamentação
 
 **GILVERSON (≈ 1 min)**
 
@@ -184,7 +192,7 @@ A menor média, a P6, bate com as críticas ao áudio e à falta de PDF, o que m
 
 E é importante ser transparente com as limitações: as amostras são pequenas e por conveniência, a avaliação é de percepção, autodeclarada, e não medimos objetivamente o ganho de conhecimento.
 
-## Slide 17 — Objetivo alcançado: plataforma desenvolvida, publicada e bem avaliada
+## Slide 18 — Objetivo alcançado: plataforma desenvolvida, publicada e bem avaliada
 
 **GILVERSON (≈ 1 min)**
 
@@ -194,9 +202,17 @@ Como contribuição, deixamos uma ferramenta gratuita e aberta, que transforma a
 
 Para trabalhos futuros, sugerimos implementar as melhorias que os participantes pediram, medir o impacto com pré e pós-teste, ampliar a amostra para outros estados e criar trilhas por área de atuação.
 
+Respondendo à nossa pergunta de pesquisa: um curso curto, assíncrono e prático, numa plataforma com trilha e gamificação, mostrou-se uma forma viável e bem aceita de capacitar esses profissionais, com as limitações que já apresentamos.
+
 A mensagem final é que a capacitação é condição para que a IA traga ganho real à advocacia, sempre subordinada ao julgamento técnico e ético do profissional.
 
-## Slide 18 — Obrigado!
+## Slide 19 — Referências
+
+**(Slide de apoio, sem fala. Passar direto para o "Obrigado". Se a banca pedir, mostrar e lembrar que a lista completa está no artigo.)**
+
+
+
+## Slide 20 — Obrigado!
 
 **JOÃO LUCAS (≈ 20 s), depois os dois respondem**
 
