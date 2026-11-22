@@ -92,13 +92,13 @@ Agora o João mostra a plataforma.
 
 ## Slide 10 — A plataforma
 
-**JOÃO LUCAS (≈ 30 s)**
+**JOÃO LUCAS (≈ 45 s)**
 
-A ATHENAS é uma aplicação React com TypeScript, publicada no GitHub Pages e instalável como aplicativo. O back-end é o Supabase, com banco PostgreSQL, autenticação e regras de segurança por usuário.
+O site foi feito em React com TypeScript, está publicado no GitHub Pages e pode ser instalado no celular como um aplicativo.
 
-A assistente Athena, que aparece aqui, responde dúvidas usando o Gemini e encaminha ao instrutor o que não souber.
+Por trás dele está o Supabase. Ele cuida do login, por e-mail ou pela conta Google, e guarda os dados no banco. E o banco protege esses dados: cada aluno só consegue ver o próprio progresso e as próprias notas, e só o administrador vê os relatórios da turma.
 
-Ela também tem gamificação, com pontos e sequência de dias, e certificado com código verificável.
+A assistente Athena, que aparece aqui, responde dúvidas usando o Gemini e encaminha ao instrutor o que não souber. A plataforma também tem gamificação, com pontos e sequência de dias, e certificado com código verificável.
 
 ## Slide 11 — A ATHENAS no ar
 
