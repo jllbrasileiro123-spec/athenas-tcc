@@ -39,3 +39,11 @@ create policy "Aluno altera o próprio consentimento"
 --   select participa_pesquisa, count(*) from public.consentimentos group by 1;
 
 notify pgrst, 'reload schema';
+
+-- Quem ainda não respondeu o termo (para cobrar o aceite):
+--   select p.full_name, u.email
+--   from public.profiles p
+--   join auth.users u on u.id = p.id
+--   left join public.consentimentos c on c.user_id = p.id
+--   where c.user_id is null
+--   order by p.full_name;
