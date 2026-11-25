@@ -48,20 +48,23 @@ function describeCourses(courses: CourseRow[]) {
     .join('\n\n')
 }
 
+// O nome do aluno não entra no prompt: o plano gratuito do Gemini pode usar e
+// revisar o que recebe, e um curso sobre sigilo e LGPD não pode mandar dado
+// pessoal sem necessidade. A Athena responde do mesmo jeito sem saber quem é.
 function buildSystemPrompt(params: {
-  studentName: string
   courses: CourseRow[]
   focusedCourseId: string | null
   progress: string
 }) {
-  const { studentName, courses, focusedCourseId, progress } = params
+  const { courses, focusedCourseId, progress } = params
   const focused = courses.find((c) => c.id === focusedCourseId)
 
   const base = `Você é a Athena, assistente de estudos da plataforma ATHENAS.
 Fale em português do Brasil, em tom próximo e direto, como uma monitora que conhece o aluno.
 Responda em no máximo 2 parágrafos curtos. Não use emojis nem markdown de título.
-
-Aluno: ${studentName}.
+Não pergunte o nome do aluno nem peça dados pessoais. Se a mensagem trouxer dados
+sigilosos (nome de cliente, número de processo, CPF, fatos de um caso real), não
+os repita: lembre o aluno de anonimizar antes de usar qualquer IA.
 
 Você é uma monitora de estudos completa: além do conteúdo das formações, responda
 dúvidas acadêmicas gerais (matemática, português, física, química, história,
@@ -361,14 +364,7 @@ Deno.serve(async (req) => {
       .join('; ')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name')
-    .eq('id', user.id)
-    .maybeSingle()
-
   const system = buildSystemPrompt({
-    studentName: (profile as { full_name?: string } | null)?.full_name ?? 'aluno',
     courses,
     focusedCourseId: payload.curso_id ?? null,
     progress,

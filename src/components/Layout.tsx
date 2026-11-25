@@ -138,6 +138,9 @@ export function Layout() {
               <Link to="/privacidade" className="hover:text-brand-gold transition-colors">
                 {t('footer.privacy')}
               </Link>
+              <Link to="/termo-de-consentimento" className="hover:text-brand-gold transition-colors">
+                {t('footer.consent')}
+              </Link>
             </nav>
           </div>
           <p className="mt-8 pt-6 border-t border-white/10 text-xs text-neutral-500">

@@ -360,6 +360,10 @@ export function AthenaAssistant({
           </div>
         )}
 
+        <p className="mb-2 shrink-0 rounded-lg border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-[11px] leading-snug text-amber-100">
+          {t('assistant.privacyNotice')}
+        </p>
+
         <form onSubmit={onSubmit} className="flex gap-2 shrink-0">
           <input
             value={input}
