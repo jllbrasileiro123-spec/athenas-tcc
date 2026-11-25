@@ -13,6 +13,7 @@ const PRIVACY_BODY: TranslationKey[] = [
   'legal.privacy1',
   'legal.privacy2',
   'legal.privacy3',
+  'legal.privacy5',
   'legal.privacy4',
 ]
 

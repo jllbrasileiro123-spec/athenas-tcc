@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { ConsentGate } from './components/ConsentGate'
 import { InstructorRoute } from './components/InstructorRoute'
 import { AdminRoute } from './components/AdminRoute'
 import { BrandSplash } from './components/BrandSplash'
@@ -45,6 +46,9 @@ const VerifyCertificate = lazy(() =>
 )
 const Survey = lazy(() => import('./pages/Survey').then((m) => ({ default: m.Survey })))
 const PostTest = lazy(() => import('./pages/PostTest').then((m) => ({ default: m.PostTest })))
+const TermoConsentimento = lazy(() =>
+  import('./pages/TermoConsentimento').then((m) => ({ default: m.TermoConsentimento }))
+)
 const UserTestProtocol = lazy(() =>
   import('./pages/UserTestProtocol').then((m) => ({ default: m.UserTestProtocol }))
 )
@@ -56,7 +60,9 @@ function PageFallback() {
 function AuthenticatedLayout() {
   return (
     <ProtectedRoute>
-      <Layout />
+      <ConsentGate>
+        <Layout />
+      </ConsentGate>
     </ProtectedRoute>
   )
 }
@@ -76,6 +82,8 @@ export default function App() {
         {/* Verificação pública do certificado: não exige login */}
         <Route path="/verificar" element={<VerifyCertificate />} />
         <Route path="/verificar/:code" element={<VerifyCertificate />} />
+        {/* TCLE público: a banca e quem ainda não tem conta podem ler */}
+        <Route path="/termo-de-consentimento" element={<TermoConsentimento />} />
         <Route element={<AuthenticatedLayout />}>
           <Route path="explorar" element={<Home />} />
           <Route path="curso/:id" element={<CourseDetail />} />

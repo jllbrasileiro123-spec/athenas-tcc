@@ -25,6 +25,7 @@ export const translations = {
     en: 'Smart education with Athena assistant',
   },
   'footer.terms': { pt: 'Termos', en: 'Terms' },
+  'footer.consent': { pt: 'Termo de consentimento', en: 'Consent form' },
   'footer.privacy': { pt: 'Privacidade', en: 'Privacy' },
   'footer.support': { pt: 'Suporte', en: 'Support' },
   'footer.copyright': {
@@ -160,6 +161,10 @@ export const translations = {
   },
   'assistant.placeholder': { pt: 'Digite sua dúvida...', en: 'Type your question...' },
   'assistant.send': { pt: 'Enviar', en: 'Send' },
+  'assistant.privacyNotice': {
+    pt: 'Não escreva dados sigilosos aqui (nomes de clientes, nº de processo, CPF ou fatos de casos reais). As perguntas são respondidas por uma IA externa (Google Gemini).',
+    en: 'Do not type confidential data here (client names, case numbers, IDs or facts from real cases). Questions are answered by an external AI (Google Gemini).',
+  },
   'assistant.clear': { pt: 'Limpar', en: 'Clear' },
   'assistant.suggestions': { pt: 'Sugestões', en: 'Suggestions' },
   'assistant.q1': { pt: 'Como me matricular em um curso?', en: 'How do I enroll in a course?' },
@@ -1532,6 +1537,10 @@ export const translations = {
   'legal.privacy3': {
     pt: 'Não vendemos seus dados. Administradores acessam filas de curadoria apenas para aprovar ou recusar solicitações e formações.',
     en: 'We do not sell your data. Administrators access curation queues only to approve or reject applications and programs.',
+  },
+  'legal.privacy5': {
+    pt: 'A assistente Athena envia ao Google Gemini apenas a pergunta digitada, o histórico recente da conversa e o conteúdo das formações em que você está matriculado. Seu nome, e-mail e telefone não são enviados. Mesmo assim, não escreva no chat dados sigilosos de clientes ou de processos.',
+    en: 'The Athena assistant sends Google Gemini only the question you type, the recent conversation history and the content of the programs you are enrolled in. Your name, email and phone are not sent. Even so, do not type confidential client or case data in the chat.',
   },
   'legal.privacy4': {
     pt: 'Você pode solicitar exclusão de conta e dados pelo canal de suporte. Este texto descreve o uso no projeto acadêmico ATHENAS e não substitui assessoria jurídica.',
